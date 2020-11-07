@@ -9,6 +9,7 @@ app_name ='hzm'
 
 urlpatterns = [
 	path('',views.main_page, name='main_page'),
+	path('schedule/', views.schedule, name='schedule'),
 	path('signin/',views.signin_page,name='signin_page'),
 	path('signup/',views.signup_page,name='signup_page'),
 	path('api/signin',apis.sign_in,name='ajax_signin'),

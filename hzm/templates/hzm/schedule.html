@@ -59,155 +59,8 @@
 			 </div>
 		</nav>
 	<!--navbar 끝-->
-		<!--점보트론 시작-->
-		<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-		  <h1 class="display-4">{% if pk %} {{player_id}}님 {% endif %} 반갑습니다, 학지매 입니다!</h1>
-		  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-		  <hr class="my-4">
-		  <p>친선경기 신청은 아래 버튼</p>
-		  <a class="btn btn-primary btn-lg" role="button" data-toggle="modal" data-target="#friendlymatch" >친해지기</a>
+		<div class="container-fluid" style="height:84vh; padding:0px;">
 		</div>
-		<!--점보트론 끝-->
-		<div class="container-fluid" style="height:60vh; padding:0px;">
-			<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
-			<table class="table table-dark" style="overflow:scroll; height: 25vh;" >
-				  <thead>
-				    <tr">
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">#</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">상태</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">학지매</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">Others</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">결과</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  
-				    
-				   
-				  </tbody>
-				</table>
-			</div>
-		</div>
-		<!--<div id="test" style="height:10vh;"></div>	-->	
-
 
 		<!--하단 탭바-->
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
@@ -285,11 +138,11 @@
       <div class="modal-body">
       	<div class="input-group mb-3">
 			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="player_id" aria-describedby="button-addon2">
 		</div>
 			<div class="input-group mb-3">
 			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="player_id" aria-describedby="button-addon2">
 		</div>
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
@@ -308,17 +161,17 @@
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2">
+			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="player_id" aria-describedby="button-addon2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="player_id" aria-describedby="button-addon2">
 			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="player_id" aria-describedby="button-addon2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="player_id" aria-describedby="button-addon2">
 		</div>
       </div>
       <div class="modal-footer">
