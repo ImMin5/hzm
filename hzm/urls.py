@@ -20,4 +20,8 @@ urlpatterns = [
 	path('api/get_my_schedules',apis.get_my_schedules,name='ajax_get_my_schedules'),
 	path('api/get_all_schedules',apis.get_all_schedules,name='ajax_get_all_schedules'),
 	path('api/create_my_schedule_table',apis.create_my_schedule_table,name='ajax_create_my_schedule_table'),
+	path('api/id_check',apis.id_check, name='ajax_id_check'),
+	path('api/delete_my_schedule',apis.delete_my_schedule, name='ajax_delete_my_schedule'),
+	path('api/edit_my_schedule',apis.edit_my_schedule, name='ajax_edit_my_schedule'),
+
 ]
