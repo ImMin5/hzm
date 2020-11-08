@@ -131,3 +131,4 @@ dmypy.json
 #minho
 local_settings.py
 .DS_Store
+*.pyc
