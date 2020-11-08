@@ -15,58 +15,72 @@ from django.db.models import Q
 from .serializers import *
 import time
 
+def id_check (request) :
+	player_id = request.GET.get('player_id')
+
+	try :
+		check_id = Player.objects.get(player_id=player_id)
+		return HttpResponse("중복된 닉네임입니다.")
+	except Exception as e :
+		return HttpResponse("사용할 수 있는 닉네임 입니다.")
+
 
 def sign_in(request) :
 	player_id = request.POST.get('player_id')
 	player_passwd = request.POST.get('player_passwd')
-	
-	if request.method == 'POST' :
-		print('POST')
-		print(player_id)
-		print(player_passwd)
+	try :
+		if request.method == 'POST' :
+			print('POST')
+			print(player_id)
+			print(player_passwd)
 
-		player = Player.objects.get(Q(player_id=player_id) & Q(player_passwd=player_passwd))
-		data = {}
-		print(player.pk)
-		if player is not None:
-			print('login')
-			#data['pk'] = player_pk
-			request.session['pk'] = player.pk
-			request.session['player_id'] = player.player_id
-			return redirect('/')
+			player = Player.objects.get(Q(player_id=player_id) & Q(player_passwd=player_passwd))
+			data = {}
+			print(player.pk)
+			if player is not None:
+				print('login')
+				#data['pk'] = player_pk
+				request.session['pk'] = player.pk
+				request.session['player_id'] = player.player_id
+				return redirect('/')
+			else :
+				print('NONE')
+				return HttpResponse('Login failed. Try again2.')
 		else :
-			print('NONE')
-			return HttpResponse('Login failed. Try again2.')
-	else :
-		return HttpResponse('Login failed. Try again1.')
+			return HttpResponse('Login failed. Try again1.')
+	except Exception as e :
+		return HttpResponse("로그인 실패")
 
 
 def sign_up(request) :
 	player_id = request.POST.get('player_id')
 	player_passwd = request.POST.get('player_passwd')
 	club_name = request.POST.get('player_club')
-	
-	if request.method == 'POST' :
-		print('POST')
-		print(player_id)
-		print(player_passwd)
+	try :
+		if request.method == 'POST' :
+			print('POST')
+			print(player_id)
+			print(player_passwd)
 
-		player = Player(player_id=player_id, player_passwd=player_passwd, club_name=club_name)
-		player.save()
+			player = Player(player_id=player_id, player_passwd=player_passwd, club_name=club_name)
+			player.save()
 
-		player = Player.objects.get(player_id=player_id)
-		request.session['pk'] = player.pk
-		request.session['player_id'] = player.player_id
+			player = Player.objects.get(player_id=player_id)
+			request.session['pk'] = player.pk
+			request.session['player_id'] = player.player_id
 
-		if player is not None:
-			print('create id')
-			return redirect('/')
-		else:
-			print('NONE')
-			return HttpResponse('아이디 생성실패1')
-	else :
-		return HttpResponse('good')
-
+			if player is not None:
+				print('create id')
+				return redirect('/')
+			else:
+				print('NONE')
+				return HttpResponse('아이디 생성실패1')
+		else :
+			return HttpResponse('good')
+	except Exception as e : 
+		print(e)
+		print('create id error')
+		return HttpResponse(e)
 
 def logout(request) :
 	request.session.clear()
@@ -103,7 +117,14 @@ def add_schedule(request) :
 	schedule = Schedule(player_id=pk,date_start=date_start,date_end=date_end,title=title)
 	schedule.save();
 
-	return HttpResponse("good")
+	data = {
+		'title' : schedule.title,
+		'date_end' : schedule.date_end,
+		'date_start' : schedule.date_start,
+		'pk' : schedule.pk,
+	}
+
+	return JsonResponse(data)
 
 def get_my_schedules(request) :
 
@@ -159,6 +180,41 @@ def get_all_schedules(request) :
 	serialized_schedules = ScheduleSerializer(schedules,many=True)
 
 	return HttpResponse(json.dumps(serialized_schedules.data))
+
+def delete_my_schedule(request) :
+	try :
+		pk = request.POST.get('pk')
+		schedule = Schedule.objects.filter(pk=pk)
+		schedule.delete()
+		return HttpResponse("삭제되었습니다!")
+	except Exception as e :
+		return HttpResponse("delete schedule failed") 
+
+def edit_my_schedule(request) :
+	pk = int(request.POST.get('pk'))
+	print("pk")
+	print(pk)
+	date_start = request.POST.get('date_start')
+	date_end = request.POST.get('date_end')
+
+		
+	print(1)
+	schedule = Schedule.objects.get(pk=pk)
+	schedule.date_start=date_start
+	schedule.date_end=date_end
+	schedule.save()
+	print(schedule)
+	
+	data = {
+		'pk' : schedule.pk,
+		'title' : schedule.title,
+		'date_start' : schedule.date_start,
+		'date_end' : schedule.date_end,
+		}
+	print(4)
+	return JsonResponse(data)
+	
+
 
 
 
