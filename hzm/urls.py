@@ -16,4 +16,8 @@ urlpatterns = [
 	path('api/signup',apis.sign_up,name='ajax_signup'),
 	path('api/logout',apis.logout,name='ajax_logout'),
 	path('api/add_fmatch',apis.add_fmatch,name='ajax_add_fmatch'),
+	path('api/add_schedule',apis.add_schedule,name='ajax_add_schedule'),
+	path('api/get_my_schedules',apis.get_my_schedules,name='ajax_get_my_schedules'),
+	path('api/get_all_schedules',apis.get_all_schedules,name='ajax_get_all_schedules'),
+	path('api/create_my_schedule_table',apis.create_my_schedule_table,name='ajax_create_my_schedule_table'),
 ]

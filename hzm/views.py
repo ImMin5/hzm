@@ -15,11 +15,11 @@ def main_page(request) :
 
 def schedule(request) :
 	pk=request.session.get('pk')
-
+	player_id=request.session.get('player_id')
 	print('schedule page')
 	print(pk)
 	if pk is not None :
-		return render(request, 'hzm/schedule.html')
+		return render(request, 'hzm/schedule.html',{'pk':pk, 'player_id':player_id})
 	else :
 		return redirect('/')
 

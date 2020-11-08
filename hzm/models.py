@@ -9,13 +9,15 @@ class Player(models.Model):
 	player_id = models.CharField(max_length=128, blank=True, null=True)
 	player_passwd = models.CharField(max_length=128, blank=True, null= True)
 	club_name = models.CharField(max_length=128,blank=True, null=True)
+	win = models.IntegerField(default=0,blank=True, null= True)
+	lose = models.IntegerField(default=0,blank=True, null= True)
 
 class Record(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
 	club_name = models.CharField(max_length=128,blank=True, null= True)
 	record = models.TimeField()
 	map_name = models.ForeignKey('Map',on_delete=models.SET_NULL,null=True)
-	match_data = models.DateField()
+	match_date = models.DateField()
 	match_club = models.CharField(max_length=128,blank=True, null=True)
 
 class Map(models.Model):
@@ -53,8 +55,12 @@ class Post_list(models.Model):
 	match_map13 = models.CharField(max_length=128, blank=True, null= True)
 	match_map14 = models.CharField(max_length=128, blank=True, null= True)
 
-
-
+class Schedule(models.Model):
+	player = models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	club_name = models.CharField(max_length=128,blank=True, null=True)
+	title = models.CharField(max_length=128,blank=True, null=True)
+	date_start = models.CharField(max_length=128, blank=True, null= True)
+	date_end = models.CharField(max_length=128, blank=True, null= True)
 
 
 

@@ -12,6 +12,8 @@ from django.contrib.auth.models import User
 from django.core.files.storage import default_storage #파일 저장 경로
 from django.conf import settings
 from django.db.models import Q
+from .serializers import *
+import time
 
 
 def sign_in(request) :
@@ -86,5 +88,78 @@ def add_fmatch(request) :
 	post_list.save();
 
 	return HttpResponse("good")
+
+def add_schedule(request) :
+	pk = request.session['pk']
+	player = Player.objects.get(pk=pk)
+	title = request.POST.get('title')
+	date_start = request.POST.get('date_start')
+	date_end =request.POST.get('date_end')
+
+	print(date_start)
+	print(date_end)
+	print(title)
+
+	schedule = Schedule(player_id=pk,date_start=date_start,date_end=date_end,title=title)
+	schedule.save();
+
+	return HttpResponse("good")
+
+def get_my_schedules(request) :
+
+	pk = request.session['pk']
+	schedules = Schedule.objects.filter(player_id=pk)
+	serialized_schedules = ScheduleSerializer(schedules,many=True)
+
+	return HttpResponse(json.dumps(serialized_schedules.data))
+
+def create_my_schedule_table(request) :
+
+	now = time.localtime()
+
+	mon = str(now.tm_mon)
+	day = str(now.tm_mday)
+	hour=str(now.tm_hour)
+	mins=str(now.tm_min)
+	sec=str(now.tm_sec)
+
+
+	if now.tm_mon < 10 :
+		mon= str('0')+str(now.tm_mon)
+		print(mon)
+	if now.tm_mday < 10 :
+		day= str('0')+str(now.tm_mday)
+		print(day)
+	if now.tm_hour < 10 :
+		hour= str('0')+str(now.tm_hour)
+		print(hour)
+	if now.tm_min < 10 :
+		hour= str('0')+str(now.tm_min)
+		print(mins)
+	if now.tm_sec < 10 :
+		sec= str('0')+str(now.tm_sec)
+		print(sec)
+
+
+	date_now = str(now.tm_year)+'-'+mon\
+	+'-'+day+'T'+hour+':'+mins+':'+sec
+
+	print(date_now)
+	pk = request.session['pk']
+	schedules = Schedule.objects.filter(Q(player_id=pk) & Q(date_start__gte=date_now)).order_by('date_start')
+	serialized_schedules = ScheduleSerializer(schedules,many=True)
+
+	return HttpResponse(json.dumps(serialized_schedules.data))
+
+
+
+def get_all_schedules(request) :
+	pk = request.session['pk']
+	schedules = Schedule.objects.exclude(player_id=pk)
+	serialized_schedules = ScheduleSerializer(schedules,many=True)
+
+	return HttpResponse(json.dumps(serialized_schedules.data))
+
+
 
 
