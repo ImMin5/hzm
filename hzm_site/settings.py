@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'hzm_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DJANGO_DB_NAME','project_hzm'),
+        'USER': os.environ.get('DJANGO_DB_USERNAME', 'hzm_admin'),
+        'PASSWORD' : os.environ.get('DJANGO_DB_PASSWORD', 'password1234'),
+        'HOST': os.environ.get('DJANGO_DB_HOST' , 'hzm_db'),
+        'PORT': os.environ.get('DJANGO_DB_PORT','5432'),
     }
 }
 
