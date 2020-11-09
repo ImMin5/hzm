@@ -15,6 +15,7 @@ from django.db.models import Q
 from .serializers import *
 import time
 
+
 def id_check (request) :
 	player_id = request.GET.get('player_id')
 
@@ -213,7 +214,13 @@ def edit_my_schedule(request) :
 		}
 	print(4)
 	return JsonResponse(data)
-	
+
+def create_post_list(request) :
+	posts=Post_list.objects.all().order_by('-pk')
+	serialized_posts = PostSerializer(posts,many=True)
+
+	pages = request.GET.get('page',0)
+	return HttpResponse(json.dumps(serialized_posts.data))
 
 
 

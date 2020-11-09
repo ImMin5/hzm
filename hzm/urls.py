@@ -12,6 +12,9 @@ urlpatterns = [
 	path('schedule/', views.schedule, name='schedule'),
 	path('signin/',views.signin_page,name='signin_page'),
 	path('signup/',views.signup_page,name='signup_page'),
+	path('match/',views.match,name='match'),
+	path('mypage/',views.mypage, name='mypage'),
+	path('match/result/<int:post_pk>/',views.match_result,name='match_result'),
 	path('api/signin',apis.sign_in,name='ajax_signin'),
 	path('api/signup',apis.sign_up,name='ajax_signup'),
 	path('api/logout',apis.logout,name='ajax_logout'),
@@ -23,5 +26,6 @@ urlpatterns = [
 	path('api/id_check',apis.id_check, name='ajax_id_check'),
 	path('api/delete_my_schedule',apis.delete_my_schedule, name='ajax_delete_my_schedule'),
 	path('api/edit_my_schedule',apis.edit_my_schedule, name='ajax_edit_my_schedule'),
+	path('api/crate_post_list',apis.create_post_list, name='ajax_create_post_list'),
 
 ]

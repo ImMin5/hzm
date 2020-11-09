@@ -2,6 +2,13 @@
 html {
 	font-size:1.25rem;
 }
+.page-item{
+	color:black;
+}
+#bottom_tapbar {
+	height:5%;
+}
+
 @media all and (min-width:768px) and (max-width:1023px) { /*스타일입력*/
 	#test {
 		background-color: black;
