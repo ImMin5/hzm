@@ -32,18 +32,22 @@
 	  		</button>
 	 	 	<div class="collapse navbar-collapse" id="navbarNav">
 			    <ul class="navbar-nav">
-			      <li class="nav-item">
-			        <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">친선경기 신청 <span class="sr-only">(current)</span></a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:match' %}">친선경기 결과</a>
+			      <li class="nav-item dropdown">
+			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
+			      	<div class="dropdown-menu">
+			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		{% if pk %}
+			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 현황</a>
+			      		{% endif %}
+			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+			      	</div>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
 			        <a class="nav-link" href="#">개인 기록</a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:schedule' %}">스케쥴</a>
+			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" id="logout_btn">로그아웃</a>
@@ -61,19 +65,49 @@
 			 </div>
 		</nav>
 	<!--navbar 끝-->
-		<!--점보트론 시작-->
-		<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-		  <h1 class="display-4">{% if pk %} {{player_id}}님 {% endif %} 반갑습니다, 학지매 입니다!</h1>
-		  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-		  <hr class="my-4">
-		  <p>친선경기 신청은 아래 버튼</p>
-		  <a class="btn btn-primary btn-lg" role="button" data-toggle="modal" data-target="#friendlymatch" >친해지기</a>
-		</div>
-		
-		<!--점보트론 끝-->
-		<div class="container-fluid" style="height:57vh; padding:0px;">
-		
-				
+	
+		<div class="container" style="height:84vh; padding:0px;">
+			<div class="container-fluid" style="padding-top:10%;">
+				<h3 class="display-4">{{player_id}}의 마이룸</h3>
+			</div>
+			<div class="container-fluid" style="padding-top:5%;">
+				<form>
+					<div class="form-group">
+						<label for="exampleInputEmail1">카러플 닉네임</label>
+						<div class="input-group mb-3">
+						    <input type="text" class="form-control" id="mypage_player_name" value="{{player_id}}">
+						    <div class="input-group-append">
+						    	<button class="btn btn-outline-secondary" type="button" id="modal_mypage_check_id_btn")">중복확인</button>
+						    </div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">소속클럽</label>
+						<div class="input-group mb-3">
+						    <input type="text" class="form-control" id="mypage_player_club" value="{{player.club_name}}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">현재 비밀번호</label>
+					    <input type="password" class="form-control" id="mypage_password_now">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">새로운 비밀번호</label>
+					    <input type="password" class="form-control" id="mypage_password_change">
+					</div>
+				</form>
+				<button id="mypage_info_edit_btn" class="btn btn-primary">변경하기</button>
+			</div>
+			<hr>
+			<div class="container-fluid">
+				<h3 class="display-6">전적</h3>
+				<div class="container-fluid">
+					<ul>
+						<li>승 : {{player.win}}</li>
+						<li>패 : {{player.lose}}</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		<!--<div id="test" style="height:10vh;"></div>	-->	
 
@@ -84,7 +118,7 @@
 				<div class="row">
 					{% if pk %}
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -94,7 +128,7 @@
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
+							<button class="btn"><i class="fa fa-user fa-5x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
 					{% else %}
 					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
@@ -106,7 +140,7 @@
 					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
 								<i class="fa fa-user fa-3x" onclick="bt()" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이페이지</h2></a>
+								</button><h2>마이룸</h2></a>
 					</div>
 					{% endif %}
 				</div>
@@ -378,6 +412,79 @@
 			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
 			active_btn="bell";
 		});
+
+		//중복확인 버튼 클릭시
+		function id_check_btn(player_name){
+			console.log(player_name);
+			name = player_name;
+			$.ajax({
+				url : "{% url 'hzm:ajax_id_check_btn' %}",
+				type:'GET',
+				data :{
+					'player_name' : name,
+				},
+				success: function(msg) {
+					if(msg=="error" || msg=="fail"){
+						alert("이미 존재하는 닉네임 입니다.")
+					}
+					else
+					{
+						alert("사용 가능한 닉네임 입니다.");
+					}
+				},
+				error : function(msg) {
+					alert("아이디 중복체크 에러, 관리자 문의");
+				}
+			})
+		}
+		$(document).on('click','#modal_mypage_check_id_btn',function(e) {
+			var name = $('#mypage_player_name').val();
+			console.log("name : "+name);
+			id_check_btn(name);
+		});
+
+		//마이룸 정보수정
+		$(document).on('click','#mypage_info_edit_btn',function(e){
+			var player_name = $('#mypage_player_id').val();
+			var club_name = $('#mypage_player_club').val();
+			var password_now = $('#mypage_password_now').val();
+			var password_change = $('#mypage_password_change').val();
+
+			console.log("edit infdo mypage")
+			console.log(password_now)
+			console.log(password_change)
+			if(!(password_now))
+				alert("비밀번호를 입력해주세요.")
+			else if(!(password_change))
+				alert("변경할 비밀번호를 입력해주세요")
+			else if(password_now == password_change){
+				alert("이전 비밀번호와 달라야 합니다");
+				$('#mypage_password_now').val('');
+				$('#mypage_password_change').val('');
+				return;
+			}
+			else {
+				$.ajax({
+					url : "{% url 'hzm:ajax_edit_mypage_info' %}",
+					type:'POST',
+					data: {
+						'csrfmiddlewaretoken':'{{csrf_token}}',
+						'pk':{{pk}},
+						'player_name':player_name,
+						'club_name':club_name,
+						'password':password_change,
+					},
+					success:function(msg) {
+						if(msg=="good")
+							alert("변경성공")
+						else if(msg=="fail")
+							alert("비밀번호가 일치하지 않습니다.")
+					}
+				});
+			}
+		});
+
+
 
 
 	</script>

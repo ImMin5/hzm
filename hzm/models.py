@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Player(models.Model):
-	player_id = models.CharField(max_length=128, blank=True, null=True)
+	player_name = models.CharField(max_length=128, blank=True, null=True)
 	player_passwd = models.CharField(max_length=128, blank=True, null= True)
 	club_name = models.CharField(max_length=128,blank=True, null=True)
 	win = models.IntegerField(default=0,blank=True, null= True)
