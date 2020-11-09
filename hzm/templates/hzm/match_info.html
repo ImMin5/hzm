@@ -13,13 +13,8 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	
-
-
 	 <!--폰트 어썸-->
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-
-
-
 	<title>학지매</title>
 </head>
 <body style="height:100%;">
@@ -44,7 +39,7 @@
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
-			        <a class="nav-link" href="#">개인 기록</a>
+			      	<a class="nav-link" href="#">개인 기록</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
@@ -60,162 +55,102 @@
 			        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
 			      </li>
 			      {% endif %}
-			      
 			  	</ul>
 			 </div>
 		</nav>
 	<!--navbar 끝-->
-		<!--점보트론 시작-->
-		<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-		  <h1 class="display-4">{% if pk %} {{player_name}} 	님 </br>{% endif %} 반갑습니다, 학지매 입니다!</h1>
-		  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-		  <hr class="my-4">
-		  <p>친선경기 신청은 아래 버튼</p>
-		  <a class="btn btn-primary btn-lg bg-dark" role="button" data-toggle="modal" data-target="#friendlymatch" >친해지기</a>
-		</div>
+
+	<!--middle container-->
+		<div class="container-fluid" style="height:84vh; padding:0px;">
+			<div class="container-fluid" style="padding-top:5%;">
+				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
+					<h1 class="display-4">[  학지매 vs {{post.club_name}} ]</h1>
+					<h6>작성자 :	{{post.post_writer}}</h6>
+					<hr>
+				</div>
+				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
+					<form>
+						<div class="input-group mb-3">
+							<span class="input-group-text">클럽이름</span>
+							<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{post.club_name}}">
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text"> 신청자 </span>
+							<input type="text" id="matchinfo_postwriter" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2" value="{{post.post_writer}}">
+						</div>
+				      	<div class="input-group mb-3">
+				      		<span class="input-group-text">경기 인원</span>
+				      		<select id="matchinfo_player_num" class="form-control" value="{{post.player_num}}">
+				      			<option value="4"> 2 vs 2</option>
+				      			<option value="6"> 3 vs 3</option>
+				      			<option value="8"> 4 vs 4</option>
+				      		</select>
+				      	</div>
+				      	{% if post.state %}
+				      	<label for="exampleInputEmail1">RED팀 학지매</label>
+						<div class="input-group mb-3">
+							<div class="input-group mb-3">
+								<span class="input-group-text">고가평균</span>
+								<input type="time" id="match_info_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.match_time_start}}" step="2">
+							</div>
+							<input type="text" id="modal_fmatch_player1" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player5_name}}">
+							<input type="text" id="modal_fmatch_player2" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player6_name}}">
+							<input type="text" id="modal_fmatch_player3" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player7_name}}">
+							<input type="text" id="modal_fmatch_player4" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player8_name}}">
+						</div>
+						{% endif %}
+
 		
-		<!--점보트론 끝-->
-		<div class="container-fluid" style="height:57vh; padding:0px;">
-			<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
-			<!--
-			<table class="table table-dark" style="overflow:scroll; height: 25vh;" >
-				  <thead>
-				    <tr">
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">#</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">상태</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">학지매</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">Others</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">결과</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  
-				    
-				   
-				  </tbody>
-			</table>
-			-->
+						<label for="exampleInputEmail1">BLUE팀 {{post.club_name}}</label>
+						<div class="input-group mb-3">
+							<div class="input-group mb-3">
+								<span class="input-group-text">고가평균</span>
+								<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.match_time_start}}" step="2">
+							</div>
+							<input type="text" id="modal_fmatch_player1" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player1_name}}">
+							<input type="text" id="modal_fmatch_player2" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player2_name}}">
+							<input type="text" id="modal_fmatch_player3" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player3_name}}">
+							<input type="text" id="modal_fmatch_player4" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="{{post.player4_name}}">
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">희망날짜</span>
+							<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" value="{{post.match_date}}">
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">시작시간</span>
+							<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.match_time_start}}" step="2">
+							<span class="input-group-text">종료시간</span>
+							<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" value="{{post.match_time_end}}" step="2">
+							
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">비밀번호</span>
+							<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2" value="{{post.passwd}}">
+						</div>
+						{% if post.state %}
+						<div>
+							<button id="matchinfo_delete_btn" class="btn btn-primary bg-dark">삭제</button>
+							<button id="matchinfo_edit_btn" class="btn btn-primary bg-dark">수정</button>
+						</div>
+						{% else %}
+						<div>
+							<button id="matchinfo_delete_btn" class="btn btn-primary bg-dark" href="{% url 'hzm:main_page' %}">삭제</button>
+							<button id="matchinfo_accept_btn" class="btn btn-primary bg-dark">수락</button>
+						</div>
+						{% endif %}
+						
+					</form>
+				</div>
+				{% if pk %}
+				<div class="container-fluid" style="padding-left:5%; padding-right:5%;"	>
+					<hr>
+					<h4>댓글 </h4>
+				</div>
+				{% endif %}
 			</div>
-		</div>
-		<!--<div id="test" style="height:10vh;"></div>	-->	
+		</div><!-- middle container 끝-->
+
+		
 
 
 		<!--하단 탭바-->
@@ -356,7 +291,6 @@
 				var match_time_end = $('#modal_fmatch_time_end').val();
 				var player_num = $('#modal_fmatch_select').val();
 				var passwd = $('#modal_fmatch_passwd').val();
-				var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
 				var player = Array();
 				
 				for(var i = 1; i <= 4; i++) {
@@ -376,7 +310,6 @@
 				formData.append('match_time_end',match_time_end);
 				formData.append('player_num',player_num*i);
 				formData.append('passwd',passwd);
-				formData.append('blue_goga_avg',blue_goga_avg);
 
 				$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",
@@ -400,8 +333,6 @@
 
 			}
 		});
-
-		//상단 네비바에서 가입하기 버튼 클릭
 		$(document).on('click','#signup_btn',function(e) {
 			$('#modal_signin_btn').attr('id','modal_signup_btn');
 			$('#modal_signup_btn').text('가입하기');
@@ -409,14 +340,13 @@
 			
 		});
 
-		//상단 네이바에서 로그인 버튼 클릭
 		$(document).on('click','#signin_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
 			$('#staticBackdropLabel').text('로그인');
 			
 		});
-		//하단 마이페이지 버튼 클릭
+
 		$(document).on('click','#bottom_user_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
@@ -424,13 +354,8 @@
 			
 		});
 
-		//로그인후 마이페이지 버튼을 눌렀을 경우
-		$(document).on('click','i[name="logout"]',function(e) {
-			console.log("logout");
-			
-		});
+	
 
-		//모달에서 가입하기 버튼 클릭
 		$(document).on('click','#modal_signup_btn',function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -463,7 +388,7 @@
 
 
 		});
-		//모달에서 로그인 버튼 클릭
+
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -479,34 +404,23 @@
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 				},
-				success:function(msg) {
-					if( msg=="login_fail1") {
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else if (msg=="login_fail2") {
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else if(msg=="login_fail3"){
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else {
-						alert("환영합니다^^!");
-						location.reload();
-					}
+				success:function(data) {
+					alert("성공");
+					location.reload();
 				},
 				error : function(error) {
 					alert("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});
-		//로그아웃 버튼 클릭
+
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
 				url:"{% url 'hzm:ajax_logout' %}",
 				type:'GET',
 				success:function(data) {
 					alert("바이바이~");
-					location.reload();
+					location.reload('/');
 				},
 				error : function(error) {
 					alert("실패");
@@ -537,7 +451,67 @@
 			active_btn="bell";
 		});
 
+		//경기 결과 출력
+		function create_post_list(data){
+			$('#tbody_post_lists').append('\
+				<tr>\
+				<td><a href="/'+data.pk+'">'+data.pk+'</a></td>\
+				<td>'+data.pk+'</td>\
+				<td>'+data.pk+'</td>\
+				<td>'+data.pk+'</td>\
+				</tr>');
+		}
 
+		function create_post_list_table(data){
+			console.log("post table start");
+			console.log(data.length);
+			for(var i = 0; i<data.length; i++) {
+				console.log(data[i]);
+				create_post_list(data[i]);
+			}
+		}
+	
+	
+		$(document).ready(function(e){
+			$.ajax({
+				url: "{% url 'hzm:ajax_create_post_list' %}",
+				dataType:'json',
+				type :'POST',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+				}
+				,success : function(data) {
+					create_post_list_table(data);
+				},
+			});
+		});
+		
+		$(document).ready(function(e) {
+			player_num = {{post.player_num}};
+			$('#matchinfo_player_num').val(player_num*2).prop("seleted",true);
+		});
+
+		$(document).on('click','#matchinfo_delete_btn',function(e) {
+			var pk = "{{post.pk}}";
+			if(confirm("정말 삭제하시겠습니까?")) {
+				$.ajax({
+					url: "{% url 'hzm:ajax_delete_before_match_info' %}",
+					type :'GET',
+					data : {
+						'pk' : pk,
+					}
+					,success : function(data) {
+						alert("삭제되었습니다");
+					},
+					error: function(error) {
+						alert(eval(error));
+					}
+				});
+			}
+			else {
+
+			}
+		});
 	</script>
 	
 </body>

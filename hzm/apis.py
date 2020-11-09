@@ -42,7 +42,7 @@ def id_check (request) :
 		return HttpResponse("good")
 
 def edit_mypage_info(request) :
-	pk = request.POST.get('pk')
+	pk = request.session.get('pk')
 	name=request.POST.get('player_name')
 	password=request.POST.get('password')
 	club_name=request.POST.get('club_name')
@@ -52,17 +52,17 @@ def edit_mypage_info(request) :
 
 	try:
 		player=Player.objects.get(pk=pk)
-		player.player_id = name
+		player.player_name = name
 		player.player_passwd = password
 		player.club_name=club_name
 		player.save()
-		request.session['player_id'] = player.player_name
+		request.session['player_name'] = player.player_name
 		return HttpResponse("good")
 	except Exception as e :
 		return HttpResponse("fail")
 
 def sign_in(request) :
-	player_name = request.POST.get('player_id')
+	player_name = request.POST.get('player_name')
 	player_passwd = request.POST.get('player_passwd')
 	try :
 		if request.method == 'POST' :
@@ -77,7 +77,7 @@ def sign_in(request) :
 				print('login')
 				#data['pk'] = player_pk
 				request.session['pk'] = player.pk
-				request.session['player_id'] = player.player_name
+				request.session['player_name'] = player.player_name
 				return redirect('/')
 			else :
 				print('NONE')
@@ -103,7 +103,7 @@ def sign_up(request) :
 
 			player = Player.objects.get(player_name=player_name)
 			request.session['pk'] = player.pk
-			request.session['player_id'] = player.player_name
+			request.session['player_name'] = player.player_name
 
 			if player is not None:
 				print('create id')
@@ -257,6 +257,18 @@ def create_post_list(request) :
 	pages = request.GET.get('page',0)
 	return HttpResponse(json.dumps(serialized_posts.data))
 
+def delete_before_match_info(request) :
+	pk=request.GET.get('pk')
+	player_name = request.GET.get('player_name')
+	post=Post_list.objects.filter(pk=pk)
+	#post.delete();
+	posts = Post_list.objects.all().filter(state=False).order_by('-pk')
+
+	return HttpResponse("jso")
+
+def accpet_match_info(request) :
+	pk=request.sesstion.get('pk')
+	return HttpResponse("good")
 
 
 
