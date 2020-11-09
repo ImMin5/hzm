@@ -38,18 +38,22 @@
 	  		</button>
 	 	 	<div class="collapse navbar-collapse" id="navbarNav">
 			    <ul class="navbar-nav">
-			      <li class="nav-item">
-			        <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">친선경기 신청 <span class="sr-only">(current)</span></a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">친선경기 결과</a>
+			      <li class="nav-item dropdown">
+			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
+			      	<div class="dropdown-menu">
+			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		{% if pk %}
+			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 현황</a>
+			      		{% endif %}
+			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+			      	</div>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
 			        <a class="nav-link" href="#">개인 기록</a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:schedule' %}">스케쥴</a>
+			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" id="logout_btn">로그아웃</a>
@@ -79,7 +83,7 @@
 			  	</div>
 			</div>
 			<hr>
-			<div class="container-fluid" style="overflow:scroll; max-height:50%;" ><div id='calendar' style="overflow:scroll;"></div></div>
+			<div class="container-fluid" style="overflow:scroll; max-height:70%;" ><div id='calendar' style="overflow:scroll;"></div></div>
 			<div class="container-fluid" >
 				<div class="input-group flex-nowrap">
 					<div class="input-group-prepend">
@@ -126,7 +130,7 @@
 						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#" >
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
 					</div>
 					{% else %}
@@ -261,9 +265,10 @@
 		var Calendar = FullCalendar.Calendar;
 		var calendarEl = document.getElementById('calendar');
 		var calendar;
-			document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function() {
 		   
 		    calendar = new Calendar(calendarEl, {
+		      slotDuration : "00:30:00",
 		    	 titleFormat: {
 		    	 	month: '2-digit',
 		      },
@@ -279,7 +284,6 @@
 		      	startTime: '11:00', // a start time (10am in this example)
 		      	endTime: '23:00', // an end time (6pm in this example)
 		      },
-		     
 		      selectable: true,
 		      nowIndicator: true,
 		      navLinks: true, // can click day/week names to navigate views
@@ -288,6 +292,15 @@
 		      locale: 'ko',
 		      events: [
 		      ],
+		      loading: function(bool) {
+		      	if (!bool){
+		      		var start = $('.fc-timegrid-cols');
+		      		console.log(start);
+		      		var end = $(".fc-timgrid-slot").find("[data-time='17:00:00']");
+		      		$(start).nextUntil(end, 'tr').remove();
+		      		console.log("bool");
+		      	}
+		      },
 		      dateClick: function(info) {
 		      	$('#schedule_date').val(info.dateStr);
 		      },
@@ -332,6 +345,7 @@
 
 		    calendar.render();
 		  });
+
 		 	//달려에 이벤트 추가
 
 		 	var my_event_color = '#D1B2FF';

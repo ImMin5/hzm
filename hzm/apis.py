@@ -15,45 +15,81 @@ from django.db.models import Q
 from .serializers import *
 import time
 
+
+def id_check_btn (request) :
+	player_name = request.GET.get('player_name')
+	print("id_check_btn")
+	print(player_name)
+	try :
+		check_id = Player.objects.get(player_name=player_name)
+		print(check_id)
+		if check_id is not None :
+			return HttpResponse("fail")
+		else :
+			return HttpResponse("good") 
+
+	except Exception as e :
+		return HttpResponse("good")
+
+
 def id_check (request) :
-	player_id = request.GET.get('player_id')
+	player_name = request.GET.get('player_id')
 
 	try :
-		check_id = Player.objects.get(player_id=player_id)
-		return HttpResponse("중복된 닉네임입니다.")
+		check_id = Player.objects.get(player_name=player_name)
+		return HttpResponse("fail")
 	except Exception as e :
-		return HttpResponse("사용할 수 있는 닉네임 입니다.")
+		return HttpResponse("good")
 
+def edit_mypage_info(request) :
+	pk = request.POST.get('pk')
+	name=request.POST.get('player_name')
+	password=request.POST.get('password')
+	club_name=request.POST.get('club_name')
+
+	if Player.objects.filter(player_name=name).exclude(pk=pk) :
+		return HttpResponse("sameId")
+
+	try:
+		player=Player.objects.get(pk=pk)
+		player.player_id = name
+		player.player_passwd = password
+		player.club_name=club_name
+		player.save()
+		request.session['player_id'] = player.player_name
+		return HttpResponse("good")
+	except Exception as e :
+		return HttpResponse("fail")
 
 def sign_in(request) :
-	player_id = request.POST.get('player_id')
+	player_name = request.POST.get('player_id')
 	player_passwd = request.POST.get('player_passwd')
 	try :
 		if request.method == 'POST' :
 			print('POST')
-			print(player_id)
+			print(player_name)
 			print(player_passwd)
 
-			player = Player.objects.get(Q(player_id=player_id) & Q(player_passwd=player_passwd))
+			player = Player.objects.get(Q(player_name=player_name) & Q(player_passwd=player_passwd))
 			data = {}
 			print(player.pk)
 			if player is not None:
 				print('login')
 				#data['pk'] = player_pk
 				request.session['pk'] = player.pk
-				request.session['player_id'] = player.player_id
+				request.session['player_id'] = player.player_name
 				return redirect('/')
 			else :
 				print('NONE')
-				return HttpResponse('Login failed. Try again2.')
+				return HttpResponse('login_fail1')
 		else :
-			return HttpResponse('Login failed. Try again1.')
+			return HttpResponse('login_fail2')
 	except Exception as e :
-		return HttpResponse("로그인 실패")
+		return HttpResponse("login_fail3")
 
 
 def sign_up(request) :
-	player_id = request.POST.get('player_id')
+	player_name = request.POST.get('player_id')
 	player_passwd = request.POST.get('player_passwd')
 	club_name = request.POST.get('player_club')
 	try :
@@ -62,12 +98,12 @@ def sign_up(request) :
 			print(player_id)
 			print(player_passwd)
 
-			player = Player(player_id=player_id, player_passwd=player_passwd, club_name=club_name)
+			player = Player(player_name=player_name, player_passwd=player_passwd, club_name=club_name)
 			player.save()
 
-			player = Player.objects.get(player_id=player_id)
+			player = Player.objects.get(player_name=player_name)
 			request.session['pk'] = player.pk
-			request.session['player_id'] = player.player_id
+			request.session['player_id'] = player.player_name
 
 			if player is not None:
 				print('create id')
@@ -213,7 +249,13 @@ def edit_my_schedule(request) :
 		}
 	print(4)
 	return JsonResponse(data)
-	
+
+def create_post_list(request) :
+	posts=Post_list.objects.all().order_by('-pk')
+	serialized_posts = PostSerializer(posts,many=True)
+
+	pages = request.GET.get('page',0)
+	return HttpResponse(json.dumps(serialized_posts.data))
 
 
 
