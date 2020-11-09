@@ -59,7 +59,7 @@ def match(request) :
 
 def match_result(request,post_pk) :
 	pk=request.session.get('pk')
-	player_id=request.session.get('player_id') 
+	player_name=request.session.get('player_id') 
 	post = Post_list.objects.get(pk=post_pk)
 	return render(request, 'hzm/match_result.html', {'post':post,'time_start':post.match_time_start,\
 		'time_end':post.match_time_end ,'pk':pk, 'player_id':player_name})

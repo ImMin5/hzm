@@ -63,40 +63,6 @@
 			      
 			  	</ul>
 			 </div>
-		</nav>		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
-	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-	    		<span class="navbar-toggler-icon"></span>
-	  		</button>
-	 	 	<div class="collapse navbar-collapse" id="navbarNav">
-			    <ul class="navbar-nav">
-			      <li class="nav-item">
-			        <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">친선경기 신청 <span class="sr-only">(current)</span></a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:match' %}">친선경기 결과</a>
-			      </li>
-			      {% if pk %}
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">개인 기록</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:schedule' %}">스케쥴</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="logout_btn">로그아웃</a>
-			      </li>
-			      {% else %}
-			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
-			      </li>
-			      {% endif %}
-			      
-			  	</ul>
-			 </div>
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
