@@ -4,7 +4,7 @@ from . import models as Models
 class ScheduleSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Schedule
-		fields = ('pk','player','date_start','date_end','club_name','title')
+		fields = ('pk','player_id','date_start','date_end','club_name','title')
 
 
 
@@ -13,11 +13,13 @@ class PostSerializer(serializers.ModelSerializer) :
 		model = Models.Post_list
 		fields = ('pk','post_writer','club_name'\
 			,'player_num'\
-			,'player1_name','player2_name','player3_name','player4_name','player5_name','player6_name','player7_name','player8_name'\
+			,'red_p1_name','red_p2_name','red_p3_name','red_p4_name','red_p5_name','red_p6_name','red_p7_name','red_p8_name'\
+			,'blue_p1_name','blue_p2_name','blue_p3_name','blue_p4_name','blue_p5_name','blue_p6_name','blue_p7_name','blue_p8_name'\
 			,'match_date','match_time_start','match_time_end'\
 			,'match_map1','match_map2','match_map3','match_map4','match_map5','match_map6','match_map7'\
 			,'match_map8','match_map9','match_map10','match_map11','match_map12','match_map13','match_map14'\
-			,'date','post_passwd')
+			,'date','passwd','state','result'\
+			,'red_goga_avg','blue_goga_avg')
 
 
 

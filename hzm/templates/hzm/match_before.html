@@ -24,6 +24,7 @@
 </head>
 <body style="height:100%;">
 	
+
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
 			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
@@ -65,157 +66,68 @@
 			 </div>
 		</nav>
 	<!--navbar 끝-->
-		<!--점보트론 시작-->
-		<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-		  <h1 class="display-4">{% if pk %} {{player_name}} 	님 </br>{% endif %} 반갑습니다, 학지매 입니다!</h1>
-		  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-		  <hr class="my-4">
-		  <p>친선경기 신청은 아래 버튼</p>
-		  <a class="btn btn-primary btn-lg bg-dark" role="button" data-toggle="modal" data-target="#friendlymatch" >친해지기</a>
-		</div>
-		
-		<!--점보트론 끝-->
-		<div class="container-fluid" style="height:57vh; padding:0px;">
-			<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
-			<!--
-			<table class="table table-dark" style="overflow:scroll; height: 25vh;" >
-				  <thead>
-				    <tr">
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">#</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">상태</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">학지매</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">Others</th>
-				      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">결과</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				    				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기전</td>
-				      <td>학지매</td>
-				      <td>아지매</td>
-				      <td>승리</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>경기종료</td>
-				      <td>학지매</td>
-				      <td>이지매</td>
-				      <td>패배</td>
-				    </tr>
-				  
-				  
-				    
-				   
-				  </tbody>
-			</table>
-			-->
+
+		<!--middle container-->
+		<div class="container-fluid" style="height:84vh; padding:0px;">
+			<div class="container-fluid" style="padding-top:5%;">
+				
 			</div>
-		</div>
-		<!--<div id="test" style="height:10vh;"></div>	-->	
+			<div class="table-responsive" style="padding-left:5%; padding-right:5%;">
+				<table class="table table-striped table-hover">
+					<h1 class="display-3">경기 신청 현황</h1>
+					<hr>
+					<p>{{count}}개의 신청 대기중인 경기</p>
+										<thead class="thead-dark">
+						<tr>
+							<th style="width:5%;" scope="col">#</th>
+							<th style="width:10%; text-align:center;" scope="col">상태</th>
+							<th style="width:10%;" scope="col">인원</th>
+							<th style="width:35%; text-align:center;" scope="col">제목</th>
+							<th style="width:15%;" scope="col">작성자</th>
+							<th style="width:25%;" scope="col">작성일</th>	
+						</tr>
+					</thead>
+					<tbody id="tbody_post_lists" onload="create_post_list_table(data)">
+						{% for list in posts %}
+						<tr onclick="location.href='/match_before/info/{{list.pk}}'" >
+							<td><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
+							<td align="center">
+								{% if list.state %}
+								<i class="fas fa-check-square"></i>
+								{% else %}
+								<i class="far fa-square"></i>
+								{% endif %}
+							</td>
+							<td> {{list.player_num}} : {{list.player_num}}</td>
+							<td style="text-align:center;"> 학지매 vs {{list.club_name}}</td>
+							<td>{{list.post_writer}}</td>
+							<td>{{list.date}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination pagination-lg justify-content-center">
+				  	{% if posts.has_previous %}
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
+				     {% else %}
+				       <li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
+				    {% endif %}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
+				    {% if posts.has_next %}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
+				    {% else%}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
+				    {% endif %}
+				  </ul>
+				</nav>
+			</div>
+		</div><!-- middle container 끝-->
+
+		
 
 
 		<!--하단 탭바-->
@@ -356,7 +268,6 @@
 				var match_time_end = $('#modal_fmatch_time_end').val();
 				var player_num = $('#modal_fmatch_select').val();
 				var passwd = $('#modal_fmatch_passwd').val();
-				var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
 				var player = Array();
 				
 				for(var i = 1; i <= 4; i++) {
@@ -376,7 +287,6 @@
 				formData.append('match_time_end',match_time_end);
 				formData.append('player_num',player_num*i);
 				formData.append('passwd',passwd);
-				formData.append('blue_goga_avg',blue_goga_avg);
 
 				$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",
@@ -400,8 +310,6 @@
 
 			}
 		});
-
-		//상단 네비바에서 가입하기 버튼 클릭
 		$(document).on('click','#signup_btn',function(e) {
 			$('#modal_signin_btn').attr('id','modal_signup_btn');
 			$('#modal_signup_btn').text('가입하기');
@@ -409,14 +317,13 @@
 			
 		});
 
-		//상단 네이바에서 로그인 버튼 클릭
 		$(document).on('click','#signin_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
 			$('#staticBackdropLabel').text('로그인');
 			
 		});
-		//하단 마이페이지 버튼 클릭
+
 		$(document).on('click','#bottom_user_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
@@ -430,7 +337,7 @@
 			
 		});
 
-		//모달에서 가입하기 버튼 클릭
+
 		$(document).on('click','#modal_signup_btn',function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -463,7 +370,7 @@
 
 
 		});
-		//모달에서 로그인 버튼 클릭
+
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -479,27 +386,16 @@
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 				},
-				success:function(msg) {
-					if( msg=="login_fail1") {
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else if (msg=="login_fail2") {
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else if(msg=="login_fail3"){
-						return alert("존재하지 않는 아이디입니다");
-					}
-					else {
-						alert("환영합니다^^!");
-						location.reload();
-					}
+				success:function(data) {
+					alert("성공");
+					location.reload();
 				},
 				error : function(error) {
 					alert("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});
-		//로그아웃 버튼 클릭
+
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
 				url:"{% url 'hzm:ajax_logout' %}",
@@ -537,7 +433,43 @@
 			active_btn="bell";
 		});
 
+		//경기 결과 출력
+		function create_post_list(data){
+			$('#tbody_post_lists').append('\
+				<tr>\
+				<td><a href="/match/'+data.pk+'">'+data.pk+'</a></td>\
+				<td>'+data.player_num+' : '+data.player_num+'</td>\
+				<td> 학지매 vs '+data.club_name+'</td>\
+				<td>'+data.post_writer+'</td>\
+				<td>'+data.date+'</td>\
+				</tr>');
+		}
 
+		function create_post_list_table(data){
+			console.log("post table start");
+			console.log(data.length);
+			for(var i = 0; i<data.length; i++) {
+				console.log(data[i]);
+				create_post_list(data[i]);
+			}
+		}
+	
+	
+	/*	$(document).ready(function(e){
+			$.ajax({
+				url: "{% url 'hzm:ajax_create_post_list' %}",
+				dataType:'json',
+				type :'POST',
+				data : {
+					'page' :'1',
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+				}
+				,success : function(data) {
+					create_post_list_table(data);
+				},
+			});
+		});*/
+		
 	</script>
 	
 </body>

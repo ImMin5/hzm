@@ -24,6 +24,7 @@
 </head>
 <body style="height:100%;">
 	
+	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
 			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
@@ -37,7 +38,7 @@
 			      	<div class="dropdown-menu">
 			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 현황</a>
+			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
 			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
@@ -68,14 +69,14 @@
 	
 		<div class="container" style="height:84vh; padding:0px;">
 			<div class="container-fluid" style="padding-top:10%;">
-				<h3 class="display-4">{{player_id}}의 마이룸</h3>
+				<h3 class="display-4">{{player_name}}의 마이룸</h3>
 			</div>
 			<div class="container-fluid" style="padding-top:5%;">
 				<form>
 					<div class="form-group">
 						<label for="exampleInputEmail1">카러플 닉네임</label>
 						<div class="input-group mb-3">
-						    <input type="text" class="form-control" id="mypage_player_name" value="{{player_id}}">
+						    <input type="text" class="form-control" id="mypage_player_name" value="{{player_name}}">
 						    <div class="input-group-append">
 						    	<button class="btn btn-outline-secondary" type="button" id="modal_mypage_check_id_btn")">중복확인</button>
 						    </div>
@@ -162,7 +163,7 @@
 	   <div class="modal-body">
 	   		<form method="post">
 		   		<div class="input-group mb-3">
-		   			<input type="text" id="modal_player_id" class="form-control" placeholder="라이더 이름" aria-label="player_id" aria-describedby="button-addon2">
+		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
 				</div>
 		        <div class="input-group mb-3">
 		        	<input type="text" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
@@ -175,6 +176,7 @@
     </div>
   </div>
 </div>
+
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
   <div class="modal-dialog">
@@ -192,7 +194,7 @@
 		</div>
 			<div class="input-group mb-3">
 			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2">
 		</div>
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
@@ -204,20 +206,24 @@
       	</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">참여명단</span>
-			<input type="text" id="modal_fmatch_player1" class="form-control" placeholder="라이더1" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player2" class="form-control" placeholder="라이더2" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player3" class="form-control" placeholder="라이더3" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player4" class="form-control" placeholder="라이더4" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
 			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2">
 		</div>
 		<div class="input-group mb-3">
+			<span class="input-group-text">고가 평균</span>
+			<input type="time" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
+		</div>
+		<div class="input-group mb-3">
 			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
 			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" step="2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">비밀번호</span>
@@ -319,10 +325,10 @@
 
 		//모달에서 가입하기 버튼 클릭
 		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_id = $('#modal_player_id').val();
+			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_id);
+			console.log(player_name);
 			console.log(player_passwd);
 
 			if(confirm('아이디를 생성하시겠습니까?')) {
@@ -331,7 +337,7 @@
 					type:'POST',
 					dataType : 'json',
 					data : {
-						'player_id' : player_id,
+						'player_name' : player_name,
 						'player_passwd' : player_passwd,
 						'csrfmiddlewaretoken' : "{{csrf_token}}",
 
@@ -352,16 +358,16 @@
 		});
 		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
-			var player_id = $('#modal_player_id').val();
+			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_id);
+			console.log(player_name);
 			console.log(player_passwd);
 			$.ajax({
 				url:"{% url 'hzm:ajax_signin' %}",
 				type:'POST',
 				data : {
-					'player_id' : player_id,
+					'player_name' : player_name,
 					'player_passwd' : player_passwd,
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
@@ -445,7 +451,7 @@
 
 		//마이룸 정보수정
 		$(document).on('click','#mypage_info_edit_btn',function(e){
-			var player_name = $('#mypage_player_id').val();
+			var player_name = $('#mypage_player_name').val();
 			var club_name = $('#mypage_player_club').val();
 			var password_now = $('#mypage_password_now').val();
 			var password_change = $('#mypage_password_change').val();
@@ -469,7 +475,6 @@
 					type:'POST',
 					data: {
 						'csrfmiddlewaretoken':'{{csrf_token}}',
-						'pk':{{pk}},
 						'player_name':player_name,
 						'club_name':club_name,
 						'password':password_change,

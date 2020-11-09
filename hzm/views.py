@@ -11,23 +11,23 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 def main_page(request) :
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_id') 
-	return render(request,'hzm/main_page.html',{'pk':pk ,'player_id':player_name})
+	player_name=request.session.get('player_name') 
+	return render(request,'hzm/main_page.html',{'pk':pk ,'player_name':player_name})
 
 def mypage(request) :
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_id')
+	player_name=request.session.get('player_name')
 
 	player=Player.objects.get(pk=pk)
-	return render(request,'hzm/mypage.html',{'pk':pk ,'player_id':player_name,'player':player})
+	return render(request,'hzm/mypage.html',{'pk':pk ,'player_name':player_name,'player':player})
 
 def schedule(request) :
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_id')
+	player_name=request.session.get('player_name')
 	print('schedule page')
 	print(pk)
 	if pk is not None :
-		return render(request, 'hzm/schedule.html',{'pk':pk, 'player_id':player_name})
+		return render(request, 'hzm/schedule.html', {'pk':pk, 'player_name':player_name})
 	else :
 		return redirect('/')
 
@@ -39,13 +39,13 @@ def signup_page(request) :
 	return render(request,'hzm/signup_page.html')
 
 def match(request) :
-	count = Post_list.objects.all().count()
-	posts = Post_list.objects.all().order_by('-pk')
-	paginator = Paginator(posts, 2)
+	posts = Post_list.objects.all().filter(state=True).order_by('-pk')
+	count = posts.count();
+	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_id') 
+	player_name=request.session.get('player_name') 
 
 	try :
 		posts = paginator.get_page(pages)
@@ -55,13 +55,31 @@ def match(request) :
 		posts = paginator.page(paginator.num_pages)
 		return HttpResponse("end")
 
-	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_id':player_name})
+	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_name':player_name})
 
-def match_result(request,post_pk) :
+def match_info(request,post_pk) :
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_id') 
+	player_name=request.session.get('player_name') 
 	post = Post_list.objects.get(pk=post_pk)
-	return render(request, 'hzm/match_result.html', {'post':post,'time_start':post.match_time_start,\
-		'time_end':post.match_time_end ,'pk':pk, 'player_id':player_name})
+	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
+
+def match_before(request) :
+	posts = Post_list.objects.all().filter(state=False).order_by('-pk')
+	count = posts.count()
+	paginator = Paginator(posts, 10)
+	pages = request.GET.get('page',1)
+
+	pk=request.session.get('pk')
+	player_name=request.session.get('player_name') 
+
+	try :
+		posts = paginator.get_page(pages)
+	except PageNotAnInteger :
+		posts = paginator.page(1)
+	except EmptyPage :
+		posts = paginator.page(paginator.num_pages)
+		return HttpResponse("end")
+
+	return render(request, 'hzm/match_before.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
 
 
