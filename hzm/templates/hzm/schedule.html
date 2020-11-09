@@ -43,7 +43,7 @@
 			      	<div class="dropdown-menu">
 			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 현황</a>
+			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
 			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
@@ -71,13 +71,14 @@
 			 </div>
 		</nav>
 	<!--navbar 끝-->
+
 		<!-- middle container -->
 		<div class="container-fluid" style="height:84vh; padding:0px;">
 			
 			<div class="media" style="padding-top:5%; margin-bottom:5%;">
 				<i class="far fa-calendar-plus fa-4x" style="padding-left:5%;"></i>
 				<div class="media-body" style="margin-left:5%;">
-					<h5 class="mt-0">{{player_id}}님의 스케쥴 관리</h5>
+					<h5 class="mt-0">{{player_name}}님의 스케쥴 관리</h5>
 					경기가 가능한 날을 표시해 주세요!</br>
 					취소도 가능합니다^^
 			  	</div>
@@ -156,7 +157,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{player_id}}님</h5>
+        <h5 class="modal-title">{{player_name}}님</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -166,7 +167,7 @@
       		<div class="input-group-prepend">
       			<span class="input-group-text">라이더</span>
 		  </div>
-		  <input type="text" class="form-control" id="modal_schedule_event_edit_player_id" aria-label="player_id" aria-describedby="basic-addon1" readonly>
+		  <input type="text" class="form-control" id="modal_schedule_event_edit_player_name" aria-label="player_name" aria-describedby="basic-addon1" readonly>
 		</div>
 
 		      	<div class="input-group mb-3">
@@ -201,7 +202,6 @@
 </div>
 
 <!-- 알림창 -->
-
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
   <div class="modal-dialog">
@@ -215,11 +215,11 @@
       <div class="modal-body">
       	<div class="input-group mb-3">
 			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2">
 		</div>
 			<div class="input-group mb-3">
 			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2">
 		</div>
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
@@ -231,24 +231,28 @@
       	</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">참여명단</span>
-			<input type="text" id="modal_fmatch_player1" class="form-control" placeholder="라이더1" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player2" class="form-control" placeholder="라이더2" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player3" class="form-control" placeholder="라이더3" aria-label="player_id" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_player4" class="form-control" placeholder="라이더4" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text">고가 평균</span>
+			<input type="time" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
 			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" step="2">
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="player_id" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2">
 		</div>
       </div>
       <div class="modal-footer">
@@ -305,7 +309,7 @@
 		      	$('#schedule_date').val(info.dateStr);
 		      },
 		      eventClick: function(info) {
-		      	if(info.event.title == '{{player_id}}'){
+		      	if(info.event.title == '{{player_name}}'){
 		      		console.log('yes');
 		      		
 		      		$('#modal_schedule_event_edit').modal('show');
@@ -326,7 +330,7 @@
 		      		console.log(time_start);
 		      		console.log(time_end);
 		      		
-		      		$('#modal_schedule_event_edit_player_id').val(info.event.title);
+		      		$('#modal_schedule_event_edit_player_name').val(info.event.title);
 		      		$('#modal_schedule_event_edit_date').val(date);
 		      		$('#modal_schedule_event_edit_time_start').val(time_start);
 		      		$('#modal_schedule_event_edit_time_end').val(time_end);
@@ -450,9 +454,9 @@
 
 		 		if(date && time_start && time_end){
 		 			var date_start = date+'T'+time_start;
-		 			if(time_start_flag) date_start=date_start+':00';
+		 			if(time_start_flag) date_start=date_start;
 		 			date_end = date+'T'+time_end;
-		 			if(time_end_flag) date_end=date_end+':00';
+		 			if(time_end_flag) date_end=date_end;
 		 			time_start_flag=0;
 		 			time_end_flag=0;
 		 			var date_ = {'pk':pk, 'date_start':date_start, 'date_end':date_end};
@@ -513,8 +517,8 @@
 		 		var date = $('#schedule_date').val();
 		 		var time_start = $('#schedule_time_start').val();
 		 		var time_end = $('#schedule_time_end').val();
-		 		title = '{{player_id}}';
-		 		var date_start = date+'T'+time_start+':00';
+		 		title = '{{player_name}}';
+		 		var date_start = date+'T'+time_start;
 		 		console.log(date);
 		 		console.log(time_start);
 		 		console.log("일정추가"+date_start);
@@ -524,7 +528,7 @@
 		 		if(confirm('날짜 : '+date+'\n시간 : '+time_start+'\n정말 추가 하시겠습니까?') ){
 		 			if(time_start && time_end){
 
-		 				date_end = date+'T'+time_end+':00';
+		 				date_end = date+'T'+time_end;
 		 				var date_ = {'date_start':date_start, 'date_end':date_end, 'title':title};
 
 		 				$.ajax({
@@ -740,10 +744,10 @@
 
 
 		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_id = $('#modal_player_id').val();
+			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_id);
+			console.log(player_name);
 			console.log(player_passwd);
 
 			if(confirm('아이디를 생성하시겠습니까?')) {
@@ -752,7 +756,7 @@
 					type:'POST',
 					dataType : 'json',
 					data : {
-						'player_id' : player_id,
+						'player_name' : player_name,
 						'player_passwd' : player_passwd,
 						'csrfmiddlewaretoken' : "{{csrf_token}}",
 
@@ -773,16 +777,16 @@
 		});
 
 		$(document).on('click', '#modal_signin_btn', function(e) {
-			var player_id = $('#modal_player_id').val();
+			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_id);
+			console.log(player_name);
 			console.log(player_passwd);
 			$.ajax({
 				url:"{% url 'hzm:ajax_signin' %}",
 				type:'POST',
 				data : {
-					'player_id' : player_id,
+					'player_name' : player_name,
 					'player_passwd' : player_passwd,
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
