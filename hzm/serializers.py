@@ -19,7 +19,7 @@ class PostSerializer(serializers.ModelSerializer) :
 			,'match_map1','match_map2','match_map3','match_map4','match_map5','match_map6','match_map7'\
 			,'match_map8','match_map9','match_map10','match_map11','match_map12','match_map13','match_map14'\
 			,'date','passwd','state','result'\
-			,'red_goga_avg','blue_goga_avg')
+			,'red_goga_avg','blue_goga_avg','blue_win','red_win')
 
 
 

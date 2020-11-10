@@ -83,7 +83,7 @@
 							<th style="width:10%; text-align:center;" scope="col">상태</th>
 							<th style="width:10%;" scope="col">인원</th>
 							<th style="width:35%; text-align:center;" scope="col">제목</th>
-							<th style="width:15%;" scope="col">작성자</th>
+							<th style="width:15%; text-align:center;" scope="col">작성자</th>
 							<th style="width:25%;" scope="col">작성일</th>	
 						</tr>
 					</thead>
@@ -91,17 +91,17 @@
 						{% for list in posts %}
 						<tr onclick="location.href='/match_before/info/{{list.pk}}'" >
 							<td><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
-							<td align="center">
+							<td style="font-size:0.8rem;" align="center">
 								{% if list.state %}
 								<i class="fas fa-check-square"></i>
 								{% else %}
-								<i class="far fa-square"></i>
+								승인대기
 								{% endif %}
 							</td>
 							<td> {{list.player_num}} : {{list.player_num}}</td>
 							<td style="text-align:center;"> 학지매 vs {{list.club_name}}</td>
-							<td>{{list.post_writer}}</td>
-							<td>{{list.date}}</td>
+							<td style="text-align:center;">{{list.post_writer}}</td>
+							<td style="font-size:0.8rem;">{{list.date}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
