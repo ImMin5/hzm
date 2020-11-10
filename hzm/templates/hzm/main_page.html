@@ -345,6 +345,17 @@
 
 <!-- script start -->
 	<script>
+		function getTime() {
+			var Now = new Date();
+			var NowTime = Now.getFullYear();
+			
+			NowTime += '-' + String(Number(Now.getMonth()) +1) ;
+			NowTime += '-' + Now.getDate();
+			NowTime += ' ' + Now.getHours();
+			NowTime += ':' + Now.getMinutes();
+			NowTime += ':' + Now.getSeconds();
+			return NowTime;
+		}
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
 			if(confirm("이길수 있겠어?")){
@@ -358,9 +369,10 @@
 				var passwd = $('#modal_fmatch_passwd').val();
 				var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
 				var player = Array();
-				
-				for(var i = 1; i <= 4; i++) {
-					player[i] = $('#modal_fmatch_player'+i).val();
+				var date = getTime();
+
+				for(var i = 0; i < 4; i++) {
+					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
 					console.log(player[i]);
 				}
 				console.log("player_num : "+player_num);
@@ -368,7 +380,10 @@
 				console.log(match_time_start);
 				console.log(match_time_end);
 				formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-				formData.append('player[]',player);
+				formData.append('p1',player[0]);
+				formData.append('p2',player[1]);
+				formData.append('p3',player[2]);
+				formData.append('p4',player[3]);
 				formData.append('post_writer',post_writer);
 				formData.append('club_name',club_name);
 				formData.append('match_date',match_date);
@@ -377,7 +392,8 @@
 				formData.append('player_num',player_num*i);
 				formData.append('passwd',passwd);
 				formData.append('blue_goga_avg',blue_goga_avg);
-
+				formData.append('date',date);
+				console.log("date : "+date)
 				$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",
 						type : 'POST',
@@ -386,6 +402,7 @@
 						processData : false,
 						data : formData,
 						success : function(data) {
+							$('#friendlymatch').modal('hide');
 							
 						},
 						error : function(error) {

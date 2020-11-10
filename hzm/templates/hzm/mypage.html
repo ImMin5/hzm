@@ -477,13 +477,21 @@
 						'csrfmiddlewaretoken':'{{csrf_token}}',
 						'player_name':player_name,
 						'club_name':club_name,
-						'password':password_change,
+						'password_now' : password_now,
+						'password_chnage':password_change,
 					},
 					success:function(msg) {
-						if(msg=="good")
+						if(msg=="good"){
 							alert("변경성공")
-						else if(msg=="fail")
+							location.reload();
+						}
+						else if(msg=="sameId"){
+							alert("중복된 닉네임입니다.")
+						}
+						else if(msg=="fail" || msg=="passwdfail")
 							alert("비밀번호가 일치하지 않습니다.")
+							$('#mypage_password_change').val('')
+							$('#mypage_password_now').val('')
 					}
 				});
 			}

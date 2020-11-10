@@ -7,7 +7,7 @@ from django.db import models
 
 class Player(models.Model):
 	player_name = models.CharField(max_length=128, blank=True, null=True)
-	player_passwd = models.CharField(max_length=128, blank=True, null= True)
+	passwd = models.CharField(max_length=128, blank=True, null= True)
 	club_name = models.CharField(max_length=128,blank=True, null=True)
 	win = models.IntegerField(default=0,blank=True, null= True)
 	lose = models.IntegerField(default=0,blank=True, null= True)
@@ -67,7 +67,9 @@ class Post_list(models.Model):
 	red_goga_avg = models.CharField(max_length=128, blank=True, null= True)
 	blue_goga_avg = models.CharField(max_length=128, blank=True, null= True)
 	state = models.BooleanField(default=False) 
-	result = models.BooleanField(default=True)
+	result = models.BooleanField(default=False)
+	blue_win = models.IntegerField(default=0,blank=True, null= True)
+	red_win = models.IntegerField(default=0,blank=True, null= True)
 	
 class Schedule(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)

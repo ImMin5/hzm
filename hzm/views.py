@@ -18,7 +18,14 @@ def mypage(request) :
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name')
 
-	player=Player.objects.get(pk=pk)
+	if pk is None :
+		request.session.clear()
+		return redirect('/')
+		
+	try : 
+		player=Player.objects.get(pk=pk)
+	except Exception as e :
+		return redirect('/')
 	return render(request,'hzm/mypage.html',{'pk':pk ,'player_name':player_name,'player':player})
 
 def schedule(request) :
@@ -60,17 +67,41 @@ def match(request) :
 def match_info(request,post_pk) :
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name') 
+
+	if pk is None :
+		return redirect("/")
+	elif player_name is None :
+		return redirect("/")
+
 	post = Post_list.objects.get(pk=post_pk)
 	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
 
+def match_before_info(request,post_pk) :
+	pk=request.session.get('pk')
+	player_name=request.session.get('player_name') 
+
+	if pk is None :
+		return redirect("/")
+	elif player_name is None :
+		return redirect("/")
+
+	post = Post_list.objects.get(pk=post_pk)
+	return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
+
 def match_before(request) :
+
+	pk=request.session.get('pk')
+	player_name=request.session.get('player_name') 
+
+	if pk is None :
+		return redirect("/")
+	elif player_name is None :
+		return redirect("/")
+
 	posts = Post_list.objects.all().filter(state=False).order_by('-pk')
 	count = posts.count()
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
-
-	pk=request.session.get('pk')
-	player_name=request.session.get('player_name') 
 
 	try :
 		posts = paginator.get_page(pages)
@@ -82,4 +113,5 @@ def match_before(request) :
 
 	return render(request, 'hzm/match_before.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
 
-
+def delete_result(request) :
+	return render(request,'hzm/test.html')
