@@ -36,4 +36,7 @@ urlpatterns = [
 	path('api/accpet_match_info/<int:post_pk>/',apis.accpet_match_info, name='accept_match_info'),
 	path('api/check_post_passwd',apis.check_post_passwd,name='ajax_check_post_passwd'),
 	path('api/save_match_info',apis.save_match_info,name='ajax_save_match_info'),
+	path('api/get_redteam_player',apis.get_redteam_player,name='ajax_get_redteam_player'),
+	path('api/get_redteam_subplayer',apis.get_redteam_subplayer,name='ajax_get_redteam_subplayer'),
+	path('api/save_redteam_player',apis.save_redteam_player,name='ajax_save_redteam_player'),
 ]
