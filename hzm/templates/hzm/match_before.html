@@ -23,52 +23,49 @@
 	<title>학지매</title>
 </head>
 <body style="height:100%;">
-	
-
-	<!--내비게이션 바-->
-		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
-	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-	    		<span class="navbar-toggler-icon"></span>
-	  		</button>
-	 	 	<div class="collapse navbar-collapse" id="navbarNav">
-			    <ul class="navbar-nav">
-			      <li class="nav-item dropdown">
-			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
-			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
-			      		{% if pk %}
-			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
-			      		{% endif %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
-			      	</div>
-			      </li>
-			      {% if pk %}
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">개인 기록</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="logout_btn">로그아웃</a>
-			      </li>
-			      {% else %}
-			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
-			      </li>
-			      {% endif %}
-			      
-			  	</ul>
-			 </div>
-		</nav>
-	<!--navbar 끝-->
+	<!--navbar 시작-->
+	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
+				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		    		<span class="navbar-toggler-icon"></span>
+		  		</button>
+		 	 	<div class="collapse navbar-collapse" id="navbarNav">
+				    <ul class="navbar-nav">
+				      <li class="nav-item dropdown">
+				      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
+				      	<div class="dropdown-menu">
+				      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+				      		{% if pk %}
+				      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
+				      		{% endif %}
+				      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+				      	</div>
+				      </li>
+				      {% if pk %}
+				      <li class="nav-item">
+				        <a class="nav-link" href="#">개인 기록</a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" id="logout_btn">로그아웃</a>
+				      </li>
+				      {% else %}
+				       <li class="nav-item">
+				        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
+				      </li>
+				      {% endif %}
+			</ul>
+		</div>
+	</nav>
+		<!--navbar 끝-->
 
 		<!--middle container-->
-		<div class="container-fluid" style="height:84vh; padding:0px;">
+		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:5%;">
 				
 			</div>
@@ -82,8 +79,8 @@
 							<th style="width:5%;" scope="col">#</th>
 							<th style="width:10%; text-align:center;" scope="col">상태</th>
 							<th style="width:10%;" scope="col">인원</th>
-							<th style="width:35%; text-align:center;" scope="col">제목</th>
-							<th style="width:15%; text-align:center;" scope="col">작성자</th>
+							<th style="width:30%; text-align:center;" scope="col">제목</th>
+							<th style="width:20%; text-align:center;" scope="col">작성자</th>
 							<th style="width:25%;" scope="col">작성일</th>	
 						</tr>
 					</thead>
@@ -125,7 +122,8 @@
 				  </ul>
 				</nav>
 			</div>
-		</div><!-- middle container 끝-->
+		</div>
+		<!-- middle container 끝-->
 
 		
 
@@ -194,7 +192,7 @@
   </div>
 </div>
 
-<!--친선경기 신청 모달-->
+<!--경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -204,18 +202,19 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form>
       <div class="modal-body">
       	<div class="input-group mb-3">
 			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" required>
 		</div>
 			<div class="input-group mb-3">
 			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2" required>
 		</div>
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
-      		<select id="modal_fmatch_select" class="form-control">
+      		<select id="modal_fmatch_select" class="form-control" required>
       			<option value="4"> 2 vs 2</option>
       			<option value="6"> 3 vs 3</option>
       			<option value="8"> 4 vs 4</option>
@@ -223,34 +222,35 @@
       	</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">참여명단</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
+			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2">
+			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">고가 평균</span>
-			<input type="time" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
+			<input type="text" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="시작시간" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
+			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" required>
 			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" step="2">
+			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2" required>
 		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
+        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
       </div>
+  </form>
     </div>
   </div>
 </div>
@@ -469,6 +469,46 @@
 				},
 			});
 		});*/
+		//경기신청모달 고가 평균 폼 확인
+
+		//경기 신청모달에서 참여인원 수 선택시
+		$('#modal_fmatch_select').change(function(e) {
+			console.log("change1")
+			var state=$('#modal_fmatch_select option:selected').val();
+			if( state== '4'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '6'){
+				console.log("change")
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '8'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
+			}
+		})
+
+		function goga_form_check(data){
+			data_=data.split(':')
+			var count =0;
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
 		
 	</script>
 	

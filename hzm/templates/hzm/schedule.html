@@ -73,7 +73,7 @@
 	<!--navbar 끝-->
 
 		<!-- middle container -->
-		<div class="container-fluid" style="height:84vh; padding:0px;">
+		<div class="container-fluid" style="height:100vh; padding:10%; overflow:scroll;">
 			
 			<div class="media" style="padding-top:5%; margin-bottom:5%;">
 				<i class="far fa-calendar-plus fa-4x" style="padding-left:5%;"></i>
@@ -90,15 +90,15 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="addon-wrapping">@</span>
 					</div>
-					<input id="schedule_date" type="date" class="form-control" placeholder="경기 가능한 날짜" aria-label="date" aria-describedby="addon-wrapping" step="2">
-					<input id="schedule_time_start" type="time" class="form-control" placeholder="경기 가능한 시간" aria-label="time" aria-describedby="addon-wrapping" step="2">
-					<input id="schedule_time_end" type="time" class="form-control" placeholder="경기시간" aria-label="time" aria-describedby="button-addon2" step="2">
+					<input id="schedule_date" type="date" class="form-control" placeholder="경기 가능한 날짜" aria-label="date" aria-describedby="addon-wrapping">
+					<input id="schedule_time_start" type="time" class="form-control" placeholder="경기 가능한 시간" aria-label="time" aria-describedby="addon-wrapping">
+					<input id="schedule_time_end" type="time" class="form-control" placeholder="경기시간" aria-label="time" aria-describedby="button-addon2">
 				
 					<button class="btn btn-outline-secondary" type="button" id="schedule_add_btn">일정추가</button>
 				</div>
 			</div>
 
-			<div class="container-fluid" style="overflow:scroll; height:20vh;">
+			<div class="container-fluid" style="overflow:scroll; height:40%;">
 				<table class="table table-md" >
 				  <thead>
 				    <tr>
@@ -112,8 +112,7 @@
 				  </tbody>
 				</table>				
 			</div>
-		</div>
-		<!--middle container end-->
+		</div><!--middle container end-->
 		
 
 		<!--하단 탭바-->
@@ -202,7 +201,7 @@
 </div>
 
 <!-- 알림창 -->
-<!--친선경기 신청 모달-->
+<!--경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -212,18 +211,19 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form>
       <div class="modal-body">
       	<div class="input-group mb-3">
 			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" required>
 		</div>
 			<div class="input-group mb-3">
 			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2" required>
 		</div>
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
-      		<select id="modal_fmatch_select" class="form-control">
+      		<select id="modal_fmatch_select" class="form-control" required>
       			<option value="4"> 2 vs 2</option>
       			<option value="6"> 3 vs 3</option>
       			<option value="8"> 4 vs 4</option>
@@ -231,34 +231,35 @@
       	</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">참여명단</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2">
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
+			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2">
+			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">고가 평균</span>
-			<input type="time" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
+			<input type="text" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="시작시간" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" step="2">
+			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" required>
 			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" step="2">
+			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2">
+			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2" required>
 		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
+        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
       </div>
+  </form>
     </div>
   </div>
 </div>
@@ -454,9 +455,9 @@
 
 		 		if(date && time_start && time_end){
 		 			var date_start = date+'T'+time_start;
-		 			if(time_start_flag) date_start=date_start;
+		 			if(time_start_flag) date_start=date_start+':00';
 		 			date_end = date+'T'+time_end;
-		 			if(time_end_flag) date_end=date_end;
+		 			if(time_end_flag) date_end=date_end;+'00';
 		 			time_start_flag=0;
 		 			time_end_flag=0;
 		 			var date_ = {'pk':pk, 'date_start':date_start, 'date_end':date_end};
@@ -518,7 +519,7 @@
 		 		var time_start = $('#schedule_time_start').val();
 		 		var time_end = $('#schedule_time_end').val();
 		 		title = '{{player_name}}';
-		 		var date_start = date+'T'+time_start;
+		 		var date_start = date+'T'+time_start+':00';
 		 		console.log(date);
 		 		console.log(time_start);
 		 		console.log("일정추가"+date_start);
@@ -528,7 +529,7 @@
 		 		if(confirm('날짜 : '+date+'\n시간 : '+time_start+'\n정말 추가 하시겠습니까?') ){
 		 			if(time_start && time_end){
 
-		 				date_end = date+'T'+time_end;
+		 				date_end = date+'T'+time_end+':00';
 		 				var date_ = {'date_start':date_start, 'date_end':date_end, 'title':title};
 
 		 				$.ajax({
@@ -837,6 +838,46 @@
 			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
 			active_btn="bell";
 		});
+
+		//경기 신청모달에서 참여인원 수 선택시
+		$('#modal_fmatch_select').change(function(e) {
+			console.log("change1")
+			var state=$('#modal_fmatch_select option:selected').val();
+			if( state== '2'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '3'){
+				console.log("change")
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '4'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
+			}
+		})
+		
+				//경기신청모달 고가 평균 폼 확인
+		function goga_form_check(data){
+			data_=data.split(':')
+			var count =0;
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
 
 	</script>
 </body>

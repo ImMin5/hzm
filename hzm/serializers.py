@@ -21,5 +21,8 @@ class PostSerializer(serializers.ModelSerializer) :
 			,'date','passwd','state','result'\
 			,'red_goga_avg','blue_goga_avg','blue_win','red_win')
 
-
+class PlayerSerializer(serializers.ModelSerializer) :
+	class Meta :
+		model = Models.Player
+		fields = ('pk','player_name','passwd','club_name','win','lose')
 
