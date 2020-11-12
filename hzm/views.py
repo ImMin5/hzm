@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 import json
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+#from datetime import datetime
 # Create your views here.
 
 
@@ -46,6 +47,7 @@ def signup_page(request) :
 	return render(request,'hzm/signup_page.html')
 
 def match(request) :
+
 	posts = Post_list.objects.all().filter(state=True).order_by('-pk')
 	count = posts.count();
 	paginator = Paginator(posts, 10)
@@ -74,7 +76,7 @@ def match_info(request,post_pk) :
 		return redirect("/")
 
 	post = Post_list.objects.get(pk=post_pk)
-	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
+	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
 def match_before_info(request,post_pk) :
 	pk=request.session.get('pk')

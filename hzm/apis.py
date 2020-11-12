@@ -16,6 +16,7 @@ from .serializers import *
 import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
+my_club = "학지매"
 master_passwd = "ssdsmh"
 club_passwd ="hzm"
 
@@ -60,14 +61,14 @@ def edit_mypage_info(request) :
 		print(player)
 		print(password_now)
 		print(player.passwd)
+
 		if player.passwd == password_now :
-			print("sss")
 			player.player_name = name
-			player.passwd = password_change
+			if password_change is not None :
+				player.passwd = password_change
 			player.club_name=club_name
 			player.save()
 			request.session['player_name'] = name
-			print("Ddddd")	
 			return HttpResponse("good")
 		else :
 			return HttpResponse("passwordfail")
@@ -388,42 +389,108 @@ def save_match_info(request) :
 	pk=request.POST.get('post_pk')
 
 	print(pk)
-
 	post=Post_list.objects.get(pk=pk)
-
-	red_p1_name=request.POST.get('red_p1_name')
-	red_p2_name=request.POST.get('red_p2_name')
-	red_p3_name=request.POST.get('red_p3_name')
-	red_p4_name=request.POST.get('red_p4_name')
-	blue_p1_name=request.POST.get('blue_p1_name')
-	blue_p2_name=request.POST.get('blue_p2_name')
-	blue_p3_name=request.POST.get('blue_p3_name')
-	blue_p4_name=request.POST.get('blue_p4_name')
-	match_data=request.POST.get('match_data')
+	player_num=request.POST.get('player_num')
+	print(player_num)
+	
+	
+	
+	
+	match_date=request.POST.get('match_date')
 	match_time_start=request.POST.get('time_start')
 	match_time_end=request.POST.get('time_end')
 	red_goga_avg=request.POST.get('red_goga_avg')
 	blue_goga_avg=request.POST.get('blue_goga_avg')
-	player_num=request.POST.get('player_num')
+	
+	if player_num >= '1':
+		red_p1_name=request.POST.get('red_p1_name')
+		blue_p1_name=request.POST.get('blue_p1_name')
+		post.red_p1_name=red_p1_name
+		post.blue_p1_name=blue_p1_name
+	if player_num >= '2':
+		red_p2_name=request.POST.get('red_p2_name')
+		blue_p2_name=request.POST.get('blue_p2_name')
+		post.red_p2_name=red_p2_name
+		post.blue_p2_name=blue_p2_name
 
+	if player_num >= '3' :
+		red_p3_name=request.POST.get('red_p3_name')
+		blue_p3_name=request.POST.get('blue_p3_name')
+		post.red_p3_name=red_p3_name
+		post.blue_p3_name=blue_p3_name
+	
+	if player_num >= '4' :
+		red_p4_name=request.POST.get('red_p4_name')
+		blue_p4_name=request.POST.get('blue_p4_name')
+		post.red_p4_name=red_p4_name
+		post.blue_p4_name=blue_p4_name
 
-	post.red_p1_name=red_p1_name
-	post.red_p2_name=red_p2_name
-	post.red_p3_name=red_p3_name
-	post.red_p4_name=red_p4_name
-	post.blue_p1_name=blue_p1_name
-	post.blue_p2_name=blue_p2_name
-	post.blue_p3_name=blue_p3_name
-	post.blue_p4_name=blue_p4_name
-	post.match_data=match_data
+	
+	
+	post.match_date=match_date
 	post.match_time_start=match_time_start
 	post.match_time_end=match_time_end
 	post.red_goga_avg=red_goga_avg
 	post.blue_goga_avg=blue_goga_avg
 	post.player_num=player_num
 	post.save()		
-	return HttpResponse("good")
 
- 	
+	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
+
+ 
+def get_redteam_subplayer(request) :
+	player_num=request.GET.get('player_num')
+	red_p1_name=request.GET.get('red_p1')
+	red_p2_name=request.GET.get('red_p2')
+	red_p3_name=request.GET.get('red_p3')
+	red_p4_name=request.GET.get('red_p4')
+
+	if player_num >= '3' :
+		redteam_players=Player.objects.exclude(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+	elif player_num >= '4':
+		redteam_players=Player.objects.exclude(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+	else :
+		redteam_players=Player.objects.exclude(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+
+	serialized_players = PlayerSerializer(redteam_players,many=True)
+	return HttpResponse(json.dumps(serialized_players.data))
+
+def get_redteam_player(request) :
+	player_num=request.GET.get('player_num')
+	red_p1_name=request.GET.get('red_p1')
+	red_p2_name=request.GET.get('red_p2')
+	red_p3_name=request.GET.get('red_p3')
+	red_p4_name=request.GET.get('red_p4')
+
+	if player_num >= '3' :
+		redteam_players=Player.objects.filter(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+	elif player_num >= '4':
+		redteam_players=Player.objects.filter(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+	else :
+		redteam_players=Player.objects.filter(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+
+	print(redteam_players)
+
+	serialized_players = PlayerSerializer(redteam_players,many=True)
+	return HttpResponse(json.dumps(serialized_players.data))
+
+def save_redteam_player(request) :
+	player_num=request.GET.get('player_num')
+	
+	if player_num >= 1 :
+		red_p1_name=request.GET.get('red_p1')
+	if player_num >= 2 :
+		red_p1_name=request.GET.get('red_p2')
+	if player_num >= 3 :
+		red_p1_name=request.GET.get('red_p3')
+	if player_num >= 4 :
+		red_p1_name=request.GET.get('red_p4')
+
+	red_p2_name=request.GET.get('red_p2')
+	red_p3_name=request.GET.get('red_p3')
+	red_p4_name=request.GET.get('red_p4')
+
+	return HttpResponse("ddd")
+
 
 
