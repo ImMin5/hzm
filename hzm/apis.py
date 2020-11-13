@@ -149,17 +149,26 @@ def add_fmatch(request) :
 	date = request.POST.get('date')
 	p1 = request.POST.get('p1')
 	p2 = request.POST.get('p2')
-	p3 = request.POST.get('p3')
-	p4 = request.POST.get('p4')
-
-
+	
+	if player_num == '3' :
+		p3 = request.POST.get('p3')
+	elif player_num == '4' :
+		p3 = request.POST.get('p3')
+		p4 = request.POST.get('p4')
 
 	print(date)
 	
-	post = Post_list(post_writer=post_writer, club_name=club_name, \
+	post = Post_list(post_writer=post_writer, club_name=club_name, player_num=player_num, \
 		match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end,\
 		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date,\
-		blue_p1_name=p1,blue_p2_name=p2,blue_p3_name=p3,blue_p4_name=p4)
+		blue_p1_name=p1,blue_p2_name=p2)
+	
+	if player_num == '3' :
+		post.blue_p3_name=p3
+	elif player_num =='4' :
+		post.blue_p3_name=p3
+		post.blue_p4_name=p4
+
 	post.save()
 
 	return HttpResponse("good")
@@ -388,13 +397,11 @@ def check_post_passwd(request) :
 def save_match_info(request) :
 	pk=request.POST.get('post_pk')
 
+	print("pk number")
 	print(pk)
 	post=Post_list.objects.get(pk=pk)
 	player_num=request.POST.get('player_num')
 	print(player_num)
-	
-	
-	
 	
 	match_date=request.POST.get('match_date')
 	match_time_start=request.POST.get('time_start')
@@ -405,24 +412,50 @@ def save_match_info(request) :
 	if player_num >= '1':
 		red_p1_name=request.POST.get('red_p1_name')
 		blue_p1_name=request.POST.get('blue_p1_name')
-		post.red_p1_name=red_p1_name
+		try :
+			player=Player.objects.get(player_name=red_p1_name)
+			print("player")
+			print(player)
+			post.red_p1_name=red_p1_name
+		except Exception as e :
+			print("red1 is none")
+
 		post.blue_p1_name=blue_p1_name
+
 	if player_num >= '2':
 		red_p2_name=request.POST.get('red_p2_name')
 		blue_p2_name=request.POST.get('blue_p2_name')
-		post.red_p2_name=red_p2_name
+		try :
+			player=Player.objects.filter(player_name=red_p2_name)
+			print("player2")
+			print(player.player_name)
+			post.red_p2_name=red_p2_name
+		except Exception as e :
+			print("red2 is none")
 		post.blue_p2_name=blue_p2_name
 
 	if player_num >= '3' :
 		red_p3_name=request.POST.get('red_p3_name')
 		blue_p3_name=request.POST.get('blue_p3_name')
-		post.red_p3_name=red_p3_name
+		try :
+			player=Player.objects.filter(player_name=red_p3_name)
+			print("player3")
+			print(player.player_name)
+			post.red_p3_name=red_p3_name
+		except Exception as e :
+			print("red2 is none")
 		post.blue_p3_name=blue_p3_name
 	
 	if player_num >= '4' :
 		red_p4_name=request.POST.get('red_p4_name')
 		blue_p4_name=request.POST.get('blue_p4_name')
-		post.red_p4_name=red_p4_name
+		try :
+			player=Player.objects.filter(player_name=red_p4_name)
+			print("player4")
+			print(player.player_name)
+			post.red_p4_name=red_p4_name
+		except Exception as e :
+			print("red2 is none")
 		post.blue_p4_name=blue_p4_name
 
 	
@@ -434,8 +467,8 @@ def save_match_info(request) :
 	post.blue_goga_avg=blue_goga_avg
 	post.player_num=player_num
 	post.save()		
-
-	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
+	return HttpResponse("save")
+	#return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
  
 def get_redteam_subplayer(request) :

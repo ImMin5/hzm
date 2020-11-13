@@ -12,11 +12,14 @@
 		 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 		 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 		 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
-		
+		<link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 
 
 		 <!--폰트 어썸-->
 		 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+		 <!--알림창-->
+		 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 		<title>학지매</title>
 	</head>
@@ -160,7 +163,7 @@
 						</div>
 						<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 						<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
-									<i class="fa fa-user fa-3x" onclick="bt()" id="bottom_user_btn" name="logout" style="color:black;" ></i>
+									<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
 									</button><h2>마이페이지</h2></a>
 						</div>
 						{% endif %}
@@ -252,8 +255,8 @@
 		</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
+        <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
+        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary bg-dark">신청하기</button>
       </div>
   </form>
     </div>
@@ -273,59 +276,128 @@
 				NowTime += ':' + Now.getSeconds();
 				return NowTime;
 			}
-			//경기신청 버튼
-			$(document).on('click','#modal_fmatch_btn',function(e) {
-				if(confirm("이길수 있겠어?")){
-					var formData = new FormData();
-					var post_writer = $('#modal_fmatch_name').val();
-					var club_name = $('#modal_fmatch_clubname').val();
-					var match_date = $('#modal_fmatch_date').val();
-					var match_time_start = $('#modal_fmatch_time_start').val();
-					var match_time_end = $('#modal_fmatch_time_end').val();
-					var player_num = $('#modal_fmatch_select').val();
-					var passwd = $('#modal_fmatch_passwd').val();
-					var player = Array();
-					
-					for(var i = 1; i <= 4; i++) {
-						player[i] = $('#modal_fmatch_player'+i).val();
-						console.log(player[i]);
+		//경기신청 버튼
+		$(document).on('click','#modal_fmatch_btn',function(e) {
+			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
+			var formData = new FormData();
+			var post_writer = $('#modal_fmatch_name').val();
+			var club_name = $('#modal_fmatch_clubname').val();
+			var match_date = $('#modal_fmatch_date').val();
+			var match_time_start = $('#modal_fmatch_time_start').val();
+			var match_time_end = $('#modal_fmatch_time_end').val();
+			var player_num = $('#modal_fmatch_select').val();
+			var passwd = $('#modal_fmatch_passwd').val();
+			var player = Array();
+			var date = getTime();
+			var player_count=0;
+			
+			for(var i = 0; i <player_num; i++) {
+					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
+					if($.trim(player[i]) != '') {
+						player_count++;
+						console.log("player["+i+"]:"+player[i]);
 					}
-					console.log("player_num : "+player_num);
-					console.log("match date : "+match_date);
-					console.log(match_time_start);
-					console.log(match_time_end);
+			}
+
+
+			if( $.trim(club_name) == '') {
+				console.log("club_name :" +club_name)
+				swal("클럽명을 입력해주세요");
+				return ;
+			}
+			else if($.trim(post_writer) == '') {
+				 swal("카러플 닉네임을 입력해주세요");
+				 console.log("post writer: "+ club_name)
+				return;
+			}
+			else if(player_num != player_count){
+				swal("선수 명단을 입력해 주세요");
+				console.log("player_num :"+player_num)
+				console.log("player_num input :"+player.length)
+				return;
+			}
+			else if(!(match_date)){
+				swal("희망 경기 날짜를 입력해주세요");
+				console.log("match date : "+match_date)
+				return;
+			}
+			else if(goga_form_check(blue_goga_avg) == false) {	
+				swal("고가 입력 양식 00:00:00");
+				return ;
+			} 
+			else if(!(match_time_start)){
+				swal("시작 시간을 입력해주세요");
+				return;
+			}
+			else if(!(match_time_end)){
+				swal("종료 시간을 입력해주세요");
+				return;
+			}
+			else if(match_time_start > match_time_end){
+				swal("시작시간이 종료시간보다 늦습니다!")
+				return;
+			}	
+			else if(!(passwd)){
+				swal("비밀번호를 입력해주세요")
+				return;
+			}
+
+			console.log("match date : "+match_date);
+			console.log(match_time_start);
+			console.log(match_time_end);
+
+			swal({
+				title: "이길 수 있겠어?",
+				text: "무르기 없기~",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willDelete) => {
+				if (willDelete) {
+
 					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-					formData.append('player[]',player);
+					formData.append('p1',player[0]);
+					formData.append('p2',player[1]);
+					formData.append('p3',player[2]);
+					formData.append('p4',player[3]);
 					formData.append('post_writer',post_writer);
 					formData.append('club_name',club_name);
 					formData.append('match_date',match_date);
 					formData.append('match_time_start',match_time_start);
 					formData.append('match_time_end',match_time_end);
-					formData.append('player_num',player_num*i);
+					formData.append('player_num',player_num);
 					formData.append('passwd',passwd);
-
+					formData.append('blue_goga_avg',blue_goga_avg);
+					formData.append('date',date);
+					console.log("date : "+date)
 					$.ajax({
-							url : "{% url 'hzm:ajax_add_fmatch' %}",
-							type : 'POST',
-							dataType : 'json',
-							contentType : false,
-							processData : false,
-							data : formData,
-							success : function(data) {
-								
-							},
-							error : function(error) {
+						url : "{% url 'hzm:ajax_add_fmatch' %}",
+						type : 'POST',
+						contentType : false,
+						processData : false,
+						data : formData,
+						success : function(data) {
+							$('#friendlymatch').modal('hide');
+							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
+							
+						},
+						error : function(error) {
+							swal("신청실패", "아마도 통신오류??..", "error");
+							$('#friendlymatch').modal('hide');
+						},
+					});
 
-							},
-						});
 
 
-				}
-				else
-				{
-
+				} else {
+					swal("담에 봐요!");
+					$('#friendlymatch').modal('hide');
 				}
 			});
+
+		});
+
 			$(document).on('click','#signup_btn',function(e) {
 				$('#modal_signin_btn').attr('id','modal_signup_btn');
 				$('#modal_signup_btn').text('가입하기');
@@ -373,11 +445,11 @@
 
 						},
 						success:function(data) {
-							alert("아이디 생성 성공");
+							swal("아이디 생성 성공");
 							location.reload();
 						},
 						error : function(error) {
-							alert("아이디생성실패");
+							swal("아이디생성실패");
 						}
 					});
 				}
@@ -405,21 +477,21 @@
 				},
 				success:function(msg) {
 					if( msg=="login_fail1") {
-						return alert("존재하지 않는 아이디입니다");
+						return swal("존재하지 않는 아이디입니다");
 					}
 					else if (msg=="login_fail2") {
-						return alert("존재하지 않는 아이디입니다");
+						return swal("존재하지 않는 아이디입니다");
 					}
 					else if(msg=="login_fail3"){
-						return alert("존재하지 않는 아이디입니다");
+						return swal("존재하지 않는 아이디입니다");
 					}
 					else {
-						alert("환영합니다^^!");
+						swal("환영합니다^^!");
 						location.reload();
 					}
 				},
 				error : function(error) {
-					alert("아이디/비밀번호가 일치하지 않습니다.");
+					swal("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});

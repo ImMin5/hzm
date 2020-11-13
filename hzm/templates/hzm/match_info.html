@@ -12,9 +12,14 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
+	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	
 	 <!--폰트 어썸-->
 	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+	 <!--알림창-->
+	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 	<title>학지매</title>
 
 
@@ -96,26 +101,26 @@
 									<span class="input-group-text">고가평균</span>
 									<input type="text" id="matchinfo_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="RED팀 고가평균" aria-describedby="button-addon2" value="{{post.red_goga_avg}}" step="2" disabled required>
 								</div>
-								<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p1_name}}" disabled required>
-								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p2_name}}" disabled required>
-								{% if post.player_num >= 3 %}
-								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p3_name}}" disabled required>
+								{% if post.red_p1_name == None %}
+								<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
 								{% else %}
-								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p1_name}}" disabled required>
 								{% endif %}
 
-								{% if post.player_num >= 4 %}	
-								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p4_name}}" disabled required>
+								{% if post.red_p2_name == None %}
+								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
 								{% else %}
-								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>	
+								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p2_name}}" disabled required>
 								{% endif %}
-								<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{post.red_p1_name}}" data-p2="{{post.red_p2_name}}" data-p3="{{post.red_p3_name}}" data-p4="{{post.red_p4_name}}" data-player_num="{{post.player_num}}">라이더수정</button>
+								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>	
+								<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{post.red_p1_name}}" data-p2="{{post.red_p2_name}}" data-p3="{{post.red_p3_name}}" data-p4="{{post.red_p4_name}}" data-player_num="{{post.player_num}}" disabled>라이더수정</button>
 							</div>
 							<label for="exampleInputEmail1">BLUE팀 {{post.club_name}}</label>
 							<div class="input-group mb-3">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
-									<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.blue_goga_avg}}" disabled required>
+									<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.blue_goga_avg}}" disabled required title="00:00:00">
 								</div>
 								<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p1_name}}" disabled required>
 								<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p2_name}}" disabled required>
@@ -185,7 +190,7 @@
 					</div>
 					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
-								<i class="fa fa-user fa-3x" onclick="bt()" id="bottom_user_btn" name="logout" style="color:black;" ></i>
+								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
 								</button><h2>마이페이지</h2></a>
 					</div>
 					{% endif %}
@@ -340,59 +345,143 @@
 
 <!-- script start -->
 	<script>
+
+
+		function getTime() {
+			var Now = new Date();
+			var NowTime = Now.getFullYear();
+			
+			NowTime += '-' + String(Number(Now.getMonth()) +1) ;
+			NowTime += '-' + Now.getDate();
+			NowTime += ' ' + Now.getHours();
+			NowTime += ':' + Now.getMinutes();
+			NowTime += ':' + Now.getSeconds();
+			return NowTime;
+		}
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
-			if(confirm("이길수 있겠어?")){
-				var formData = new FormData();
-				var post_writer = $('#modal_fmatch_name').val();
-				var club_name = $('#modal_fmatch_clubname').val();
-				var match_date = $('#modal_fmatch_date').val();
-				var match_time_start = $('#modal_fmatch_time_start').val();
-				var match_time_end = $('#modal_fmatch_time_end').val();
-				var player_num = $('#modal_fmatch_select').val();
-				var passwd = $('#modal_fmatch_passwd').val();
-				var player = Array();
-				
-				for(var i = 1; i <= 4; i++) {
-					player[i] = $('#modal_fmatch_player'+i).val();
-					console.log(player[i]);
-				}
-				console.log("player_num : "+player_num);
-				console.log("match date : "+match_date);
-				console.log(match_time_start);
-				console.log(match_time_end);
-				formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-				formData.append('player[]',player);
-				formData.append('post_writer',post_writer);
-				formData.append('club_name',club_name);
-				formData.append('match_date',match_date);
-				formData.append('match_time_start',match_time_start);
-				formData.append('match_time_end',match_time_end);
-				formData.append('player_num',player_num*i);
-				formData.append('passwd',passwd);
+			
+			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
+			var formData = new FormData();
+			var post_writer = $('#modal_fmatch_name').val();
+			var club_name = $('#modal_fmatch_clubname').val();
+			var match_date = $('#modal_fmatch_date').val();
+			var match_time_start = $('#modal_fmatch_time_start').val();
+			var match_time_end = $('#modal_fmatch_time_end').val();
+			var player_num = $('#modal_fmatch_select').val();
+			var passwd = $('#modal_fmatch_passwd').val();
+			var player = Array();
+			var date = getTime();
+			var player_count=0;
+			
+			for(var i = 0; i <player_num; i++) {
+					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
+					if($.trim(player[i]) != '') {
+						player_count++;
+						console.log("player["+i+"]:"+player[i]);
+					}
+			}
 
-				$.ajax({
+
+			if( $.trim(club_name) == '') {
+				console.log("club_name :" +club_name)
+				swal("클럽명을 입력해주세요");
+				return ;
+			}
+			else if($.trim(post_writer) == '') {
+				 swal("카러플 닉네임을 입력해주세요");
+				 console.log("post writer: "+ club_name)
+				return;
+			}
+			else if(player_num != player_count){
+				swal("선수 명단을 입력해 주세요");
+				console.log("player_num :"+player_num)
+				console.log("player_num input :"+player.length)
+				return;
+			}
+			else if(!(match_date)){
+				swal("희망 경기 날짜를 입력해주세요");
+				console.log("match date : "+match_date)
+				return;
+			}
+			else if(goga_form_check(blue_goga_avg) == false) {	
+				swal("고가 입력 양식 00:00:00");
+				return ;
+			} 
+			else if(!(match_time_start)){
+				swal("시작 시간을 입력해주세요");
+				return;
+			}
+			else if(!(match_time_end)){
+				swal("종료 시간을 입력해주세요");
+				return;
+			}
+			else if(match_time_start > match_time_end){
+				swal("시작시간이 종료시간보다 늦습니다!")
+				return;
+			}	
+			else if(!(passwd)){
+				swal("비밀번호를 입력해주세요")
+				return;
+			}
+
+			console.log("match date : "+match_date);
+			console.log(match_time_start);
+			console.log(match_time_end);
+
+			swal({
+				title: "이길 수 있겠어?",
+				text: "무르기 없기~",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willDelete) => {
+				if (willDelete) {
+
+					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
+					formData.append('p1',player[0]);
+					formData.append('p2',player[1]);
+					formData.append('p3',player[2]);
+					formData.append('p4',player[3]);
+					formData.append('post_writer',post_writer);
+					formData.append('club_name',club_name);
+					formData.append('match_date',match_date);
+					formData.append('match_time_start',match_time_start);
+					formData.append('match_time_end',match_time_end);
+					formData.append('player_num',player_num);
+					formData.append('passwd',passwd);
+					formData.append('blue_goga_avg',blue_goga_avg);
+					formData.append('date',date);
+					console.log("date : "+date)
+					$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",
 						type : 'POST',
-						dataType : 'json',
 						contentType : false,
 						processData : false,
 						data : formData,
 						success : function(data) {
+							$('#friendlymatch').modal('hide');
+							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
 							
 						},
 						error : function(error) {
-
+							swal("신청실패", "아마도 통신오류??..", "error");
+							$('#friendlymatch').modal('hide');
 						},
 					});
 
 
-			}
-			else
-			{
 
-			}
+				} else {
+					swal("담에 봐요!");
+					$('#friendlymatch').modal('hide');
+				}
+			});
+
 		});
+
+
 		$(document).on('click','#signup_btn',function(e) {
 			$('#modal_signin_btn').attr('id','modal_signup_btn');
 			$('#modal_signup_btn').text('가입하기');
@@ -431,11 +520,11 @@
 
 					},
 					success:function(data) {
-						alert("아이디 생성 성공");
+						swal("아이디 생성 성공");
 						location.reload();
 					},
 					error : function(error) {
-						alert("아이디생성실패");
+						swal("아이디생성실패");
 					}
 				});
 			}
@@ -461,11 +550,11 @@
 
 				},
 				success:function(data) {
-					alert("성공");
+					swal("성공");
 					location.reload();
 				},
 				error : function(error) {
-					alert("아이디/비밀번호가 일치하지 않습니다.");
+					swal("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});
@@ -475,11 +564,11 @@
 				url:"{% url 'hzm:ajax_logout' %}",
 				type:'GET',
 				success:function(data) {
-					alert("바이바이~");
+					swal("바이바이~");
 					location.reload('/');
 				},
 				error : function(error) {
-					alert("실패");
+					swal("실패");
 				}
 			})
 		});
@@ -609,27 +698,59 @@
 			var red_p2=$('#matchinfo_red_p2_name').val();
 			if(player_num>=3) var red_p3=$('#matchinfo_red_p3_name').val();
 			if(player_num>=4) var red_p4=$('#matchinfo_red_p4_name').val();
+			
 			var blue_p1=$('#matchinfo_blue_p1_name').val();
 			var blue_p2=$('#matchinfo_blue_p2_name').val();
 			if(player_num>=3) var blue_p3=$('#matchinfo_blue_p3_name').val();
 			if(player_num>=4) var blue_p4=$('#matchinfo_blue_p4_name').val();
+			
 			var match_date=$('#matchinfo_match_date').val();
 			var time_start=$('#matchinfo_time_start').val();
 			var time_end=$('#matchinfo_time_end').val();
 			var red_goga_avg=$('#matchinfo_red_goga_avg').val();
 			var blue_goga_avg=$('#matchinfo_blue_goga_avg').val();
 			var post_pk="{{post.pk}}";
-			var team=$(this).attr('data-team');
-			console.log(post_pk);
 
-			if( (team=="red" || team=="all")  && goga_form_check(red_goga_avg)==false ){ 
-				alert("고가 입력 형식 00:00:00")
-				return ;
-			} 
-			if( (team=="blue" || team=="all") && goga_form_check(blue_goga_avg)==false ){
-				alert("고가 입력 형식 00:00:00") 	
-				return ;
+			var team=$(this).attr('data-team');
+			console.log("post:"+post_pk);
+
+			if( team=="red" || team=="all") {
+				if(goga_form_check(red_goga_avg)==false ){
+					swal("RED팀 고가 양식 00:00:00");
+					return;
+				}
+				else if($.trim(red_p1) == '') {
+					swal("RED 라이더1 을 입력해주세요.")
+					return;
+				}
+				else if($.trim(red_p2) == '') {
+					swal("RED 라이더2 을 입력해주세요.")
+					return;
+				}
 			}
+			//	alert("고가 입력 형식 00:00:00")
+			 
+			if( team=="blue" || team=="all") {
+				if(goga_form_check(blue_goga_avg)==false ){
+					swal("BLUE팀 고가 양식 00:00:00");
+					return;
+				}
+			}
+
+			if(!(time_start)){
+				swal("시작 시간을 입력해 주세요");
+				return;
+			}
+			else if(!(time_end)){
+				swal("종료 시간을 입력해 주세요");
+				return;
+			}
+			else if(time_start > time_end){
+				swal("시작시간이 종료시간보다 늦습니다!")
+				return;
+			}
+			//	alert("고가 입력 형식 00:00:00") 	
+				
 
 			$.ajax({
 				url : "{% url 'hzm:ajax_save_match_info' %}",
@@ -675,6 +796,9 @@
 					$('#matchinfo_save_btn').text('수정');
 					$('#matchinfo_save_btn').attr('id','matchinfo_edit_btn');
 					$('#matchinfo_delete_btn').attr('disabled',true);
+
+					$('#matchinfo_redteam_member_edit_btn').attr('disabled',true);
+					location.reload();
 				}
 			});
 		})
@@ -920,6 +1044,14 @@
 				},
 			});*/
 		})
+		$(document).ready(function(e) {
+			var red_p3_name="{{post.red_p3_name}}";
+			var red_p4_name="{{post.red_p4_name}}";
+			if(red_p3_name != "None")
+				$('#matchinfo_red_p3_name').val(red_p3_name);
+			if(red_p4_name != "None")
+				$('#matchinfo_red_p3_name').val(matchinfo_red_p3_name_name);
+		});
 
 	</script>
 	
