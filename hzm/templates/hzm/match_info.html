@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="uft-8">
-	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no  user-scalable=no maximum-scale=1"/>
+	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 
 	<!--부트스트랩-->
 	 <script src="/static/js/jquery-3.5.1.min.js"></script>
@@ -124,8 +124,8 @@
 								</div>
 								<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p1_name}}" disabled required>
 								<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p2_name}}" disabled required>
-								<input type="text" id="matchinfo_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p3_name}}" disabled required>
-								<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p4_name}}" disabled required>
+								<input type="text" id="matchinfo_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">희망날짜</span>
@@ -1045,12 +1045,20 @@
 			});*/
 		})
 		$(document).ready(function(e) {
+			var player_num="{{post.player_num}}"
 			var red_p3_name="{{post.red_p3_name}}";
 			var red_p4_name="{{post.red_p4_name}}";
-			if(red_p3_name != "None")
+			var blue_p3_name="{{post.blue_p3_name}}";
+			var blue_p4_name="{{post.blue_p4_name}}";
+
+			if(player_num == 3 && red_p3_name != "None"){
 				$('#matchinfo_red_p3_name').val(red_p3_name);
-			if(red_p4_name != "None")
-				$('#matchinfo_red_p3_name').val(matchinfo_red_p3_name_name);
+				$('#matchinfo_blue_p3_name').val(blue_p3_name);
+			}
+			if(player_num ==4 && red_p4_name != "None"){
+				$('#matchinfo_red_p4_name').val(red_p4_name);
+				$('#matchinfo_blue_p4_name').val(blue_p4_name);
+			}
 		});
 
 	</script>
