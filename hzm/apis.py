@@ -426,7 +426,7 @@ def save_match_info(request) :
 		red_p2_name=request.POST.get('red_p2_name')
 		blue_p2_name=request.POST.get('blue_p2_name')
 		try :
-			player=Player.objects.filter(player_name=red_p2_name)
+			player=Player.objects.get(player_name=red_p2_name)
 			print("player2")
 			print(player.player_name)
 			post.red_p2_name=red_p2_name
@@ -438,7 +438,7 @@ def save_match_info(request) :
 		red_p3_name=request.POST.get('red_p3_name')
 		blue_p3_name=request.POST.get('blue_p3_name')
 		try :
-			player=Player.objects.filter(player_name=red_p3_name)
+			player=Player.objects.get(player_name=red_p3_name)
 			print("player3")
 			print(player.player_name)
 			post.red_p3_name=red_p3_name
@@ -450,7 +450,7 @@ def save_match_info(request) :
 		red_p4_name=request.POST.get('red_p4_name')
 		blue_p4_name=request.POST.get('blue_p4_name')
 		try :
-			player=Player.objects.filter(player_name=red_p4_name)
+			player=Player.objects.get(player_name=red_p4_name)
 			print("player4")
 			print(player.player_name)
 			post.red_p4_name=red_p4_name
