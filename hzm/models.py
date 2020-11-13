@@ -27,7 +27,7 @@ class Map(models.Model):
 class Post_list(models.Model):
 	club_name = models.CharField(max_length=128, blank=True, null= True)
 	post_writer = models.CharField(max_length=128, blank=True, null= True)
-	player_num = models.IntegerField(default=4,blank=True, null= True)
+	player_num = models.IntegerField(default=2,blank=True, null= True)
 	red_p1_name = models.CharField(max_length=128, blank=True, null= True)
 	red_p2_name = models.CharField(max_length=128, blank=True, null= True)
 	red_p3_name = models.CharField(max_length=128, blank=True, null= True)

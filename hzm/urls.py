@@ -39,4 +39,5 @@ urlpatterns = [
 	path('api/get_redteam_player',apis.get_redteam_player,name='ajax_get_redteam_player'),
 	path('api/get_redteam_subplayer',apis.get_redteam_subplayer,name='ajax_get_redteam_subplayer'),
 	path('api/save_redteam_player',apis.save_redteam_player,name='ajax_save_redteam_player'),
+	path('error',views.error_page,name='error_page'),
 ]

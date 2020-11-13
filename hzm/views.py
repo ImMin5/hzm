@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render,redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse,HttpResponseRedirect
+from django.urls import reverse
 from hzm.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
@@ -67,7 +68,7 @@ def match(request) :
 	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_name':player_name})
 
 def match_info(request,post_pk) :
-	pk=request.session.get('pk')
+	pk=post_pk
 	player_name=request.session.get('player_name') 
 
 	if pk is None :
@@ -75,20 +76,25 @@ def match_info(request,post_pk) :
 	elif player_name is None :
 		return redirect("/")
 
-	post = Post_list.objects.get(pk=post_pk)
+	post = Post_list.objects.get(pk=pk)
 	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
 def match_before_info(request,post_pk) :
-	pk=request.session.get('pk')
-	player_name=request.session.get('player_name') 
+	try :
+		pk=request.session.get('pk')
+		player_name=request.session.get('player_name') 
 
-	if pk is None :
-		return redirect("/")
-	elif player_name is None :
-		return redirect("/")
+		if pk is None :
+			return redirect("/")
+		elif player_name is None :
+			return redirect("/")
 
-	post = Post_list.objects.get(pk=post_pk)
-	return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
+		post = Post_list.objects.get(pk=post_pk)
+		if post.state == True :
+			raise Exception('error')
+		return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
+	except Exception as e :
+		return HttpResponseRedirect(reverse('hzm:error_page'))
 
 def match_before(request) :
 
@@ -117,3 +123,6 @@ def match_before(request) :
 
 def delete_result(request) :
 	return render(request,'hzm/test.html')
+
+def error_page(request) :
+	return render(request, 'hzm/error.html')
