@@ -66,7 +66,8 @@ class Post_list(models.Model):
 	date = models.CharField(max_length=128, blank=True, null= True)
 	red_goga_avg = models.CharField(max_length=128, blank=True, null= True)
 	blue_goga_avg = models.CharField(max_length=128, blank=True, null= True)
-	state = models.BooleanField(default=False) 
+	accept = models.BooleanField(default=False)
+	state = models.CharField(max_length=4, blank=True, null= True)
 	result = models.BooleanField(default=False)
 	blue_win = models.IntegerField(default=0,blank=True, null= True)
 	red_win = models.IntegerField(default=0,blank=True, null= True)
@@ -77,6 +78,13 @@ class Schedule(models.Model):
 	title = models.CharField(max_length=128,blank=True, null=True)
 	date_start = models.CharField(max_length=128, blank=True, null= True)
 	date_end = models.CharField(max_length=128, blank=True, null= True)
+
+class Matchresult(models.Model):
+	match=models.ForeignKey('Post_list', on_delete=models.SET_NULL, blank=True, null=True)
+	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	result = models.BooleanField(default=False)
+	club_name =models.CharField(max_length=128, blank=True, null= True)
+
 
 
 

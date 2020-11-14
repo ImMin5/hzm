@@ -103,16 +103,16 @@ def sign_in(request) :
 
 
 def sign_up(request) :
-	player_name = request.POST.get('player_id')
+	player_name = request.POST.get('player_name')
 	player_passwd = request.POST.get('player_passwd')
 	club_name = request.POST.get('player_club')
 	try :
 		if request.method == 'POST' :
 			print('POST')
-			print(player_id)
+			print(player_name)
 			print(player_passwd)
 
-			player = Player(player_name=player_name, passwd=player_passwd, club_name=club_name)
+			player = Player(player_name=player_name, passwd=player_passwd, club_name=my_club)
 			player.save()
 
 			player = Player.objects.get(player_name=player_name)
@@ -302,7 +302,7 @@ def delete_match_info(request,post_pk) :
 	try :
 		post=Post_list.objects.get(pk=post_pk)
 		post.delete();
-		posts = Post_list.objects.all().filter(state=True).order_by('-pk')
+		posts = Post_list.objects.all().filter(accept=True).order_by('-pk')
 		count = posts.count()
 		
 		paginator = Paginator(posts, 10)
@@ -329,7 +329,7 @@ def delete_before_match_info(request,post_pk) :
 
 		post=Post_list.objects.get(pk=post_pk)
 		post.delete();
-		posts = Post_list.objects.all().filter(state=False).order_by('-pk')
+		posts = Post_list.objects.all().filter(accept=False).order_by('-pk')
 		count = posts.count()
 		paginator = Paginator(posts, 10)
 		pages = request.GET.get('page',1)
@@ -354,10 +354,10 @@ def accpet_match_info(request,post_pk) :
 		print(post_pk)
 		post=Post_list.objects.get(pk=post_pk)
 		print(post)
-		post.state=True
+		post.accept=True
 		post.save()
 		print(1)
-		posts = Post_list.objects.all().filter(state=True).order_by('-pk')
+		posts = Post_list.objects.all().filter(accept=True).order_by('-pk')
 		print(2)
 		count = posts.count()
 		paginator = Paginator(posts, 10)

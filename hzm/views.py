@@ -6,6 +6,8 @@ from hzm.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 import json
+import datetime
+import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #from datetime import datetime
 # Create your views here.
@@ -49,13 +51,31 @@ def signup_page(request) :
 
 def match(request) :
 
-	posts = Post_list.objects.all().filter(state=True).order_by('-pk')
+	posts = Post_list.objects.all().filter(accept=True).order_by('-pk')
 	count = posts.count();
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
 	pk=request.session.get('pk')
-	player_name=request.session.get('player_name') 
+	player_name=request.session.get('player_name')
+
+	if pk is None :
+		return redirect('hzm:main_page')
+
+	
+	now = time.strftime('%Y-%m-%d %I:%M',time.localtime())
+	for post in posts :
+		match_date_start = post.match_date+' '+post.match_time_start
+		match_date_end = post.match_date+' '+post.match_time_end
+		print(now)
+		print(match_date_end)
+		if match_date_start > now :
+			post.state="경기 전"
+		elif match_date_start >= now and match_date_end < now :
+			post.state="경기 중"
+		else :
+			post.state="경기종료"
+		post.save()
 
 	try :
 		posts = paginator.get_page(pages)
@@ -68,15 +88,10 @@ def match(request) :
 	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_name':player_name})
 
 def match_info(request,post_pk) :
-	pk=post_pk
+	post_pk=post_pk
+	pk=request.session.get('pk')
 	player_name=request.session.get('player_name') 
-
-	if pk is None :
-		return redirect("/")
-	elif player_name is None :
-		return redirect("/")
-
-	post = Post_list.objects.get(pk=pk)
+	post = Post_list.objects.get(pk=post_pk)
 	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
 def match_before_info(request,post_pk) :
@@ -90,7 +105,7 @@ def match_before_info(request,post_pk) :
 			return redirect("/")
 
 		post = Post_list.objects.get(pk=post_pk)
-		if post.state == True :
+		if post.accpet == True :
 			raise Exception('error')
 		return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
 	except Exception as e :
@@ -106,7 +121,8 @@ def match_before(request) :
 	elif player_name is None :
 		return redirect("/")
 
-	posts = Post_list.objects.all().filter(state=False).order_by('-pk')
+	posts = Post_list.objects.all().filter(accept=False).order_by('-pk')
+
 	count = posts.count()
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
