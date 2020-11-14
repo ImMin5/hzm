@@ -90,12 +90,7 @@
 						{% for list in posts %}
 						<tr onclick="location.href='/match_before/info/{{list.pk}}'" >
 							<td><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
-							<td style="font-size:0.8rem;" align="center">
-								{% if list.state %}
-								<i class="fas fa-check-square"></i>
-								{% else %}
-								승인대기
-								{% endif %}
+							<td style="font-size:0.8rem;" align="center">승인대기
 							</td>
 							<td> {{list.player_num}} : {{list.player_num}}</td>
 							<td style="text-align:center;"> 학지매 vs {{list.club_name}}</td>
