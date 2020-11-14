@@ -49,7 +49,7 @@
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
-			        <a class="nav-link" href="#">개인 기록</a>
+			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
@@ -171,7 +171,7 @@
 		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
 				</div>
 		        <div class="input-group mb-3">
-		        	<input type="text" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
+		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
 		        	<div class="input-group-append">
 				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
 				</div>

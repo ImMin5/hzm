@@ -46,7 +46,7 @@
 				      </li>
 				      {% if pk %}
 				      <li class="nav-item">
-				        <a class="nav-link" href="#">개인 기록</a>
+				        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
 				      </li>
 				      <li class="nav-item">
 				        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
@@ -94,12 +94,17 @@
 							<tr onclick="location.href='/match/info/{{list.pk}}'" >
 								<td style="text-align:center;" ><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
 								{% if list.state == "경기종료" %}
-								<td id="tbody_post_lists_td_state" style="color:blue; text-align: center;">{{list.state}}
-								</td>
-								{% elif list.sate == "경기 전"%}
+									{% if list.result %}
+									<td id="tbody_post_lists_td_state" style="color:green; text-align:center;">승리</td>
+									{% elif list.result == False %}
+									<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">패배</td>
+									{% else %}
+									<td id="tbody_post_lists_td_state" style="color:blue; text-align: center;">{{list.state}}</td>
+									{% endif %}
+								{% elif list.state == "경기준비" %}
 								<td id="tbody_post_lists_td_state" style="color:black; text-align: center;">{{list.state}}
 								</td>
-								{% else %}
+								{% elif list.state == "진행중" %}
 								<td id="tbody_post_lists_td_state" style="color:red; text-align: center;">{{list.state}}
 								</td>
 								{% endif %}
@@ -188,7 +193,7 @@
 			   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
 					</div>
 			        <div class="input-group mb-3">
-			        	<input type="text" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
+			        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
 			        	<div class="input-group-append">
 					    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
 					</div>
