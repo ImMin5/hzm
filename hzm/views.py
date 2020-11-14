@@ -70,11 +70,12 @@ def match(request) :
 		print(now)
 		print(match_date_end)
 		if match_date_start > now :
-			post.state="경기 전"
-		elif match_date_start >= now and match_date_end < now :
-			post.state="경기 중"
-		else :
+			post.state="경기준비"
+		elif match_date_end < now :
 			post.state="경기종료"
+		else :
+			post.state="진행중"
+		print(post.state)
 		post.save()
 
 	try :
@@ -147,3 +148,8 @@ def delete_result(request) :
 
 def error_page(request) :
 	return render(request, 'hzm/error.html')
+
+def personal_record(request) :
+	player_name=request.session.get('player_name')
+	pk=request.session.get('pk')
+	return render(request, 'hzm/personal_record.html',{'player_name':player_name, 'pk':pk})
