@@ -425,23 +425,30 @@
 			});
 
 
-			$(document).on('click','#modal_signup_btn',function(e) {
-				var player_name = $('#modal_player_name').val();
-				var player_passwd = $('#modal_player_passwd').val(); 
+		//모달에서 가입하기 버튼 클릭
+		$(document).on('click','#modal_signup_btn',function(e) {
+			var player_name = $('#modal_player_name').val();
+			var player_passwd = $('#modal_player_passwd').val(); 
 
-				console.log(player_name);
-				console.log(player_passwd);
+			console.log(player_name);
+			console.log(player_passwd);
 
-				if(confirm('아이디를 생성하시겠습니까?')) {
+			swal({
+				title: "아이디를 생성 하시겠습니까?",
+				text: "학지매에 오신것을 환영합니다~",
+				icon: "info",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willcreate) =>{
+				if(willcreate){
 					$.ajax({
 						url:"{% url 'hzm:ajax_signup' %}",
 						type:'POST',
-						dataType : 'json',
 						data : {
 							'player_name' : player_name,
 							'player_passwd' : player_passwd,
 							'csrfmiddlewaretoken' : "{{csrf_token}}",
-
 						},
 						success:function(data) {
 							swal("아이디 생성 성공");
@@ -451,12 +458,15 @@
 							swal("아이디생성실패");
 						}
 					});
-				}
-				else
-					return;
 
+				}
+				else{
+					return;
+				}
 
 			});
+		});
+
 
 			//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
@@ -493,6 +503,20 @@
 					swal("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
+		});
+				//로그아웃 버튼 클릭
+		$(document).on('click','#logout_btn', function(e) {
+			$.ajax({
+				url:"{% url 'hzm:ajax_logout' %}",
+				type:'GET',
+				success:function(data) {
+					location.reload();
+					//swal("바이바이~");
+				},
+				error : function(error) {
+					swal("실패");
+				}
+			})
 		});
 
 			//하탄 탭 클릭시 아이콘 크기 변경
@@ -538,11 +562,6 @@
 					create_post_list(data[i]);
 				}
 			}
-			$(document).ready(function(e){
-				var now_date = getTime();
-				console.log(match_date);
-				console.log(now_date);
-			})
 
 
 		

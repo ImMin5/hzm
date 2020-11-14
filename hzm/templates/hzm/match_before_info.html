@@ -492,6 +492,7 @@
 
 	
 
+//모달에서 가입하기 버튼 클릭
 		$(document).on('click','#modal_signup_btn',function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -499,31 +500,40 @@
 			console.log(player_name);
 			console.log(player_passwd);
 
-			if(confirm('아이디를 생성하시겠습니까?')) {
-				$.ajax({
-					url:"{% url 'hzm:ajax_signup' %}",
-					type:'POST',
-					dataType : 'json',
-					data : {
-						'player_name' : player_name,
-						'player_passwd' : player_passwd,
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
+			swal({
+				title: "아이디를 생성 하시겠습니까?",
+				text: "학지매에 오신것을 환영합니다~",
+				icon: "info",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willcreate) =>{
+				if(willcreate){
+					$.ajax({
+						url:"{% url 'hzm:ajax_signup' %}",
+						type:'POST',
+						data : {
+							'player_name' : player_name,
+							'player_passwd' : player_passwd,
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+						},
+						success:function(data) {
+							swal("아이디 생성 성공");
+							location.reload();
+						},
+						error : function(error) {
+							swal("아이디생성실패");
+						}
+					});
 
-					},
-					success:function(data) {
-						swal("아이디 생성 성공");
-						location.reload();
-					},
-					error : function(error) {
-						swal("아이디생성실패");
-					}
-				});
-			}
-			else
-				return;
+				}
+				else{
+					return;
+				}
 
-
+			});
 		});
+
 
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();

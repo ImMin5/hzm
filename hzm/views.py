@@ -59,6 +59,9 @@ def match(request) :
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name')
 
+	if pk is None :
+		return redirect('hzm:main_page')
+
 	
 	now = time.strftime('%Y-%m-%d %I:%M',time.localtime())
 	for post in posts :
@@ -85,9 +88,10 @@ def match(request) :
 	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_name':player_name})
 
 def match_info(request,post_pk) :
-	pk=post_pk
+	post_pk=post_pk
+	pk=request.session.get('pk')
 	player_name=request.session.get('player_name') 
-	post = Post_list.objects.get(pk=pk)
+	post = Post_list.objects.get(pk=post_pk)
 	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
 def match_before_info(request,post_pk) :

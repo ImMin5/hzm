@@ -79,5 +79,12 @@ class Schedule(models.Model):
 	date_start = models.CharField(max_length=128, blank=True, null= True)
 	date_end = models.CharField(max_length=128, blank=True, null= True)
 
+class Matchresult(models.Model):
+	match=models.ForeignKey('Post_list', on_delete=models.SET_NULL, blank=True, null=True)
+	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	result = models.BooleanField(default=False)
+	club_name =models.CharField(max_length=128, blank=True, null= True)
+
+
 
 
