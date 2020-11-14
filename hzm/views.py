@@ -105,10 +105,15 @@ def match_before_info(request,post_pk) :
 			return redirect("/")
 
 		post = Post_list.objects.get(pk=post_pk)
-		if post.accpet == True :
-			raise Exception('error')
+		print(post.accept)
+		if post.accept :
+			raise('error')
+			print(post.accept)
+			
+
 		return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name})
 	except Exception as e :
+		print(e)
 		return HttpResponseRedirect(reverse('hzm:error_page'))
 
 def match_before(request) :
