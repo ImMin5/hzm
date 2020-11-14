@@ -457,7 +457,7 @@ def save_match_info(request) :
 	post.blue_goga_avg=blue_goga_avg
 	post.player_num=player_num
 	post.save()		
-	return redirect('/match/info/')
+	return redirect('/match/')
 	#return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
  
