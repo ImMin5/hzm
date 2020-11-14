@@ -121,12 +121,12 @@ def sign_up(request) :
 
 			if player is not None:
 				print('create id')
-				return redirect('/')
+				return redirect('main_page')
 			else:
 				print('NONE')
 				return HttpResponse('아이디 생성실패1')
 		else :
-			return HttpResponse('good')
+			return redirect('main_page')
 	except Exception as e : 
 		print(e)
 		print('create id error')
@@ -302,22 +302,12 @@ def delete_match_info(request,post_pk) :
 	try :
 		post=Post_list.objects.get(pk=post_pk)
 		post.delete();
-		posts = Post_list.objects.all().filter(accept=True).order_by('-pk')
-		count = posts.count()
-		
-		paginator = Paginator(posts, 10)
-		pages = request.GET.get('page',1)
-		posts = paginator.get_page(pages)
-
-	except PageNotAnInteger :
-		posts = paginator.page(1)
-	except EmptyPage :
-		posts = paginator.page(paginator.num_pages)
-		return HttpResponse("end")
+		return redirect('hzm:match')
 	except Exception as e :
+		print(e)
 		return HttpResponse("게시물이 존재하지 않습니다")
 
-	return render(request, 'hzm/match.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
+	#return render(request, 'hzm/match.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
 
 def delete_before_match_info(request,post_pk) :
 	try :
@@ -344,11 +334,11 @@ def delete_before_match_info(request,post_pk) :
 
 	return render(request, 'hzm/match_before.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
 
-def accpet_match_info(request,post_pk) :
+def accept_match_info(request,post_pk) :
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name')
 	if pk is None :
-		return redirect('/')
+		return redirect('main_page')
 
 	try :
 		print(post_pk)
@@ -372,8 +362,8 @@ def accpet_match_info(request,post_pk) :
 
 	except Exception as e :
 		return HttpResponse("게시물이 존재하지 않습니다.")
-
-	return render(request, 'hzm/match.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
+	return redirect('hzm:match')
+	#return render(request, 'hzm/match.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name})
 
 def check_post_passwd(request) :
 	passwd=request.POST.get('post_passwd')
@@ -414,8 +404,8 @@ def save_match_info(request) :
 		blue_p1_name=request.POST.get('blue_p1_name')
 		try :
 			player=Player.objects.get(player_name=red_p1_name)
-			print("player")
-			print(player)
+			print("player1")
+			print(player.player_name	)
 			post.red_p1_name=red_p1_name
 		except Exception as e :
 			print("red1 is none")
@@ -467,7 +457,7 @@ def save_match_info(request) :
 	post.blue_goga_avg=blue_goga_avg
 	post.player_num=player_num
 	post.save()		
-	return HttpResponse("save")
+	return redirect('/match/info/'+pk)
 	#return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
 
  
@@ -478,9 +468,9 @@ def get_redteam_subplayer(request) :
 	red_p3_name=request.GET.get('red_p3')
 	red_p4_name=request.GET.get('red_p4')
 
-	if player_num >= '3' :
+	if player_num == '3' :
 		redteam_players=Player.objects.exclude(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
-	elif player_num >= '4':
+	elif player_num == '4':
 		redteam_players=Player.objects.exclude(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
 	else :
 		redteam_players=Player.objects.exclude(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
@@ -495,9 +485,9 @@ def get_redteam_player(request) :
 	red_p3_name=request.GET.get('red_p3')
 	red_p4_name=request.GET.get('red_p4')
 
-	if player_num >= '3' :
+	if player_num == '3' :
 		redteam_players=Player.objects.filter(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
-	elif player_num >= '4':
+	elif player_num == '4':
 		redteam_players=Player.objects.filter(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
 	else :
 		redteam_players=Player.objects.filter(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
@@ -510,13 +500,13 @@ def get_redteam_player(request) :
 def save_redteam_player(request) :
 	player_num=request.GET.get('player_num')
 	
-	if player_num >= 1 :
+	if player_num >= '1' :
 		red_p1_name=request.GET.get('red_p1')
-	if player_num >= 2 :
+	if player_num >= '2' :
 		red_p1_name=request.GET.get('red_p2')
-	if player_num >= 3 :
+	if player_num >= '3' :
 		red_p1_name=request.GET.get('red_p3')
-	if player_num >= 4 :
+	if player_num >= '4' :
 		red_p1_name=request.GET.get('red_p4')
 
 	red_p2_name=request.GET.get('red_p2')
@@ -524,6 +514,35 @@ def save_redteam_player(request) :
 	red_p4_name=request.GET.get('red_p4')
 
 	return HttpResponse("ddd")
+
+def save_matchresult(request) :
+	win=request.POST.get('win')
+	lose=request.POST.get('lose')
+	post_pk =request.POST.get('post_pk')
+	player_num=request.POST.get('player_num')
+
+	red_p1_name = request.POST.get('red_p1_name')
+	red_p2_name = request.POST.get('red_p2_name')
+	if player_num >='3' :
+		red_p3_name = request.POST.get('red_p3_name')
+	if player_num >='4' :
+		red_p4_name = request.POST.get('red_p4_name')
+
+	try :
+		post=Post_list.objects.get(pk=post_pk)
+		post.red_win=win
+		post.blue_win=lose
+		if win > lose :
+			post.result=True
+		else :
+			post.result=False
+		post.save()
+	except Exception as e :
+		print(e)
+		return redirect('/')
+
+	return redirect('hzm:match')
+
 
 
 
