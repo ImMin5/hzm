@@ -96,7 +96,7 @@
 									{% if list.result %}
 									<td id="tbody_post_lists_td_state" style="color:green; text-align:center;">승리</td>
 									{% elif list.result == False %}
-										{% if list.win == list.lose %}
+										{% if list.red_win == list.blue_win %}
 										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">결과입력대기</td>
 										{% else %}
 										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">패배</td>
