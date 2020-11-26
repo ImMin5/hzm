@@ -26,3 +26,8 @@ class PlayerSerializer(serializers.ModelSerializer) :
 		model = Models.Player
 		fields = ('pk','player_name','passwd','club_name','win','lose')
 
+class RecordSerializer(serializers.ModelSerializer):
+	class Meta :
+		model = Models.Record
+		fields = ('pk','player','club_name','record','map_id','map_name','record_date','match_club')
+

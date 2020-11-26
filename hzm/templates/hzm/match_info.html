@@ -124,7 +124,10 @@
 								</div>
 								<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p1_name}}" disabled required>
 								<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p2_name}}" disabled required>
+								
 								<input type="text" id="matchinfo_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+							
+								
 								<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
 							</div>
 							<div class="input-group mb-3">
@@ -172,7 +175,7 @@
 				<div class="row">
 					{% if pk %}
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -182,11 +185,11 @@
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
+							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
 					{% else %}
 					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
 					<div class="col-4" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -194,7 +197,7 @@
 					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
 								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이페이지</h2></a>
+								</button><h2>마이룸</h2></a>
 					</div>
 					{% endif %}
 				</div>
@@ -232,7 +235,7 @@
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal_fmatch_title">친선경기 신청 </h5>
@@ -255,15 +258,15 @@
       		<select id="modal_fmatch_select" class="form-control" required>
       			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
       			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
-      			<option id="modal_fmatch_player_option3" value="4"> 4 vs 4</option>
+      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">참여명단</span>
+			<span class="input-group-text">라이더</span>
 			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
@@ -285,20 +288,20 @@
 		</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
+        <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
+        <button type="button" id="modal_fmatch_btn" class="btn btn-secondary bg-dark">신청하기</button>
       </div>
   </form>
     </div>
   </div>
 </div>
 
-<!--선수변경 모달-->
+<!--라이더변경 모달-->
 <div class="modal fade" id="modal_redteam_member" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">RED팀 선수 변경</h5>
+        <h5 class="modal-title">RED팀 라이더 변경</h5>
         <button type="button" name="modal_redteam_close_btn" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -306,7 +309,7 @@
       <div class="modal-body" style="height:30vh;">
         <div class="container-fluid" style="padding:0; height:100%;" >
         	<div style="border : solid gray 1px; float:left; width:45%; height :100%; display:inline-block; overflow: auto;">
-        		<div class="container" style="text-align: center; padding-top:3%;"><h6>참가 선수</h6></div>
+        		<div class="container" style="text-align: center; padding-top:3%;"><h6>참가 라이더</h6></div>
         		<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_left" style="border : none;">
         			<thead class="thead-light" >
         				<tr >
@@ -324,7 +327,7 @@
         		<i id="modal_floor_arrow_left_btn" class="far fa-arrow-alt-circle-left" onclick='move_modal_floor_used_unused(1)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
         	</div>
         	<div style="border : solid gray 1px; float:right; width:45%; height :100%; display:inline-block; overflow: scroll;">
-        		<div class="container" style="text-align: center; padding-top:3%;"><h6>후보 선수</h6></div>
+        		<div class="container" style="text-align: center; padding-top:3%;"><h6>후보 라이더</h6></div>
         		<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_right" style="border : none;">
         			<thead class="thead-light" >
         				<tr>
@@ -417,9 +420,62 @@
 			NowTime += ':' + Now.getSeconds();
 			return NowTime;
 		}
+
+				//경기신청모달 고가 평균 폼 확인
+		function goga_form_check(data){
+			data_=data.split(':')
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청모달 경기 날짜 폼 체크
+		function match_date_form_check(match_date) {
+			if(match_date.length != 10) 
+				return false;
+			else if(match_date[4] != '-')
+				return false;
+			else if(match_date[7] != '-')
+				return false;
+			
+			match_date_=match_date.split('-')
+
+			if(isNaN(match_date_[0]))
+				return false;
+			else if(isNaN(match_date_[1]))
+				return false;
+			else if(isNaN(match_date_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청 모달 시간 체크
+		function time_form_check(time){
+			if(time.length != 5)
+				return false;
+			else if(time[2] != ':')
+				return false;
+
+			time_=time.split(':')
+			if(isNaN(time_[0]))
+				return false;
+			else if (isNaN(time_[1]))
+				return false;
+			return true;
+		}
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
-			
 			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
 			var formData = new FormData();
 			var post_writer = $('#modal_fmatch_name').val();
@@ -444,45 +500,38 @@
 
 			if( $.trim(club_name) == '') {
 				console.log("club_name :" +club_name)
-				swal("클럽명을 입력해주세요");
-				return ;
+				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
-				 swal("카러플 닉네임을 입력해주세요");
 				 console.log("post writer: "+ club_name)
-				return;
+				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
-				swal("선수 명단을 입력해 주세요");
 				console.log("player_num :"+player_num)
 				console.log("player_num input :"+player.length)
-				return;
+				return swal("라이더를  입력해 주세요");
 			}
 			else if(!(match_date)){
-				swal("희망 경기 날짜를 입력해주세요");
 				console.log("match date : "+match_date)
-				return;
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(match_date_form_check(match_date) == false){
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
 			else if(goga_form_check(blue_goga_avg) == false) {	
-				swal("고가 입력 양식 00:00:00");
-				return ;
+				return swal("고가 입력 양식 00:00:00");
 			} 
-			else if(!(match_time_start)){
-				swal("시작 시간을 입력해주세요");
-				return;
+			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
+				return swal("시간 입력 양식 ex) 11:11")
 			}
-			else if(!(match_time_end)){
-				swal("종료 시간을 입력해주세요");
-				return;
-			}
-			else if(match_time_start > match_time_end){
-				swal("시작시간이 종료시간보다 늦습니다!")
-				return;
-			}	
-			else if(!(passwd)){
-				swal("비밀번호를 입력해주세요")
-				return;
-			}
+			else if(!(match_time_start))
+				return swal("시작 시간을 입력해주세요");
+			else if(!(match_time_end))
+				return swal("종료 시간을 입력해주세요");
+			else if(match_time_start > match_time_end)
+				return swal("시작시간이 종료시간보다 늦습니다!");
+			else if(!(passwd))
+				return swal("비밀번호를 입력해주세요");
 
 			console.log("match date : "+match_date);
 			console.log(match_time_start);
@@ -764,7 +813,7 @@
 						read_common();
 						$('#matchinfo_player_num').attr('data-team','all');
 					}if(data.team == "fail"){
-						alert("비밀번호가 일치 하지 않습니다.")
+						swal("비밀번호가 일치 하지 않습니다.")
 						return;
 					}
 					$('#matchinfo_footer').append('<button id="matchinfo_cancel_btn" class="btn btn-secondary bg-dark">취소</button>')
@@ -788,7 +837,7 @@
 		$(document).on('click','#matchinfo_cancel_btn',function(e) {
 			location.reload();
 		});
-
+		//경기 정보 저장 버튼
 		$(document).on('click','#matchinfo_save_btn',function(e) {
 			var player_num=$('#matchinfo_player_num').val();
 
@@ -832,7 +881,7 @@
 					return swal("RED 라이더4 을 입력해주세요.");
 				}
 			}
-			//	alert("고가 입력 형식 00:00:00")
+		
 			 
 			if( team=="blue" || team=="all") {
 				if(goga_form_check(blue_goga_avg)==false ){
@@ -855,19 +904,27 @@
 				}
 			}
 
+			if(match_date_form_check(match_date) == false) {
+				swal("날짜 입력 양식 ex)2020-01-01");
+				return false;
+			}
 			if(!(time_start)){
 				swal("시작 시간을 입력해 주세요");
-				return;
+				return false;
 			}
 			else if(!(time_end)){
 				swal("종료 시간을 입력해 주세요");
-				return;
+				return false;
+			}
+			else if(time_form_check(time_start) == false || time_form_check(time_end)==false){
+				swal("시간 입력 양식 ex)00:00 ")
+				return false;
 			}
 			else if(time_start > time_end){
 				swal("시작시간이 종료시간보다 늦습니다!")
-				return;
+				return false;
 			}
-			//	alert("고가 입력 형식 00:00:00") 	
+			
 				
 
 			$.ajax({
@@ -987,28 +1044,7 @@
 		//경기정보 수정페이지에서 참여인원수 확인
 
 
-		//경기신청모달 고가 평균 폼 확인
-		function goga_form_check(data){
-			console.log("form check : "+data)
-			data_=data.split(':')
-			var count =0;
 
-			if(data.length != 8)
-				return false;
-			else if(data[2] != ':')
-				return false;
-			else if(data[5] != ':')
-				return false;
-			else if(isNaN(data_[0]))
-				return false;
-			else if(isNaN(data_[1]))
-				return false;
-			else if(isNaN(data_[2]))
-				return false;
-
-			//$('#matchinfo_save_btn').attr('type','submit')
-			return true;
-		}
 		//
 		function create_redteam_player(player_name) {
 			player_num = $('#matchinfo_redteam_member_edit_btn').attr('data-player_num');
@@ -1100,7 +1136,7 @@
 			$(this).parent().remove();
 			}
 			else{
-				alert("인원초과");
+				swal("인원초과");
 			}
 
 		});
@@ -1136,19 +1172,20 @@
 			init_modal_redteam();
 			$('#modal_redteam_member').modal('hide');
 		})
+		//라이더 이름 불러오기
 		$(document).ready(function(e) {
 			var player_num="{{post.player_num}}";
 			var red_p3_name="{{post.red_p3_name}}";
 			var red_p4_name="{{post.red_p4_name}}";
 			var blue_p3_name="{{post.blue_p3_name}}";
 			var blue_p4_name="{{post.blue_p4_name}}";
-
-			if(player_num >= 3 && red_p3_name != "None"){
-				$('#matchinfo_red_p3_name').val(red_p3_name);
+			console.log("blue"+blue_p4_name);
+			if(player_num >= 3){ 
+				if(red_p3_name != "None") $('#matchinfo_red_p3_name').val(red_p3_name);
 				$('#matchinfo_blue_p3_name').val(blue_p3_name);
 			}
-			if(player_num >=4 && red_p4_name != "None"){
-				$('#matchinfo_red_p4_name').val(red_p4_name);
+			if(player_num >=4) {
+				if(red_p4_name != "None") $('#matchinfo_red_p4_name').val(red_p4_name);
 				$('#matchinfo_blue_p4_name').val(blue_p4_name);
 			}
 		});

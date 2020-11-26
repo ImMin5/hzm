@@ -203,9 +203,9 @@
 </div>
 
 <!-- 알림창 -->
-<!--경기 신청 모달-->
+<!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal_fmatch_title">친선경기 신청 </h5>
@@ -226,17 +226,17 @@
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
       		<select id="modal_fmatch_select" class="form-control" required>
-      			<option value="4"> 2 vs 2</option>
-      			<option value="6"> 3 vs 3</option>
-      			<option value="8"> 4 vs 4</option>
+      			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
+      			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
+      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">참여명단</span>
+			<span class="input-group-text">라이더</span>
 			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
@@ -259,7 +259,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary bg-dark">신청하기</button>
+        <button type="button" id="modal_fmatch_btn" class="btn btn-secondary bg-dark">신청하기</button>
       </div>
   </form>
     </div>
@@ -699,45 +699,38 @@
 
 			if( $.trim(club_name) == '') {
 				console.log("club_name :" +club_name)
-				swal("클럽명을 입력해주세요");
-				return ;
+				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
-				 swal("카러플 닉네임을 입력해주세요");
 				 console.log("post writer: "+ club_name)
-				return;
+				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
-				swal("선수 명단을 입력해 주세요");
 				console.log("player_num :"+player_num)
 				console.log("player_num input :"+player.length)
-				return;
+				return swal("라이더를  입력해 주세요");
 			}
 			else if(!(match_date)){
-				swal("희망 경기 날짜를 입력해주세요");
 				console.log("match date : "+match_date)
-				return;
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(match_date_form_check(match_date) == false){
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
 			else if(goga_form_check(blue_goga_avg) == false) {	
-				swal("고가 입력 양식 00:00:00");
-				return ;
+				return swal("고가 입력 양식 00:00:00");
 			} 
-			else if(!(match_time_start)){
-				swal("시작 시간을 입력해주세요");
-				return;
+			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
+				return swal("시간 입력 양식 ex) 11:11")
 			}
-			else if(!(match_time_end)){
-				swal("종료 시간을 입력해주세요");
-				return;
-			}
-			else if(match_time_start > match_time_end){
-				swal("시작시간이 종료시간보다 늦습니다!")
-				return;
-			}	
-			else if(!(passwd)){
-				swal("비밀번호를 입력해주세요")
-				return;
-			}
+			else if(!(match_time_start))
+				return swal("시작 시간을 입력해주세요");
+			else if(!(match_time_end))
+				return swal("종료 시간을 입력해주세요");
+			else if(match_time_start > match_time_end)
+				return swal("시작시간이 종료시간보다 늦습니다!");
+			else if(!(passwd))
+				return swal("비밀번호를 입력해주세요");
 
 			console.log("match date : "+match_date);
 			console.log(match_time_start);

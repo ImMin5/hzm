@@ -9,11 +9,17 @@ html {
 	height:5%;
 }
 
+
+body{
+	-ms-overflow-style:none;
+}
+body::-webkit-scrollbar { display:none; }
+
+
 @media all and (min-width:768px) and (max-width:1023px) { /*스타일입력*/
 	#test {
 		background-color: black;
 	}
-}
 
 /* 테블릿 세로 (해상도 768px ~ 1023px)*/
 @media all and (min-width:768px) and (max-width:1023px) { /*스타일입력*/

@@ -14,10 +14,11 @@ class Player(models.Model):
 
 class Record(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	map_id = models.ForeignKey('Map',on_delete=models.SET_NULL,null=True)
+	map_name =models.CharField(max_length=128,blank=True, null= True)
 	club_name = models.CharField(max_length=128,blank=True, null= True)
-	record = models.TimeField()
-	map_name = models.ForeignKey('Map',on_delete=models.SET_NULL,null=True)
-	match_date = models.DateField()
+	record = models.CharField(max_length=15,blank=True, null=True)
+	record_date = models.CharField(max_length=15,blank=True, null=True)
 	match_club = models.CharField(max_length=128,blank=True, null=True)
 
 class Map(models.Model):
