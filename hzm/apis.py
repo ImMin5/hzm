@@ -582,7 +582,6 @@ def get_record_rank(requset) :
 	records=[]
 	players=[]
 	for i in range(all_records.count()) :
-		print(all_records[i])
 		records.append(all_records[i]['record'])
 		players.append(all_records[i]['player_id'])
 	
