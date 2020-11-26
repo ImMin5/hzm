@@ -558,9 +558,6 @@ def add_map_record(request) :
 	player=request.session.get('pk')
 	club_name="학지매"
 
-	print(maps_id)
-	print(map_name)
-	print(map_record)
 	record=Record(maps_id=maps_id,map_name=map_name,record=map_record,player_id=player,\
 		record_date=record_date,club_name=club_name)
 	record.save()
