@@ -4,6 +4,10 @@ a{
    
 } 
 
+-webkit-scollbar {
+    display: none;
+
+}
 
 
 
