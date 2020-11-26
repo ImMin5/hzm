@@ -58,10 +58,6 @@ def match(request) :
 
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name')
-
-	if pk is None :
-		return redirect('hzm:main_page')
-
 	
 	now = time.strftime('%Y-%m-%d %I:%M',time.localtime())
 	for post in posts :
@@ -85,8 +81,10 @@ def match(request) :
 	except EmptyPage :
 		posts = paginator.page(paginator.num_pages)
 		return HttpResponse("end")
-
-	return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count, 'pk':pk, 'player_name':player_name})
+	if pk :
+		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count ,'pk':pk})
+	else :
+		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count})
 
 def match_info(request,post_pk) :
 	post_pk=post_pk
@@ -152,4 +150,8 @@ def error_page(request) :
 def personal_record(request) :
 	player_name=request.session.get('player_name')
 	pk=request.session.get('pk')
-	return render(request, 'hzm/personal_record.html',{'player_name':player_name, 'pk':pk})
+	maps=Map.objects.all().order_by('map_name')	
+
+	if pk is None :
+		return redirect("/")
+	return render(request, 'hzm/personal_record.html',{'maps':maps,'player_name':player_name, 'pk':pk})

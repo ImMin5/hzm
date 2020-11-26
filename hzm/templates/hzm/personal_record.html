@@ -83,7 +83,8 @@
 			  	</div>
 			</div>
 			<hr>
-			<button style="float :left; margin-left : 1%; " id="add_button" data-toggle="modal" data-target="#modal_camera_add" type="button" class="btn btn-dark">기록 추가</button>
+			<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
+
 			<div class="input-group mb-3" style="width:25%; float:right;">
 				<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
 				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
@@ -94,13 +95,14 @@
 				<table class="table table-md" >
 				  <thead>
 				    <tr>
-				      <th scope="col">#</th>
-				      <th scope="col">맵 이름</th>
-				      <th scope="col">최고 기록</th>
-				      <th scope="col">비고</th>
+				      <th scope="col" style="width:8%; text-align: center;">#</th>
+				      <th scope="col" style="width:29%; text-align: center;">맵 이름</th>
+				      <th scope="col" style="width:22%; text-align: center;">나의 최고 기록</th>
+				      <th scope="col" style="width:22%; text-align: center;">클럽 최고 기록</th>
+				      <th scope="col" style="width:17%; text-align: center;">클럽 내 등수</th>
 				    </tr>
 				  </thead>
-				  <tbody id="schedule_table_tbody">
+				  <tbody id="record_table_tbody">
 				  </tbody>
 				</table>				
 			</div>
@@ -111,9 +113,8 @@
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem;">
 			<div class="container-fluid">
 				<div class="row">
-					{% if pk %}
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -123,53 +124,13 @@
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
+							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
-					{% else %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
-					</div>
-					<div class="col-4" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
-								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이페이지</h2></a>
-					</div>
-					{% endif %}
 				</div>
 			</div>
 		</nav>
 		<!--하단 탭바 끝-->
 	
-
-	<!-- 로그인 모달 -->
-<div class="modal fade modal-xl" id="login" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	        	<span aria-hidden="true">&times;</span>
-	        </button>
-	   </div>
-	   <div class="modal-body">
-	   		<form method="post">
-		   		<div class="input-group mb-3">
-		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
-				</div>
-		        <div class="input-group mb-3">
-		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
-		        	<div class="input-group-append">
-				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
-				</div>
-			</form>
-		</div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -196,15 +157,15 @@
       		<select id="modal_fmatch_select" class="form-control" required>
       			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
       			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
-      			<option id="modal_fmatch_player_option3" value="4"> 4 vs 4</option>
+      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">참여명단</span>
+			<span class="input-group-text">라이더</span>
 			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
@@ -234,6 +195,43 @@
   </div>
 </div>
 
+
+<!--기록 추가 모달-->
+<div class="modal fade" id="modal_record" tabindex="-1" aria-labelledby="modal_record_title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			 <div class="modal-header">
+			 	<h5 class="modal-title" id="modal_record_title">기록 추가 </h5>
+			 	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			 		<span aria-hidden="true">&times;</span>
+			 	</button>
+			 </div>
+			<div class="modal-body">
+				<div class="input-group mb-3">
+					<span class="input-group-text">맵 이름</span>
+					<select id="modal_record_map_name" class="form-control">
+						{% for map in maps %}
+						<option value="{{map.pk}}">{{map.map_name}}</option>
+						{% endfor %}
+      		</select>
+      	</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text">기록 </span>
+					<input type="text" id="modal_record_time" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="맵 기록" aria-describedby="button-addon2" required>
+				</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text">기록 경신일</span>
+					<input type="text" id="modal_record_date" class="form-control" placeholder="입력 형식 2020-01-01" aria-label="맵 기록" aria-describedby="button-addon2" required>
+				</div>
+			</div><!--modal body end-->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
+				<button type="button" id="modal_record_add_btn" class="btn btn-secondary bg-dark">기록추가</button>
+			</div>
+		</div>
+  	</div>
+ </div>
+
 <!-- script start -->
 	<script>
 		function getTime() {
@@ -248,7 +246,59 @@
 			return NowTime;
 		}
 
-		
+				//경기신청모달 고가 평균 폼 확인
+		function goga_form_check(data){
+			data_=data.split(':')
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청모달 경기 날짜 폼 체크
+		function match_date_form_check(match_date) {
+			if(match_date.length != 10) 
+				return false;
+			else if(match_date[4] != '-')
+				return false;
+			else if(match_date[7] != '-')
+				return false;
+			
+			match_date_=match_date.split('-')
+
+			if(isNaN(match_date_[0]))
+				return false;
+			else if(isNaN(match_date_[1]))
+				return false;
+			else if(isNaN(match_date_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청 모달 시간 체크
+		function time_form_check(time){
+			if(time.length != 5)
+				return false;
+			else if(time[2] != ':')
+				return false;
+
+			time_=time.split(':')
+			if(isNaN(time_[0]))
+				return false;
+			else if (isNaN(time_[1]))
+				return false;
+			return true;
+		}
 
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
@@ -285,15 +335,21 @@
 			else if(player_num != player_count){
 				console.log("player_num :"+player_num)
 				console.log("player_num input :"+player.length)
-				return swal("선수 명단을 입력해 주세요");
+				return swal("라이더를  입력해 주세요");
 			}
 			else if(!(match_date)){
 				console.log("match date : "+match_date)
-				return swal("희망 경기 날짜를 입력해주세요");
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(match_date_form_check(match_date) == false){
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
 			else if(goga_form_check(blue_goga_avg) == false) {	
 				return swal("고가 입력 양식 00:00:00");
 			} 
+			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
+				return swal("시간 입력 양식 ex) 11:11")
+			}
 			else if(!(match_time_start))
 				return swal("시작 시간을 입력해주세요");
 			else if(!(match_time_end))
@@ -359,22 +415,7 @@
 
 		});
 
-		//상단 네비바에서 가입하기 버튼 클릭
-		$(document).on('click','#signup_btn',function(e) {
-			$('#modal_signin_btn').attr('id','modal_signup_btn');
-			$('#modal_signup_btn').text('가입하기');
-			$('#staticBackdropLabel').text('가입하기');
-			
-		});
-
-		//상단 네이바에서 로그인 버튼 클릭
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-		//하단 마이페이지 버튼 클릭
+		//하단 마이룸 버튼 클릭
 		$(document).on('click','#bottom_user_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
@@ -382,92 +423,7 @@
 			
 		});
 
-		//로그인후 마이페이지 버튼을 눌렀을 경우
-		$(document).on('click','i[name="logout"]',function(e) {
-			console.log("logout");
-			
-		});
 
-		//모달에서 가입하기 버튼 클릭
-		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
-
-			swal({
-				title: "아이디를 생성 하시겠습니까?",
-				text: "학지매에 오신것을 환영합니다~",
-				icon: "info",
-				buttons: true,
-				dangerMode: true,
-			})
-			.then((willcreate) =>{
-				if(willcreate){
-					$.ajax({
-					url:"{% url 'hzm:ajax_signup' %}",
-					type:'POST',
-					data : {
-						'player_name' : player_name,
-						'player_passwd' : player_passwd,
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-					},
-					success:function(data) {
-						swal("아이디 생성 성공");
-						location.reload();
-					},
-					error : function(error) {
-						swal("아이디생성실패");
-					}
-				});
-
-				}
-				else{
-					return;
-				}
-
-			});
-
-
-		});
-		//모달에서 로그인 버튼 클릭
-		$(document).on('click', '#modal_signin_btn', function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
-			$.ajax({
-				url:"{% url 'hzm:ajax_signin' %}",
-				type:'POST',
-				data : {
-					'player_name' : player_name,
-					'player_passwd' : player_passwd,
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-				},
-				success:function(msg) {
-					if( msg=="login_fail1") {
-						return swal("존재하지 않는 아이디입니다");
-					}
-					else if (msg=="login_fail2") {
-						return swal("존재하지 않는 아이디입니다");
-					}
-					else if(msg=="login_fail3"){
-						return swal("존재하지 않는 아이디입니다");
-					}
-					else {
-						swal("환영합니다^^!");
-						location.reload();
-					}
-				},
-				error : function(error) {
-					swal("아이디/비밀번호가 일치하지 않습니다.");
-				}
-			});
-		});
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
@@ -485,7 +441,7 @@
 
 		//하탄 탭 클릭시 아이콘 크기 변경
 		var active_btn="home";
-		$(document).on('click','#bottom_home_btn',function(e) {
+		$(document).on('click','#bottom_home',function(e) {
 			active_btn="home";
 		});
 		$(document).on('click','#bottom_user_btn',function(e) {
@@ -494,37 +450,22 @@
 			active_btn="user";
 		});
 
-		$(document).on('click','#bottom_heart_btn',function(e) {
+		$(document).on('click','#bottom_heart',function(e) {
 			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
+			if(active_btn=="heart")
+				return false;
 			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
 			active_btn="heart";
 		});
 
-		$(document).on('click','#bottom_bell_btn',function(e) {
+		$(document).on('click','#bottom_bell',function(e) {
 			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
+			if(active_btn=="bell")
+				return false;
 			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
 			active_btn="bell";
 		});
-		//경기신청모달 고가 평균 폼 확인
-		function goga_form_check(data){
-			data_=data.split(':')
-			var count =0;
-
-			if(data.length != 8)
-				return false;
-			else if(data[2] != ':')
-				return false;
-			else if(data[5] != ':')
-				return false;
-			else if(isNaN(data_[0]))
-				return false;
-			else if(isNaN(data_[1]))
-				return false;
-			else if(isNaN(data_[2]))
-				return false;
-
-			return true;
-		}
+		
 		//경기 신청모달에서 참여인원 수 선택시
 		$('#modal_fmatch_select').change(function(e) {
 			console.log("change1")
@@ -542,10 +483,106 @@
 				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
 				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
 			}
-		})
-
+		});
+		//개인 기록 테이블
+		function create_record_table(data,num) {
+			var rank;
 		
+			var map_name=data.map_name;
+			$.ajax({
+				url : "{% url 'hzm:ajax_get_record_rank' %}",
+				type:'GET',
+				dataType:'json',
+				async:false,
+				data:{
+				
+					'map_name':map_name,
+				},
+				success:function(data){
+					rank=data.rank;
+					best_record=data.best_record;
+					console.log("rank");
+				},
+				error:function(error){
+				},
+			})
+			console.log("data")
+			$('#record_table_tbody').append('<tr>\
+				<td style="text-align:center;">'+num+'</td>\
+				<td style="text-align:center;">'+data.map_name+'</td>\
+				<td style="text-align:center;">'+data.record+'</td>\
+				<td style="text-align:center;">'+best_record+'</td>\
+				<td style="text-align:center;">'+rank+'</td>\
+				</tr>');
+		}
+		$(document).ready(function(e) {
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_records' %}",
+				type: 'POST',
+				dataType: 'json',
+				data :{
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+				},
+				success: function(data) {
+					for(var i=0 ; i<data.length;i++){
+						create_record_table(data[i],i+1);
+					}
+				}
+			})
+		})
+		//기록추가 모달에서 추가 버튼 클릭 시 
+		$(document).on('click','#modal_record_add_btn',function(e) {
+			var map_record=$('#modal_record_time').val();
+			var map_id=$('#modal_record_map_name option:selected').val();
+			var map_name=$('#modal_record_map_name option:selected').text();
+			var record_date=$('#modal_record_date').val();
 
+			if(goga_form_check(map_record) == false)
+				return swal("기록 입력 양식 00:00:00")
+			if(match_date_form_check(record_date) == false)
+				return swal("날짜 입력 양식 ex) 2020-01-01");
+
+			console.log(map_name);
+			console.log(map_record);
+			$.ajax({
+				url:"{% url 'hzm:ajax_add_map_record' %}",
+				type:'POST',
+				dataType:'json',
+				data: {
+					'csrfmiddlewaretoken':"{{csrf_token}}",
+					'record':map_record,
+					'map_id':map_id,
+					'map_name':map_name,
+					'record_date':record_date,
+				},
+				success: function(data) {
+					$('#modal_record').modal('hide');
+					modal_record_init();
+					$('#record_table_tbody').empty();
+					for(var i=0; i<data.length; i++) {
+						create_record_table(data[i],i+1)
+					}
+				},
+				error : function(error) {
+
+				},
+			})
+		});
+
+		function modal_record_init(){
+			$('#modal_record_date').val('');
+			$('#modal_record_time').val('');
+		}
+
+			 	/*검색기능*/
+		$(document).ready(function(){
+			$("#keyword_mapname").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("#record_table_tbody").filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
 	</script>
 	
 </body>

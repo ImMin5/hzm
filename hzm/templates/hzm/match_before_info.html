@@ -171,7 +171,7 @@
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
+							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
 					{% else %}
 					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
@@ -183,7 +183,7 @@
 					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
 								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이페이지</h2></a>
+								</button><h2>마이룸</h2></a>
 					</div>
 					{% endif %}
 				</div>
@@ -219,9 +219,9 @@
   </div>
 </div>
 
-<!--경기 신청 모달-->
+<!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal_fmatch_title">친선경기 신청 </h5>
@@ -242,17 +242,17 @@
       	<div class="input-group mb-3">
       		<span class="input-group-text">경기 인원</span>
       		<select id="modal_fmatch_select" class="form-control" required>
-      			<option value="4"> 2 vs 2</option>
-      			<option value="6"> 3 vs 3</option>
-      			<option value="8"> 4 vs 4</option>
+      			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
+      			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
+      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">참여명단</span>
+			<span class="input-group-text">라이더</span>
 			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required disabled>
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required disabled>
+			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
+			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
 		</div>
 		<div class="input-group mb-3">
 			<span class="input-group-text">경기날짜</span>
@@ -274,20 +274,20 @@
 		</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="submit" id="modal_fmatch_btn" class="btn btn-primary">신청하기</button>
+        <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
+        <button type="button" id="modal_fmatch_btn" class="btn btn-secondary bg-dark">신청하기</button>
       </div>
   </form>
     </div>
   </div>
 </div>
 
-<!--선수변경 모달-->
+<!--라이더변경 모달-->
 <div class="modal fade" id="modal_redteam_member" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">RED팀 선수 변경</h5>
+        <h5 class="modal-title">RED팀 라이더 변경</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -346,6 +346,60 @@
 			NowTime += ':' + Now.getSeconds();
 			return NowTime;
 		}
+
+				//경기신청모달 고가 평균 폼 확인
+		function goga_form_check(data){
+			data_=data.split(':')
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청모달 경기 날짜 폼 체크
+		function match_date_form_check(match_date) {
+			if(match_date.length != 10) 
+				return false;
+			else if(match_date[4] != '-')
+				return false;
+			else if(match_date[7] != '-')
+				return false;
+			
+			match_date_=match_date.split('-')
+
+			if(isNaN(match_date_[0]))
+				return false;
+			else if(isNaN(match_date_[1]))
+				return false;
+			else if(isNaN(match_date_[2]))
+				return false;
+
+			return true;
+		}
+		//경기신청 모달 시간 체크
+		function time_form_check(time){
+			if(time.length != 5)
+				return false;
+			else if(time[2] != ':')
+				return false;
+
+			time_=time.split(':')
+			if(isNaN(time_[0]))
+				return false;
+			else if (isNaN(time_[1]))
+				return false;
+			return true;
+		}
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
 			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
@@ -372,45 +426,38 @@
 
 			if( $.trim(club_name) == '') {
 				console.log("club_name :" +club_name)
-				swal("클럽명을 입력해주세요");
-				return ;
+				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
-				 swal("카러플 닉네임을 입력해주세요");
 				 console.log("post writer: "+ club_name)
-				return;
+				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
-				swal("선수 명단을 입력해 주세요");
 				console.log("player_num :"+player_num)
 				console.log("player_num input :"+player.length)
-				return;
+				return swal("라이더를  입력해 주세요");
 			}
 			else if(!(match_date)){
-				swal("희망 경기 날짜를 입력해주세요");
 				console.log("match date : "+match_date)
-				return;
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(match_date_form_check(match_date) == false){
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
 			else if(goga_form_check(blue_goga_avg) == false) {	
-				swal("고가 입력 양식 00:00:00");
-				return ;
+				return swal("고가 입력 양식 00:00:00");
 			} 
-			else if(!(match_time_start)){
-				swal("시작 시간을 입력해주세요");
-				return;
+			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
+				return swal("시간 입력 양식 ex) 11:11")
 			}
-			else if(!(match_time_end)){
-				swal("종료 시간을 입력해주세요");
-				return;
-			}
-			else if(match_time_start > match_time_end){
-				swal("시작시간이 종료시간보다 늦습니다!")
-				return;
-			}	
-			else if(!(passwd)){
-				swal("비밀번호를 입력해주세요")
-				return;
-			}
+			else if(!(match_time_start))
+				return swal("시작 시간을 입력해주세요");
+			else if(!(match_time_end))
+				return swal("종료 시간을 입력해주세요");
+			else if(match_time_start > match_time_end)
+				return swal("시작시간이 종료시간보다 늦습니다!");
+			else if(!(passwd))
+				return swal("비밀번호를 입력해주세요");
 
 			console.log("match date : "+match_date);
 			console.log(match_time_start);
@@ -467,7 +514,6 @@
 			});
 
 		});
-
 
 		$(document).on('click','#signup_btn',function(e) {
 			$('#modal_signin_btn').attr('id','modal_signup_btn');
@@ -551,11 +597,11 @@
 
 				},
 				success:function(data) {
-					alert("성공");
+					//swal("성공");
 					location.reload();
 				},
 				error : function(error) {
-					alert("아이디/비밀번호가 일치하지 않습니다.");
+					swal("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});
@@ -624,27 +670,6 @@
 			}
 		})
 
-		
-				//경기신청모달 고가 평균 폼 확인
-		function goga_form_check(data){
-			data_=data.split(':')
-			var count =0;
-
-			if(data.length != 8)
-				return false;
-			else if(data[2] != ':')
-				return false;
-			else if(data[5] != ':')
-				return false;
-			else if(isNaN(data_[0]))
-				return false;
-			else if(isNaN(data_[1]))
-				return false;
-			else if(isNaN(data_[2]))
-				return false;
-
-			return true;
-		}
 
 		$(document).ready(function(e){
 			player_num ={{post.player_num}}
@@ -676,26 +701,6 @@
 			
 		});
 
-		function goga_form_check(data){
-			console.log("form check : "+data)
-			data_=data.split(':')
-			var count =0;
-
-			if(data.length != 8)
-				return false;
-			else if(data[2] != ':')
-				return false;
-			else if(data[5] != ':')
-				return false;
-			else if(isNaN(data_[0]))
-				return false;
-			else if(isNaN(data_[1]))
-				return false;
-			else if(isNaN(data_[2]))
-				return false;
-
-			return true;
-		}
 
 		function create_redteam_player(player_name) {
 			$('tbody[name=modal_tbody_redteam_player]').append('<tr>\

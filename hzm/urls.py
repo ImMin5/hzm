@@ -9,6 +9,7 @@ app_name ='hzm'
 
 urlpatterns = [
 	path('',views.main_page, name='main_page'),
+	path('error',views.error_page,name='error_page'),
 	path('schedule/', views.schedule, name='schedule'),
 	path('signin/',views.signin_page,name='signin_page'),
 	path('signup/',views.signup_page,name='signup_page'),
@@ -17,6 +18,7 @@ urlpatterns = [
 	path('match_before/',views.match_before,name='match_before'),
 	path('match_before/info/<int:post_pk>/',views.match_before_info,name='match_before_info'),
 	path('mypage/',views.mypage, name='mypage'),
+	path('personal_record',views.personal_record,name='personal_record'),
 	path('api/signin',apis.sign_in,name='ajax_signin'),
 	path('api/signup',apis.sign_up,name='ajax_signup'),
 	path('api/logout',apis.logout,name='ajax_logout'),
@@ -39,7 +41,8 @@ urlpatterns = [
 	path('api/get_redteam_player',apis.get_redteam_player,name='ajax_get_redteam_player'),
 	path('api/get_redteam_subplayer',apis.get_redteam_subplayer,name='ajax_get_redteam_subplayer'),
 	path('api/save_redteam_player',apis.save_redteam_player,name='ajax_save_redteam_player'),
-	path('error',views.error_page,name='error_page'),
 	path('api/save_matchresult',apis.save_matchresult,name='ajax_save_matchresult'),
-	path('personal_record',views.personal_record,name='personal_record'),
+	path('api/add_map_record',apis.add_map_record,name='ajax_add_map_record'),
+	path('api/get_records',apis.get_records,name='ajax_get_records'),
+	path('api/get_record_rank',apis.get_record_rank,name='ajax_get_record_rank'),
 ]

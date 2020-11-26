@@ -15,6 +15,13 @@ from django.db.models import Q
 from .serializers import *
 import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.db.models import Count,Max,Min
+
+from pandas import Series, DataFrame
+import pandas as pd
+import numpy as np
+
+
 
 my_club = "학지매"
 master_passwd = "ssdsmh"
@@ -543,6 +550,53 @@ def save_matchresult(request) :
 
 	return redirect('hzm:match')
 
+def add_map_record(request) :
+	map_id=request.POST.get('map_id')
+	map_name=request.POST.get('map_name')
+	map_record=request.POST.get('record')
+	record_date=request.POST.get('record_date')
+	player=request.session.get('pk')
+	club_name="학지매"
+
+	record=Record(map_id_id=map_id,map_name=map_name,record=map_record,player_id=player,\
+		record_date=record_date,club_name=club_name)
+	record.save()
+
+	records=Record.objects.filter(player_id=player).order_by('map_name').values('map_name').annotate(record=Min('record'))
+	serialized_records = RecordSerializer(records,many=True)
+
+	return HttpResponse(json.dumps(serialized_records.data))
+
+def get_records(request) :
+	player=request.session.get('pk')
+	records=Record.objects.filter(player_id=player).order_by('map_name').values('map_name').annotate(record=Min('record'))
+	serialized_records = RecordSerializer(records,many=True)		
+
+	return HttpResponse(json.dumps(serialized_records.data))
+
+def get_record_rank(requset) :
+	map_name=requset.GET.get('map_name')
+	pk=requset.session.get('pk')
+	
+	all_records=Record.objects.filter(map_name=map_name).values('player_id').annotate(record=Min('record'))
+	records=[]
+	players=[]
+	for i in range(all_records.count()) :
+		print(all_records[i])
+		records.append(all_records[i]['record'])
+		players.append(all_records[i]['player_id'])
+	
+	obj_records=Series(records)
+	rank=obj_records.rank(method='min')[players.index(pk)]
+	best_record=0
+	records.sort()
+	
+	data = {
+		'rank':int(rank),
+		'best_record':records[0],
+	}
+
+	return JsonResponse(data)
 
 
 
