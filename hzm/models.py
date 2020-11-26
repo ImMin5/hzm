@@ -23,7 +23,7 @@ class Record(models.Model):
 
 class Map(models.Model):
 	map_name = models.CharField(max_length=128,blank=True, null=True)
-	map_test_record = models.TimeField(blank=True, null=True)
+	map_test_record = models.CharField(max_length=15,blank=True, null=True)
 
 class Post_list(models.Model):
 	club_name = models.CharField(max_length=128, blank=True, null= True)
