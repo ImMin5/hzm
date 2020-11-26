@@ -487,7 +487,7 @@
 		//개인 기록 테이블
 		function create_record_table(data,num) {
 			var rank;
-		
+			var best_record;
 			var map_name=data.map_name;
 			$.ajax({
 				url : "{% url 'hzm:ajax_get_record_rank' %}",

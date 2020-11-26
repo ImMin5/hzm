@@ -558,11 +558,15 @@ def add_map_record(request) :
 	player=request.session.get('pk')
 	club_name="학지매"
 
+	print(maps_id)
+	print(map_name)
+	print(map_record)
 	record=Record(maps_id=maps_id,map_name=map_name,record=map_record,player_id=player,\
 		record_date=record_date,club_name=club_name)
 	record.save()
 
 	records=Record.objects.filter(player_id=player).order_by('map_name').values('map_name').annotate(record=Min('record'))
+	print(records)
 	serialized_records = RecordSerializer(records,many=True)
 
 	return HttpResponse(json.dumps(serialized_records.data))
@@ -577,21 +581,24 @@ def get_records(request) :
 def get_record_rank(requset) :
 	map_name=requset.GET.get('map_name')
 	pk=requset.session.get('pk')
-	
+	print("pk in rank" )
+	print(pk)
 	all_records=Record.objects.filter(map_name=map_name).values('player_id').annotate(record=Min('record'))
 	records=[]
 	players=[]
+	print(all_records)
 	for i in range(all_records.count()) :
 		records.append(all_records[i]['record'])
 		players.append(all_records[i]['player_id'])
 	
 	obj_records=Series(records)
-	rank=obj_records.rank(method='min')[players.index(pk)]
+	if pk in players :
+		rank=int(obj_records.rank(method='min')[players.index(pk)])
 	best_record=0
 	records.sort()
 	
 	data = {
-		'rank':int(rank),
+		'rank':rank,
 		'best_record':records[0],
 	}
 
