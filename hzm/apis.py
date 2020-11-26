@@ -551,14 +551,14 @@ def save_matchresult(request) :
 	return redirect('hzm:match')
 
 def add_map_record(request) :
-	map_id=request.POST.get('map_id')
+	maps_id=request.POST.get('map_id')
 	map_name=request.POST.get('map_name')
 	map_record=request.POST.get('record')
 	record_date=request.POST.get('record_date')
 	player=request.session.get('pk')
 	club_name="학지매"
 
-	record=Record(map_id_id=map_id,map_name=map_name,record=map_record,player_id=player,\
+	record=Record(maps_id=maps_id,map_name=map_name,record=map_record,player_id=player,\
 		record_date=record_date,club_name=club_name)
 	record.save()
 

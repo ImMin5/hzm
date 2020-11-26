@@ -29,5 +29,5 @@ class PlayerSerializer(serializers.ModelSerializer) :
 class RecordSerializer(serializers.ModelSerializer):
 	class Meta :
 		model = Models.Record
-		fields = ('pk','player_id','club_name','record','map_id_id','map_name','record_date','match_club')
+		fields = ('pk','player_id','club_name','record','maps_id','map_name','record_date','match_club')
 
