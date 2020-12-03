@@ -40,7 +40,7 @@
 			      <li class="nav-item dropdown">
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
 			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
