@@ -34,7 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -74,7 +74,7 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:10%; overflow:scroll;">
+		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll;">
 			<div class="media" style="padding-top:5%; margin-bottom:5%;">
 				<i class="fas fa-car fa-4x" style="padding-left:5%;"></i>
 				<div class="media-body" style="margin-left:5%;">
@@ -116,11 +116,11 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
@@ -213,15 +213,15 @@
 						{% for map in maps %}
 						<option value="{{map.pk}}">{{map.map_name}}</option>
 						{% endfor %}
-      		</select>
-      	</div>
+					</select>
+				</div>
 				<div class="input-group mb-3">
 					<span class="input-group-text">기록 </span>
 					<input type="text" id="modal_record_time" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="맵 기록" aria-describedby="button-addon2" required>
 				</div>
 				<div class="input-group mb-3">
 					<span class="input-group-text">기록 경신일</span>
-					<input type="text" id="modal_record_date" class="form-control" placeholder="입력 형식 2020-01-01" aria-label="맵 기록" aria-describedby="button-addon2" required>
+					<input type="text" id="modal_record_date" class="form-control" placeholder="입력 형식 2020-01-01" aria-label="맵 기록" aria-describedby="button-addon2" value="2020-01-01" disabled>
 				</div>
 			</div><!--modal body end-->
 			<div class="modal-footer">
@@ -234,6 +234,7 @@
 
 <!-- script start -->
 	<script>
+		
 		function getTime() {
 			var Now = new Date();
 			var NowTime = Now.getFullYear();
@@ -325,11 +326,9 @@
 
 
 			if( $.trim(club_name) == '') {
-				console.log("club_name :" +club_name)
 				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
-				 console.log("post writer: "+ club_name)
 				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
@@ -488,7 +487,7 @@
 		function create_record_table(data,num) {
 			var rank;
 			var best_record;
-			var map_name=data.map_name;
+			var maps_id=data.maps_id;
 			$.ajax({
 				url : "{% url 'hzm:ajax_get_record_rank' %}",
 				type:'GET',
@@ -496,7 +495,7 @@
 				async:false,
 				data:{
 				
-					'map_name':map_name,
+					'maps_id':maps_id,
 				},
 				success:function(data){
 					rank=data.rank;
@@ -509,7 +508,7 @@
 			console.log("data")
 			$('#record_table_tbody').append('<tr>\
 				<td style="text-align:center;">'+num+'</td>\
-				<td style="text-align:center;">'+data.map_name+'</td>\
+				<td style="text-align:center;">'+data.maps_id+'</td>\
 				<td style="text-align:center;">'+data.record+'</td>\
 				<td style="text-align:center;">'+best_record+'</td>\
 				<td style="text-align:center;">'+rank+'</td>\
@@ -533,8 +532,7 @@
 		//기록추가 모달에서 추가 버튼 클릭 시 
 		$(document).on('click','#modal_record_add_btn',function(e) {
 			var map_record=$('#modal_record_time').val();
-			var map_id=$('#modal_record_map_name option:selected').val();
-			var map_name=$('#modal_record_map_name option:selected').text();
+			var maps_id=$('#modal_record_map_name option:selected').val();
 			var record_date=$('#modal_record_date').val();
 
 			if(goga_form_check(map_record) == false)
@@ -542,8 +540,6 @@
 			if(match_date_form_check(record_date) == false)
 				return swal("날짜 입력 양식 ex) 2020-01-01");
 
-			console.log(map_name);
-			console.log(map_record);
 			$.ajax({
 				url:"{% url 'hzm:ajax_add_map_record' %}",
 				type:'POST',
@@ -551,8 +547,7 @@
 				data: {
 					'csrfmiddlewaretoken':"{{csrf_token}}",
 					'record':map_record,
-					'map_id':map_id,
-					'map_name':map_name,
+					'maps_id':maps_id,
 					'record_date':record_date,
 				},
 				success: function(data) {
@@ -578,7 +573,7 @@
 		$(document).ready(function(){
 			$("#keyword_mapname").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
-				$("#record_table_tbody").filter(function() {
+				$("#record_table_tbody tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});

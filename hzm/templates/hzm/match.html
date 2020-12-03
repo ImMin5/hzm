@@ -28,7 +28,11 @@
 {% load custom_tags %}
 		<!--navbar 시작-->
 			<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+				{% if pk %}
+				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}} </a>
+				{% else %}
+				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">	학지매</a>
+				{% endif %}
 		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		    		<span class="navbar-toggler-icon"></span>
 		  		</button>
@@ -59,7 +63,7 @@
 				        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
 				      </li>
 				      <li class="nav-item">
-				        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
+				        <a class="nav-link" id="navbar_signup_btn" href="{% url 'hzm:signup' %}">가입하기</a>
 				      </li>
 				      {% endif %}
 				      
@@ -76,7 +80,17 @@
 					<table class="table table-striped table-hover">
 						<h1 class="display-3">경기 결과</h1>
 						<hr>
-						<p>{{post_count}}개의 경기결과</p>
+						<div class="container-fluid">
+							<p style="display:inline-block;">{{post_count}}개의 경기결과</p> 
+							<select id="match_filter" onchange="location.href=this.value"style="display:inline-block; float:right;">
+								<option>전체</option>
+								{% for c in clubs %}
+								<option value="{% url 'hzm:match' %}">{{c.pk}}</option>
+								{% endfor %}
+
+							</select>
+
+						</div>
 						<thead class="thead-dark" >
 							<tr>
 								<th style="width:10%; text-align:center;" scope="col">#</th>
@@ -88,32 +102,32 @@
 						</thead>
 						<tbody id="tbody_post_lists" data-nowdate="" >
 
-							{% for list in posts %}
+							{% for post in posts %}
 
-							<tr onclick="location.href='/match/info/{{list.pk}}'" >
-								<td style="text-align:center;" ><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
-								{% if list.state == "경기종료" %}
-									{% if list.result %}
+							<tr onclick="location.href='/match/info/{{post.pk}}'" >
+								<td style="text-align:center;" ><a style="text-decoration:none; color:black;">{{post.pk}}</a></td>
+								{% if post.state == "경기종료" %}
+									{% if post.result %}
 									<td id="tbody_post_lists_td_state" style="color:green; text-align:center;">승리</td>
-									{% elif list.result == False %}
-										{% if list.red_win == list.blue_win %}
+									{% elif post.result == False %}
+										{% if post.red_win == list.blue_win %}
 										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">결과입력대기</td>
 										{% else %}
 										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">패배</td>
 										{% endif %}
 									{% else %}
-									<td id="tbody_post_lists_td_state" style="color:blue; text-align: center;">{{list.state}}</td>
+									<td id="tbody_post_lists_td_state" style="color:blue; text-align: center;">{{post.state}}</td>
 									{% endif %}
-								{% elif list.state == "경기준비" %}
-								<td id="tbody_post_lists_td_state" style="color:black; text-align: center;">{{list.state}}
+								{% elif post.state == "경기준비" %}
+								<td id="tbody_post_lists_td_state" style="color:black; text-align: center;">{{post.state}}
 								</td>
-								{% elif list.state == "진행중" %}
-								<td id="tbody_post_lists_td_state" style="color:red; text-align: center;">{{list.state}}
+								{% elif post.state == "진행중" %}
+								<td id="tbody_post_lists_td_state" style="color:red; text-align: center;">{{post.state}}
 								</td>
 								{% endif %}
-								<td align="center">{{list.red_win}} : {{list.blue_win}}</td>
-								<td style="text-align:center;"> 학지매 vs {{list.club_name}}</td>
-								<td align="center">{{list.match_date}}</td>
+								<td align="center">{{post.red_win}} : {{post.blue_win}}</td>
+								<td style="text-align:center;"> {{post.club_id}}vs {{post.club_blue}}</td>
+								<td align="center">{{post.match_date}}</td>
 							</tr>
 								{% endfor %}
 						</tbody>
@@ -150,24 +164,28 @@
 						<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 							<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 						</div>
+						<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+							<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+						</div>
 						<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 							<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-						</div>
-						<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-							<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 						</div>
 						<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 							<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 								<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 						</div>
 						{% else %}
-						<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+						<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 							<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 						</div>
-						<div class="col-4" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="#">
+							<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+						</div>
+						<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 							<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
 						</div>
-						<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
+						<div class="col-3	" id="bottom_user" style="display:block; text-align: center;">
 						<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
 									<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
 									</button><h2>마이룸</h2></a>
@@ -179,32 +197,33 @@
 			<!--하단 탭바 끝-->
 		
 
-		<!-- 로그인 모달 -->
-<div class="modal fade modal-xl" id="login" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		        	<span aria-hidden="true">&times;</span>
-		        </button>
-		   </div>
-		   <div class="modal-body">
-		   		<form method="post">
-			   		<div class="input-group mb-3">
-			   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
-					</div>
-			        <div class="input-group mb-3">
-			        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
-			        	<div class="input-group-append">
-					    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
-					</div>
-				</form>
-			</div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+<!-- 로그인 모달 -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        	<span aria-hidden="true">&times;</span>
+	        </button>
+	   </div>
+	   <div class="modal-body" >
+	   		<form method="post">
+		   		<div class="input-group mb-3">
+		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
+				</div>
+		        <div class="input-group mb-3">
+		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
+		        	<div class="input-group-append">
+				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
+				</div>
+			</form>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -637,23 +656,23 @@
 				}
 			}
 
+			//필터 바꿀시
+			$(document).on('change','#match_filter',function(e){
+				var filter = $('#match_filter option:selected').text();
+				console.log(filter);
+				$.ajax({
+					url : "{% url 'hzm:ajax_match_filter' %}",
+					type: 'GET',
+					data : {
+						'filter' : filter,
+					},
+					success : function(data) {
+						console.log("filter")
+					},
+				})
+			})
 
 		
-		/*	$(document).ready(function(e){
-				$.ajax({
-					url: "{% url 'hzm:ajax_create_post_list' %}",
-					dataType:'json',
-					type :'POST',
-					data : {
-						'page' :'1',
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
-					}
-					,success : function(data) {
-						create_post_list_table(data);
-					},
-				});
-			});*/
-
 	
 		</script>
 		

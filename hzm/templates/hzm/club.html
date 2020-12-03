@@ -25,7 +25,8 @@
 
 	 <!--알림창-->
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	 <script data-ad-client="ca-pub-8149974355008509" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
 
 	<title>학지매</title>
 </head>
@@ -33,11 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			{% if pk %}
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
-			{% else %}
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
-			{% endif %}
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">	{{club.club_name}} </a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -46,11 +43,11 @@
 			      <li class="nav-item dropdown">
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}" >&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
-			      		{% if pk %}
+			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		 {% if pk %}
 			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+			      		<a class="nav-link" href="{% url 'hzm:match' all %}">&nbsp;경기 결과</a>
 			      	</div>
 			      </li>
 			      {% if pk %}
@@ -63,57 +60,47 @@
 			      <li class="nav-item">
 			        <a class="nav-link" id="logout_btn">로그아웃</a>
 			      </li>
-			      {% else %}
-			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:signup' %}" id="navbar_signup_btn" >가입하기</a>
-			      </li>
 			      {% endif %}
-			      
 			  	</ul>
 			 </div>
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
-			<!--점보트론 시작-->
-			<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-			  <h1 class="display-4"> {% if pk %} {{player.player_name}} 님 {% endif %} 반갑습니다.</br> {% if club.name %} {{club.name}} 입니다! {% endif %}	</h1>
-			  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-			  <hr class="my-4">
-			  <p>친선경기 신청은 아래 버튼</p>
-			  <a class="btn btn-primary btn-lg bg-dark" role="button" data-toggle="modal" data-target="#friendlymatch" >친해지기</a>
-			</div>
+		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll; border:0;">
 			
-			<!--점보트론 끝-->
-			<div class="container-fluid" id="ad-banner" style="height:50vh; padding:0; background-color:black;">
-				
-				<button class="btn">ddd</button>
-			</div>
+				<div class="media" style="padding-top:5%; margin-bottom:5%;">
+					<i class="fas fa-flag-checkered fa-4x" style="padding-left:5%;"></i>
+					<div class="media-body" style="margin-left:5%;">
+						<h2 class="mt-0">{{club.club_name}}의 클럽 페이지</h2>
+						<h4>클럽장 : {{club.host}}</h4>
+						아직 아무고토 없음</br>
+				  	</div>
+				</div>
+				<hr>
 
-			<!--
-			<div class="container-fluid" style="height:65vh; padding:0px;">
-				<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
+				{% if club.host == player.player_name %}
+				<button style="float :left; margin-left : 1%; " id="player_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">??</button>
 
-				<table class="table table-dark" style="overflow:scroll; height: 25vh;" >
+				<div class="input-group mb-3" style="width:25%; float:right;">
+					<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+					<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
+						<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+					</div>
+				</div>
+				<div class="container-fluid" style="overflow:scroll; height:40vh;">
+					<table class="table table-md" >
 					  <thead>
-					    <tr">
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">#</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">상태</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">학지매</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">Others</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">결과</th>
+					    <tr>
+					    	<th scope="col" style="width:33%; text-align: center;">#</th>
+					    	<th scope="col" style="width:34%; text-align: center;">아이디</th>
+					    	<th scope="col" style="width:33%; text-align: center;">비고</th>
 					    </tr>
 					  </thead>
-					  <tbody>
-					  
+					  <tbody id="club_player_table_tbody">
 					  </tbody>
-				</table>
+					</table>				
 				</div>
-			</div>
-			`-->
+				{% endif %}
 		</div>
 
 
@@ -121,12 +108,11 @@
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem;">
 			<div class="container-fluid">
 				<div class="row">
-					{% if pk %}
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-5x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -135,23 +121,6 @@
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
-					{% else %}
-					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
-					</div>
-					<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#">
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
-					</div>
-					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-					<button class="btn"><a style="color: black; text-decoration:none" href="#" >
-								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이룸</h2></a>
-					</div>
-					{% endif %}
 				</div>
 			</div>
 		</nav>
@@ -451,91 +420,14 @@
 
 		});
 
-		//모달에서 가입하기 버튼 클릭
-		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-			var club_name = $('#modal_club_name').val();
-
-			console.log(player_name);
-			console.log(player_passwd);
-
-			swal({
-				title: "아이디를 생성 하시겠습니까?",
-				text: "학지매에 오신것을 환영합니다~",
-				icon: "info",
-				buttons: true,
-				dangerMode: true,
-			})
-			.then((willcreate) =>{
-				if(willcreate){
-					$.ajax({
-					url:"{% url 'hzm:ajax_signup' %}",
-					type:'POST',
-					data : {
-						'player_name' : player_name,
-						'player_passwd' : player_passwd,
-						'club_name': club_name,
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-					},
-					success:function(data) {
-						swal("아이디 생성 성공");
-						location.reload();
-					},
-					error : function(error) {
-						swal("아이디생성실패");
-					}
-				});
-
-				}
-				else{
-					return;
-				}
-
-			});
-
-
+		//상단 네이바에서 로그인 버튼 클릭
+		$(document).on('click','#signin_btn',function(e) {
+			$('#modal_signup_btn').attr('id','modal_signin_btn');
+			$('#modal_signin_btn').text('로그인');
+			$('#staticBackdropLabel').text('로그인');
+			
 		});
-		//모달에서 로그인 버튼 클릭
-		$(document).on('click', '#modal_signin_btn', function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_name);
-			console.log(player_passwd);
-			$.ajax({
-				url:"{% url 'hzm:ajax_signin' %}",
-				type:'POST',
-				data : {
-					'player_name' : player_name,
-					'player_passwd' : player_passwd,
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-				},
-				success:function(msg) {
-					console.log("login: "+msg);
-					if( msg=="login_fail1") {
-						return swal("존재하지 않는 아이디입니다");
-					}
-					else if (msg=="login_fail2") {
-						return swal("잘못된 접근입니다.");
-					}
-					else if(msg=="login_fail3"){
-						return swal("존재하지 않는 아이디입니다");
-					}
-					else if(msg=="auth_fail"){
-						return swal("승인 대기중입니다 잠시만 기다려주세요!");
-					}
-					else {
-						location.reload();
-					}
-				},
-				error : function(error) {
-					swal("아이디/비밀번호가 일치하지 않습니다.");
-				}
-			});
-		});
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
@@ -551,10 +443,103 @@
 			})
 		});
 
+		function create_player_before_auth_table(data,num){
+			$('#club_player_table_tbody').append('<tr id="tr_'+data.player_name+'">\
+				<td style="text-align:center;">'+num+'</td>\
+				<td style="text-align:center;" >'+data.player_name+'</td>\
+				<td style="text-align:center;" ><button class="btn bg-dark btn-secondary" style="margin-right:10%;" name="club_player_table_tbody_tr_accept" data-player_name="'+data.player_name+'">수락</button><button class="btn bg-dark btn-secondary" data-player_name="'+data.player_name+'" name="club_player_table_tbody_tr_reject" >거절</button></td>\
+				</tr>')
+		}
 
-		
+		$(document).ready(function(e){
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_player_before_auth' %}",
+				type:'POST',
+				dataType:'JSON',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}"
+				},
+				success: function(data){
+					for(var i=0; i < data.length;i++)
+					create_player_before_auth_table(data[i],i+1);
+				},
+				error : function(e) {
 
+				},
+			})
+		});
+
+		/*검색기능*/
+		$(document).ready(function(){
+			$("#keyword_mapname").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("#club_player_table_tbody tr").filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
 		
+		//클럽원 수락 버튼
+		$(document).on('click','button[name=club_player_table_tbody_tr_td]',function(e) {
+			
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 수락
+		$(document).on('click','button[name=club_player_table_tbody_tr_accept]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 거절
+		$(document).on('click','button[name=club_player_table_tbody_tr_reject]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_reject_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+			
 
 	</script>
 	

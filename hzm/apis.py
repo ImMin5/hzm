@@ -58,22 +58,21 @@ def edit_mypage_info(request) :
 	password_now=request.POST.get('password_now')
 	password_change=request.POST.get('password_change')
 
-	club_name=request.POST.get('club_name')
-
 	if Player.objects.filter(player_name=name).exclude(pk=pk) :
 		return HttpResponse("sameId")
 
 	try:
 		player=Player.objects.get(pk=pk)
-		print(player)
-		print(password_now)
-		print(player.passwd)
+		club=Club.objects.get(pk=player.club_id)
 
 		if player.passwd == password_now :
+			if club.host == player.player_name :
+				club.host = name
+				club.save()
+
 			player.player_name = name
 			if password_change is not None :
 				player.passwd = password_change
-			player.club_name=club_name
 			player.save()
 			request.session['player_name'] = name
 			return HttpResponse("good")
@@ -87,18 +86,16 @@ def sign_in(request) :
 	player_passwd = request.POST.get('player_passwd')
 	try :
 		if request.method == 'POST' :
-			print('POST')
-			print(player_name)
-			print(player_passwd)
-
 			player = Player.objects.get(Q(player_name=player_name) & Q(passwd=player_passwd))
 			data = {}
 			print(player.pk)
-			if player is not None:
-				print('login')
-				#data['pk'] = player_pk
+			print(player.club_id)
+			if player.accept == False :
+				return HttpResponse("auth_fail")
+			if player.player_name is not None:
 				request.session['pk'] = player.pk
 				request.session['player_name'] = player.player_name
+				request.session['club_id'] = player.club_id
 				return redirect('/')
 			else :
 				print('NONE')
@@ -111,29 +108,17 @@ def sign_in(request) :
 
 def sign_up(request) :
 	player_name = request.POST.get('player_name')
-	player_passwd = request.POST.get('player_passwd')
-	club_name = request.POST.get('player_club')
+	player_password = request.POST.get('player_password')
+	club_name = request.POST.get('club_name')
 	try :
 		if request.method == 'POST' :
 			print('POST')
 			print(player_name)
-			print(player_passwd)
-
-			player = Player(player_name=player_name, passwd=player_passwd, club_name=my_club)
+			player = Player(player_name=player_name, passwd=player_password, club_id=club_name)
 			player.save()
-
-			player = Player.objects.get(player_name=player_name)
-			request.session['pk'] = player.pk
-			request.session['player_name'] = player.player_name
-
-			if player is not None:
-				print('create id')
-				return redirect('main_page')
-			else:
-				print('NONE')
-				return HttpResponse('아이디 생성실패1')
+			return redirect('/')
 		else :
-			return redirect('main_page')
+			return redirect('/')
 	except Exception as e : 
 		print(e)
 		print('create id error')
@@ -145,13 +130,14 @@ def logout(request) :
 
 
 def add_fmatch(request) :
-	post_writer = request.POST.get('post_writer');
-	club_name = request.POST.get('club_name');
-	match_date = request.POST.get('match_date');
-	match_time_start = request.POST.get('match_time_start');
-	match_time_end = request.POST.get('match_time_end');
-	player_num = request.POST.get('player_num');
-	passwd = request.POST.get('passwd');
+	post_writer = request.POST.get('post_writer')
+	club_red = request.POST.get('club_red')
+	club_blue = request.POST.get('club_blue')
+	match_date = request.POST.get('match_date')
+	match_time_start = request.POST.get('match_time_start')
+	match_time_end = request.POST.get('match_time_end')
+	player_num = request.POST.get('player_num')
+	passwd = request.POST.get('passwd')
 	blue_goga_avg = request.POST.get('blue_goga_avg')
 	date = request.POST.get('date')
 	p1 = request.POST.get('p1')
@@ -164,8 +150,10 @@ def add_fmatch(request) :
 		p4 = request.POST.get('p4')
 
 	print(date)
-	
-	post = Post_list(post_writer=post_writer, club_name=club_name, player_num=player_num, \
+	print(club_red)
+	club=Club.objects.get(club_name=club_red)
+
+	post = Post_list(post_writer=post_writer, club_id=club.club_name,club_blue=club_blue, player_num=player_num, \
 		match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end,\
 		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date,\
 		blue_p1_name=p1,blue_p2_name=p2)
@@ -178,7 +166,7 @@ def add_fmatch(request) :
 
 	post.save()
 
-	return HttpResponse("good")
+	return redirect('hzm:match_before')
 
 def add_schedule(request) :
 	pk = request.session['pk']
@@ -253,10 +241,15 @@ def create_my_schedule_table(request) :
 
 def get_all_schedules(request) :
 	pk = request.session['pk']
-	schedules = Schedule.objects.exclude(player_id=pk)
-	serialized_schedules = ScheduleSerializer(schedules,many=True)
-
-	return HttpResponse(json.dumps(serialized_schedules.data))
+	try :
+		player=Player.objects.get(pk=pk)
+		schedules = Schedule.objects.filter(club_id=player.club_id).exclude(player_id=player.pk)
+		serialized_schedules = ScheduleSerializer(schedules,many=True)
+		print("aaaa")
+		print(serialized_records)
+		return HttpResponse(json.dumps(serialized_schedules.data))
+	except Exception as e :
+		return redirect('/')
 
 def delete_my_schedule(request) :
 	try :
@@ -474,13 +467,14 @@ def get_redteam_subplayer(request) :
 	red_p2_name=request.GET.get('red_p2')
 	red_p3_name=request.GET.get('red_p3')
 	red_p4_name=request.GET.get('red_p4')
+	club_id=request.GET.get('club_id')
 
 	if player_num == '3' :
-		redteam_players=Player.objects.exclude(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+		redteam_players=Player.objects.filter(club_id=club_id).exclude(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
 	elif player_num == '4':
-		redteam_players=Player.objects.exclude(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+		redteam_players=Player.objects.filter(club_id=club_id).exclude(Q(player_name=red_p4_name) | Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
 	else :
-		redteam_players=Player.objects.exclude(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
+		redteam_players=Player.objects.filter(club_id=club_id).exclude(Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
 
 	serialized_players = PlayerSerializer(redteam_players,many=True)
 	return HttpResponse(json.dumps(serialized_players.data))
@@ -491,6 +485,7 @@ def get_redteam_player(request) :
 	red_p2_name=request.GET.get('red_p2')
 	red_p3_name=request.GET.get('red_p3')
 	red_p4_name=request.GET.get('red_p4')
+	club_id=request.GET.get('club_id')
 
 	if player_num == '3' :
 		redteam_players=Player.objects.filter(Q(player_name=red_p3_name) |Q(player_name=red_p2_name) | Q(player_name=red_p1_name) )
@@ -551,42 +546,48 @@ def save_matchresult(request) :
 	return redirect('hzm:match')
 
 def add_map_record(request) :
-	maps_id=request.POST.get('map_id')
-	map_name=request.POST.get('map_name')
+	maps_id=request.POST.get('maps_id')
 	map_record=request.POST.get('record')
 	record_date=request.POST.get('record_date')
-	player=request.session.get('pk')
-	club_name="학지매"
+	player_id=request.session.get('pk')
+	player=Player.objects.get(pk=player_id)
+	club_id=player.club_id
 
-	record=Record(maps_id=maps_id,map_name=map_name,record=map_record,player_id=player,\
-		record_date=record_date,club_name=club_name)
+	Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
+
+	record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
+		record_date=record_date,club_id=club_id)
 	record.save()
 
-	records=Record.objects.filter(player_id=player).order_by('map_name').values('map_name').annotate(record=Min('record'))
+	records=Record.objects.filter(player_id=player.pk).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
 	print(records)
 	serialized_records = RecordSerializer(records,many=True)
 
 	return HttpResponse(json.dumps(serialized_records.data))
 
 def get_records(request) :
-	player=request.session.get('pk')
-	records=Record.objects.filter(player_id=player).order_by('map_name').values('map_name').annotate(record=Min('record'))
+	player_id=request.session.get('pk')
+	club_id=request.session.get('club_id')
+
+	records=Record.objects.filter(Q(player_id=player_id)).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
 	serialized_records = RecordSerializer(records,many=True)		
 
 	return HttpResponse(json.dumps(serialized_records.data))
 
-def get_record_rank(requset) :
-	map_name=requset.GET.get('map_name')
-	pk=requset.session.get('pk')
+def get_record_rank(request) :
+	maps_id=request.GET.get('maps_id')
+	pk=request.session.get('pk')
+	club_id=request.session.get('club_id')
 	print("pk in rank" )
 	print(pk)
-	all_records=Record.objects.filter(map_name=map_name).values('player_id').annotate(record=Min('record'))
+	all_records=Record.objects.filter(Q(maps_id=maps_id) & Q(club_id=club_id)).values('player_id').annotate(record=Min('record'))
 	records=[]
 	players=[]
 	print(all_records)
 	for i in range(all_records.count()) :
 		records.append(all_records[i]['record'])
 		players.append(all_records[i]['player_id'])
+		print(players)
 	
 	obj_records=Series(records)
 	if pk in players :
@@ -602,4 +603,75 @@ def get_record_rank(requset) :
 	return JsonResponse(data)
 
 
+def get_player_before_auth(request) :
+	club_id=request.session.get('club_id')
+	players=Player.objects.filter(Q(club_id=club_id) & Q(accept=False))
+	serialized_players = PlayerSerializer(players,many=True)		
+
+	return HttpResponse(json.dumps(serialized_players.data)) 
+
+def accept_player(request) :
+	player_name=request.GET.get('player_name')
+	player=Player.objects.get(player_name=player_name)
+	player.accept=True
+	player.save()
+
+	return HttpResponse(player_name)
+
+def reject_player(request) :
+	player_name=request.GET.get('player_name')
+	player=Player.objects.get(player_name=player_name)
+	player.delete()
+
+	return HttpResponse(player_name)
+
+
+
+def match_filter(request) :
+
+	pk=request.session.get('pk')
+	club_id = request.session.get('club_id')
+	condition=request.GET.get('filter')
+	print(condition)
+	if condition != "전체" :
+		posts = Post_list.objects.all().filter(Q(accept=True) & Q(club_id=condition)).order_by('-pk')
+	else :
+		posts = Post_list.objects.all().filter(Q(accept=True)).order_by('-pk')
+
+	count = posts.count();
+	paginator = Paginator(posts, 10)
+	pages = request.GET.get('page',1)
+
+	
+	clubs=Club.objects.all().order_by('-pk')
+
+	now = time.strftime('%Y-%m-%d %I:%M',time.localtime())
+	for post in posts :
+		match_date_start = post.match_date+' '+post.match_time_start
+		match_date_end = post.match_date+' '+post.match_time_end
+		print(now)
+		print(match_date_end)
+		if match_date_start > now :
+			post.state="경기준비"
+		elif match_date_end < now :
+			post.state="경기종료"
+		else :
+			post.state="진행중"
+		print(post.state)
+		post.save()
+
+	try :
+		posts = paginator.get_page(pages)
+	except PageNotAnInteger :
+		posts = paginator.page(1)
+	except EmptyPage :
+		posts = paginator.page(paginator.num_pages)
+		return HttpResponse("end")
+
+	if pk :
+		player=Player.objects.get(pk=pk)
+		club=Club.objects.get(pk=player.club_id)
+		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count ,'pk':pk ,'clubs':clubs,'club':club})
+	else :
+		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count})
 
