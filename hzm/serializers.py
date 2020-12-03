@@ -4,7 +4,7 @@ from . import models as Models
 class ScheduleSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Schedule
-		fields = ('pk','player_id','date_start','date_end','club_name','title')
+		fields = ('pk','player_id','date_start','date_end','club_id','title')
 
 
 
@@ -24,10 +24,15 @@ class PostSerializer(serializers.ModelSerializer) :
 class PlayerSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Player
-		fields = ('pk','player_name','passwd','club_name','win','lose')
+		fields = ('player_name','passwd','club_id','win','lose','accept')
 
 class RecordSerializer(serializers.ModelSerializer):
 	class Meta :
 		model = Models.Record
-		fields = ('pk','player_id','club_name','record','maps_id','map_name','record_date','match_club')
+		fields = ('pk','player_id','club_id','record','maps_id','record_date','match_club')
+
+class ClubSerializer(serializers.ModelSerializer):
+	class Meta :
+		model = Models.Club
+		fields = ('club_name')
 

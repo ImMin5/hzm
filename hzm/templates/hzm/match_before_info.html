@@ -27,7 +27,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -72,7 +72,7 @@
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:5%; padding-left:0;padding-right:0">
 				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-					<h1 class="display-4">[#{{post.pk}} 학지매 vs {{post.club_name}} ]</h1>
+					<h1 class="display-4">[#{{post.pk}} {{post.club_id}} vs {{post.club_blue}} ]</h1>
 					<h6>작성자 :	{{post.post_writer}}</h6>
 					<hr>
 				</div>
@@ -81,7 +81,7 @@
 						<div class="container-fluid" id="matchinfo_body">
 							<div class="input-group mb-3">
 								<span class="input-group-text">클럽이름</span>
-								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{post.club_name}}">
+								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{post.club_blue}}">
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text"> 신청자 </span>
@@ -96,7 +96,7 @@
 					      		</select>
 					      	</div>
 
-					      	<label for="exampleInputEmail1">RED팀 학지매</label>
+					      	<label for="exampleInputEmail1">RED팀 {{post.club_id}}</label>
 							<div class="input-group mb-3" id="matchinfo_redteam_member">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
@@ -107,7 +107,7 @@
 								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value=""   disabled>
 								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value=""   disabled>
 							</div>
-							<label for="exampleInputEmail1">BLUE팀 {{post.club_name}}</label>
+							<label for="exampleInputEmail1">BLUE팀 {{post.club_blue}}</label>
 							<div class="input-group mb-3">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
@@ -163,11 +163,11 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
@@ -192,9 +192,9 @@
 		<!--하단 탭바 끝-->
 	
 
-	<!-- 로그인 모달 -->
-<div class="modal fade modal-xl" id="login" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- 로그인 모달 -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
       		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
@@ -202,7 +202,7 @@
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
 	   </div>
-	   <div class="modal-body">
+	   <div class="modal-body" >
 	   		<form method="post">
 		   		<div class="input-group mb-3">
 		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
@@ -218,6 +218,7 @@
     </div>
   </div>
 </div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">

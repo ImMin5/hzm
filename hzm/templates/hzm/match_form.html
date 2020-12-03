@@ -75,96 +75,76 @@
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:5%;">
 				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-					<h1 class="display-4">[#{{post.pk}}] {{post.club_id}} vs {{post.club_blue}}</h1>
-					<h6>작성자 :	{{post.post_writer}}</h6>
+					<h1 class="display-4"> 친선 경기 신청</h1>
 					<hr>
 				</div>
 				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
 					<form>
 						<div class="container-fluid" id="matchinfo_body">
+							<label for="exampleInputEmail1">상대할 클럽</label>
+							<div class="input-group mb-3" id="matchinfo_redteam_member">
+								<div class="input-group mb-3">
+									<span class="input-group-text">클럽이름</span>
+									<select id="matchform_club_red" class="form-control" value="" >
+										{% if clubs %}
+										{% for club in clubs %}
+										<option>{{club.club_name}}</option>
+										{% endfor %}
+										{% endif %}
+									</select>
+								</div>
+							</div>
+
+							<label for="exampleInputEmail1">신청클럽 정보</label>
 							<div class="input-group mb-3">
 								<span class="input-group-text">클럽이름</span>
-								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{post.club_blue}}" readonly>
+								<input type="text" id="matchform_club_blue" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="" >
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text"> 신청자 </span>
-								<input type="text" id="matchinfo_postwriter" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2" value="{{post.post_writer}}" readonly>
+								<input type="text" id="matchform_postwriter" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2" value="" >
 							</div>
 					      	<div class="input-group mb-3">
 					      		<span class="input-group-text">경기 인원</span>
-					      		<select id="matchinfo_player_num" class="form-control" value="{{post.player_num}}" disabled>
-					      			<option id="matchinfo_player_num_option1" value="2" disabled> 2 vs 2</option>
-					      			<option id="matchinfo_player_num_option2" value="3" disabled> 3 vs 3</option>
-					      			<option id="matchinfo_player_num_option3" value="4" disabled> 4 vs 4</option>
+					      		<select id="matchform_player_num" class="form-control" value="" >
+					      			<option id="matchform_player_num_option1" value="2" > 2 vs 2</option>
+					      			<option id="matchform_player_num_option2" value="3" > 3 vs 3</option>
+					      			<option id="matchform_player_num_option3" value="4" selected> 4 vs 4</option>
 					      		</select>
 					      	</div>
-
-					      	<label for="exampleInputEmail1">RED팀 {{post.club_id}}</label>
-							<div class="input-group mb-3" id="matchinfo_redteam_member">
-								<div class="input-group mb-3">
-									<span class="input-group-text">고가평균</span>
-									<input type="text" id="matchinfo_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="RED팀 고가평균" aria-describedby="button-addon2" value="{{post.red_goga_avg}}" step="2" disabled required>
-								</div>
-								{% if post.red_p1_name == None %}
-								<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
-								{% else %}
-								<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p1_name}}" disabled required>
-								{% endif %}
-
-								{% if post.red_p2_name == None %}
-								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
-								{% else %}
-								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.red_p2_name}}" disabled required>
-								{% endif %}
-								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
-								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>	
-								<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{post.red_p1_name}}" data-p2="{{post.red_p2_name}}" data-p3="{{post.red_p3_name}}" data-p4="{{post.red_p4_name}}" data-player_num="{{post.player_num}}" disabled>라이더수정</button>
-							</div>
-							<label for="exampleInputEmail1">BLUE팀 {{post.club_blue}}</label>
 							<div class="input-group mb-3">
-								<div class="input-group mb-3">
-									<span class="input-group-text">고가평균</span>
-									<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.blue_goga_avg}}" disabled required title="00:00:00">
-								</div>
-								<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p1_name}}" disabled required>
-								<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{post.blue_p2_name}}" disabled required>
+								<input type="text" id="matchform_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value="" required>
+								<input type="text" id="matchform_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="" required>
 								
-								<input type="text" id="matchinfo_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								<input type="text" id="matchform_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
 							
 								
-								<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								<input type="text" id="matchform_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
+							</div>
+							<div class="input-group mb-3">
+									<span class="input-group-text">고가평균</span>
+									<input type="text" id="matchform_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">희망날짜</span>
-								<input type="date" id="matchinfo_match_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" value="{{post.match_date}}" disabled required>
+								<input type="date" id="matchform_match_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" value="{{post.match_date}}"  required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">시작시간</span>
-								<input type="time" id="matchinfo_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" value="{{post.match_time_start}}" disabled required>
+								<input type="time" id="matchform_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" required>
 								<span class="input-group-text">종료시간</span readonly>
-								<input type="time" id="matchinfo_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" value="{{post.match_time_end}}" disabled required>
+								<input type="time" id="matchform_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">비밀번호</span>
-								<input type="text" id="matchinfo_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
+								<input type="text" id="matchform_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
 							</div>
 						</div><!-- matchinfo body끝-->
 						<div class="container-fluid" id="matchinfo_footer" style="">
-							{% if club_id == post.club_id %}
-							<button type="button" id="matchinfo_delete_btn" class="btn btn-primary bg-dark" disabled><a href="{% url 'hzm:delete_match_info' post.pk %}" style="color:white; text-decoration: none; " >삭제</a></button>
-							<button type="button" id="matchinfo_edit_btn" class="btn btn-primary bg-dark">수정</button>
-							<button type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-primary bg-dark" style="float:right;" data-red_p1_name="{{post.red_p1_name}}" data-red_p2_name="{{post.red_p2_name}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
-							{% endif %}
+							<button type="button" id="matchform_submit_btn" class="btn btn-primary bg-dark">신청하기</button>
 						</div>
 					</form>
 
-					
-					{% if post.club_id == club_id %}
-					<div class="container-fluid" style="padding-left:5%; padding-right:5%;"	>
-						<hr>
-						<h4>댓글 </h4>
-					</div>
-					{% endif %}
 				</div>
 			
 			</div>
@@ -295,61 +275,6 @@
   </div>
 </div>
 
-<!-- 결과입력 모달 -->
-<div class="modal fade" id="modal_matchresult" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">[ {{post.club_id}} vs ] 결과 입력 </h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	        	<span aria-hidden="true">&times;</span>
-	        </button>
-	   </div>
-	   <div class="modal-body">
-	   		<form method="post">
-	   			<label for="exampleInputEmail1">참여 라이더</label>
-	   			<div class="input-group mb-3">
-	   				<input type="text" id="modal_matchresult_red_p1_name" name="modal_matchresult_red_player_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="basic-addon2" readonly>
-	   			</div>
-	   			<div class="input-group mb-3">
-	   				<input type="text" id="modal_matchresult_red_p2_name" name="modal_matchresult_red_player_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="basic-addon2" readonly>
-	   			</div>
-	   			<div class="input-group mb-3">
-	   				<input type="text" id="modal_matchresult_red_p3_name" name="modal_matchresult_red_player_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="basic-addon2" readonly>
-	   			</div>
-	   			<div class="input-group mb-3">
-	   				<input type="text" id="modal_matchresult_red_p4_name" name="modal_matchresult_red_player_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="basic-addon2" readonly>	
-	   			</div>
-
-	   			<label for="exampleInputEmail1">최종 스코어</label>
-		   		<div class="input-group mb-3">
-		   			<div class="input-group-prepend" style="text-align: center; width:30%;">
-					    <span class="input-group-text" style="text-align:center; width:100%;">학지매</span>
-					</div>
-					<input id="modal_matchresult_win" type="number" class="form-control" aria-label="redteam_win" placeholder="RED팀 승리">
-					<div class="input-group-append">
-					    <span class="input-group-text">승</span>
-					</div>
-				</div>
-				<div class="input-group mb-3">
-		   			<div class="input-group-prepend" style="text-align: center; width:30%;">
-					    <span class="input-group-text" style="text-align: center; width:100%;">{{post.club_name}}</span>
-					</div>
-					<input id="modal_matchresult_lose" type="number" class="form-control" aria-label="lose" placeholder="BLUE팀 승리">
-					<div class="input-group-append">
-					    <span class="input-group-text">승</span>
-					</div>
-				</div> 
-				<div class="modal-footer">
-					<button id="modal_matchresult_cancel_btn" type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-					<button id="modal_matchresult_save_btn" type="button" class="btn btn-primary bg-dark">저장</button>
-				</div>
-			</form>
-		</div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- script start -->
 	<script>
@@ -421,22 +346,23 @@
 			return true;
 		}
 		//경기신청 버튼
-		$(document).on('click','#modal_fmatch_btn',function(e) {
-			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
+		$(document).on('click','#matchform_submit_btn',function(e) {
+			var blue_goga_avg = $('#matchform_blue_goga_avg').val();
 			var formData = new FormData();
-			var post_writer = $('#modal_fmatch_name').val();
-			var club_name = $('#modal_fmatch_clubname').val();
-			var match_date = $('#modal_fmatch_date').val();
-			var match_time_start = $('#modal_fmatch_time_start').val();
-			var match_time_end = $('#modal_fmatch_time_end').val();
-			var player_num = $('#modal_fmatch_select').val();
-			var passwd = $('#modal_fmatch_passwd').val();
+			var post_writer = $('#matchform_postwriter').val();
+			var club_red = $('#matchform_club_red option:selected').val();
+			var club_blue = $('#matchform_club_blue').val();
+			var match_date = $('#matchform_match_date').val();
+			var match_time_start = $('#matchform_time_start').val();
+			var match_time_end = $('#matchform_time_end').val();
+			var player_num = $('#matchform_player_num').val();
+			var passwd = $('#matchform_passwd').val();
 			var player = Array();
 			var date = getTime();
 			var player_count=0;
 			
 			for(var i = 0; i <player_num; i++) {
-					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
+					player[i] = $('#matchform_blue_p'+(i+1)+'_name').val();
 					if($.trim(player[i]) != '') {
 						player_count++;
 						console.log("player["+i+"]:"+player[i]);
@@ -444,12 +370,12 @@
 			}
 
 
-			if( $.trim(club_name) == '') {
-				console.log("club_name :" +club_name)
+			if( $.trim(club_blue) == '') {
+				console.log("club_name :" +club_blue)
 				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
-				 console.log("post writer: "+ club_name)
+				 console.log("post writer: "+ post_writer)
 				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
@@ -457,6 +383,9 @@
 				console.log("player_num input :"+player.length)
 				return swal("라이더를  입력해 주세요");
 			}
+			else if(goga_form_check(blue_goga_avg) == false) {	
+				return swal("고가 입력 양식 00:00:00");
+			} 
 			else if(!(match_date)){
 				console.log("match date : "+match_date)
 				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
@@ -464,9 +393,6 @@
 			else if(match_date_form_check(match_date) == false){
 				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
-			else if(goga_form_check(blue_goga_avg) == false) {	
-				return swal("고가 입력 양식 00:00:00");
-			} 
 			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
 				return swal("시간 입력 양식 ex) 11:11")
 			}
@@ -499,7 +425,8 @@
 					formData.append('p3',player[2]);
 					formData.append('p4',player[3]);
 					formData.append('post_writer',post_writer);
-					formData.append('club_name',club_name);
+					formData.append('club_red',club_red);
+					formData.append('club_blue',club_blue);
 					formData.append('match_date',match_date);
 					formData.append('match_time_start',match_time_start);
 					formData.append('match_time_end',match_time_end);
@@ -515,13 +442,11 @@
 						processData : false,
 						data : formData,
 						success : function(data) {
-							$('#friendlymatch').modal('hide');
-							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
+							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success").then((value)=>{ location.href="{% url 'hzm:main_page' %}"})
 							
 						},
 						error : function(error) {
 							swal("신청실패", "아마도 통신오류??..", "error");
-							$('#friendlymatch').modal('hide');
 						},
 					});
 
@@ -532,96 +457,6 @@
 					$('#friendlymatch').modal('hide');
 				}
 			});
-
-		});
-
-
-//모달에서 가입하기 버튼 클릭
-		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
-
-			swal({
-				title: "아이디를 생성 하시겠습니까?",
-				text: "학지매에 오신것을 환영합니다~",
-				icon: "info",
-				buttons: true,
-				dangerMode: true,
-			})
-			.then((willcreate) =>{
-				if(willcreate){
-					$.ajax({
-						url:"{% url 'hzm:ajax_signup' %}",
-						type:'POST',
-						data : {
-							'player_name' : player_name,
-							'player_passwd' : player_passwd,
-							'csrfmiddlewaretoken' : "{{csrf_token}}",
-						},
-						success:function(data) {
-							swal("아이디 생성 성공");
-	
-						},
-						error : function(error) {
-							swal("아이디생성실패");
-						}
-					});
-
-				}
-				else{
-					return;
-				}
-
-			});
-		});
-
-
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-		});
-
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-		});
-
-
-		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
-
-			if(confirm('아이디를 생성하시겠습니까?')) {
-				$.ajax({
-					url:"{% url 'hzm:ajax_signup' %}",
-					type:'POST',
-					dataType : 'json',
-					data : {
-						'player_name' : player_name,
-						'player_passwd' : player_passwd,
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-					},
-					success:function(data) {
-						swal("아이디 생성 성공");
-						location.reload();
-					},
-					error : function(error) {
-						swal("아이디생성실패");
-					}
-				});
-			}
-			else
-				return;
-
 
 		});
 
@@ -665,37 +500,11 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home_btn',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-
-		$(document).on('click','#bottom_heart_btn',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell_btn',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
 
 		//경기 결과 출력
 		
 
-		$(document).ready(function(e) {
-			player_num = {{post.player_num}};
-			$('#matchinfo_player_num').val(player_num).prop("seleted",true);
-		});
-
+	
 		function read_red(player_num){
 			$('#matchinfo_red_goga_avg').attr('disabled',false);
 			$('#matchinfo_red_p1_name').attr('disabled',false);
@@ -724,7 +533,7 @@
 		}
 
 		$(document).on('click','#matchinfo_edit_btn',function(e) {
-			var pk = {{post.pk}}
+			var pk =0;
 			var post_passwd = $('#matchinfo_passwd').val();
 			var player_num = {{post.player_num}}
 			console.log(post_passwd);
@@ -783,6 +592,7 @@
 		$(document).on('click','#matchinfo_cancel_btn',function(e) {
 			location.reload();
 		});
+
 		//경기 정보 저장 버튼
 		$(document).on('click','#matchinfo_save_btn',function(e) {
 			var player_num=$('#matchinfo_player_num').val();
@@ -989,9 +799,6 @@
 		})
 		//경기정보 수정페이지에서 참여인원수 확인
 
-
-
-		//
 		function create_redteam_player(player_name) {
 			player_num = $('#matchinfo_redteam_member_edit_btn').attr('data-player_num');
 			console.log("player_nim:" + player_num)
@@ -1020,7 +827,6 @@
 			red_p2=$('#matchinfo_red_p2_name').val();
 			red_p3=$('#matchinfo_red_p3_name').val();
 			red_p4=$('#matchinfo_red_p4_name').val();
-			club_id="{{post.club_id}}"
 
 			$.ajax({
 				url: "{% url 'hzm:ajax_get_redteam_subplayer' %}",
@@ -1032,7 +838,6 @@
 					'red_p2' :red_p2,
 					'red_p3' :red_p3,
 					'red_p4' :red_p4,
-					'club_id' :club_id,
 				},
 				success:function(data) {
 					for(var i=0; i<data.length ; i++){
@@ -1052,7 +857,6 @@
 					'red_p2' :red_p2,
 					'red_p3' :red_p3,
 					'red_p4' :red_p4,
-					'club_id' :club_id,
 				},
 				success:function(data) {
 					for(var i=0; i<data.length ; i++){
@@ -1161,40 +965,25 @@
 			}
 			console.log(player_num);
 		});
-		//경기결과 모달에서 저장버튼
-		$(document).on('click', '#modal_matchresult_save_btn',function(e) {
-			var win = $('#modal_matchresult_win').val();
-			var lose = $('#modal_matchresult_lose').val();
-			var player_num = $('#matchinfo_player_num option:selected').val();
-			var players=$('input[name=modal_matchresult_red_player_name]');
-			var post_pk = "{{post.pk}}";
 
-			if( $.trim(win) == '')
-				return swal("RED팀 승리 횟수를 입력해 주세요.");
-			else if( $.trim(lose) == '')
-				return swal("BLUE팀 승리 횟수를 입력해 주세요.");
-
-			for(var i=0;i<player_num;i++){
-				console.log(players[i].dataset.player_name);
+		//경기인원 변경시 
+		$('#matchform_player_num').change(function(e) {
+			console.log("change1")
+			var state=$('#matchform_player_num option:selected').val();
+			if( state== '2'){
+				$('#matchform_blue_p3_name').attr('disabled',true);
+				$('#matchform_blue_p4_name').attr('disabled',true);
 			}
-			$.ajax({
-				url : "{% url 'hzm:ajax_save_matchresult' %}",
-				type:'POST',
-				data: {
-					'csrfmiddlewaretoken': "{{csrf_token}}",
-					'post_pk':post_pk,
-					'player_num':player_num,
-					'win' :win,
-					'lose' : lose,
-				},
-				success:function(data) {
-					$('#modal_matchresult').modal('hide');
-				},
-				error:function(error) {
-
-				},
-			});
-		});
+			else if( state== '3'){
+				console.log("change")
+				$('#matchform_blue_p3_name').attr('disabled',false);
+				$('#matchform_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '4'){
+				$('#matchform_blue_p3_name').attr('disabled',false);
+				$('#matchform_blue_p4_name').attr('disabled',false);
+			}
+		})
 
 	</script>
 	

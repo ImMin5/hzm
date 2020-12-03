@@ -27,7 +27,7 @@
 <body style="height:100%;">
 	<!--navbar 시작-->
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+				<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
 		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		    		<span class="navbar-toggler-icon"></span>
 		  		</button>
@@ -87,15 +87,15 @@
 						</tr>
 					</thead>
 					<tbody id="tbody_post_lists" onload="create_post_list_table(data)">
-						{% for list in posts %}
-						<tr onclick="location.href='/match_before/info/{{list.pk}}'" >
-							<td><a style="text-decoration:none; color:black;">{{list.pk}}</a></td>
+						{% for post in posts %}
+						<tr onclick="location.href='/match_before/info/{{post.pk}}'" >
+							<td><a style="text-decoration:none; color:black;">{{post.pk}}</a></td>
 							<td style="font-size:0.8rem;" align="center">승인대기
 							</td>
-							<td> {{list.player_num}} : {{list.player_num}}</td>
-							<td style="text-align:center;"> 학지매 vs {{list.club_name}}</td>
-							<td style="text-align:center;">{{list.post_writer}}</td>
-							<td style="font-size:0.8rem;">{{list.date}}</td>
+							<td> {{post.player_num}} : {{post.player_num}}</td>
+							<td style="text-align:center;"> {{post.club_id}} vs {{post.club_blue}}</td>
+							<td style="text-align:center;">{{post.post_writer}}</td>
+							<td style="font-size:0.8rem;">{{post.date}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -133,11 +133,11 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
@@ -151,9 +151,9 @@
 		<!--하단 탭바 끝-->
 	
 
-	<!-- 로그인 모달 -->
-<div class="modal fade modal-xl" id="login" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- 로그인 모달 -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
       		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
@@ -161,7 +161,7 @@
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
 	   </div>
-	   <div class="modal-body">
+	   <div class="modal-body" >
 	   		<form method="post">
 		   		<div class="input-group mb-3">
 		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
@@ -177,6 +177,7 @@
     </div>
   </div>
 </div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -576,22 +577,6 @@
 			}
 		}
 	
-	
-	/*	$(document).ready(function(e){
-			$.ajax({
-				url: "{% url 'hzm:ajax_create_post_list' %}",
-				dataType:'json',
-				type :'POST',
-				data : {
-					'page' :'1',
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-				}
-				,success : function(data) {
-					create_post_list_table(data);
-				},
-			});
-		});*/
-		//경기신청모달 고가 평균 폼 확인
 
 		//경기 신청모달에서 참여인원 수 선택시
 		$('#modal_fmatch_select').change(function(e) {

@@ -34,7 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">	{{club.club_name}} </a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -44,10 +44,10 @@
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
 			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
-			      		{% if pk %}
+			      		 {% if pk %}
 			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+			      		<a class="nav-link" href="{% url 'hzm:match' all %}">&nbsp;경기 결과</a>
 			      	</div>
 			      </li>
 			      {% if pk %}
@@ -60,53 +60,48 @@
 			      <li class="nav-item">
 			        <a class="nav-link" id="logout_btn">로그아웃</a>
 			      </li>
-			      {% else %}
-			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
-			      </li>
 			      {% endif %}
-			      
 			  	</ul>
 			 </div>
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll;">
-			<div class="media" style="padding-top:5%; margin-bottom:5%;">
-				<i class="fas fa-car fa-4x" style="padding-left:5%;"></i>
-				<div class="media-body" style="margin-left:5%;">
-					<h5 class="mt-0">{{player_name}}님 개인기록실</h5>
-					개인 기록을 기록해 주세요</br>
-			  	</div>
-			</div>
-			<hr>
-			<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
-
-			<div class="input-group mb-3" style="width:25%; float:right;">
-				<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
-				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
-					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll; border:0;">
+			
+				<div class="media" style="padding-top:5%; margin-bottom:5%;">
+					<i class="fas fa-flag-checkered fa-4x" style="padding-left:5%;"></i>
+					<div class="media-body" style="margin-left:5%;">
+						<h2 class="mt-0">{{club.club_name}}의 클럽 페이지</h2>
+						<h4>클럽장 : {{club.host}}</h4>
+						아직 아무고토 없음</br>
+				  	</div>
 				</div>
-			</div>
-			<div class="container-fluid" style="overflow:scroll; height:40vh;">
-				<table class="table table-md" >
-				  <thead>
-				    <tr>
-				      <th scope="col" style="width:8%; text-align: center;">#</th>
-				      <th scope="col" style="width:29%; text-align: center;">맵 이름</th>
-				      <th scope="col" style="width:22%; text-align: center;">나의 최고 기록</th>
-				      <th scope="col" style="width:22%; text-align: center;">클럽 최고 기록</th>
-				      <th scope="col" style="width:17%; text-align: center;">클럽 내 등수</th>
-				    </tr>
-				  </thead>
-				  <tbody id="record_table_tbody">
-				  </tbody>
-				</table>				
-			</div>
-		</div><!--middle container 끝-->
+				<hr>
+
+				{% if club.host == player.player_name %}
+				<button style="float :left; margin-left : 1%; " id="player_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">??</button>
+
+				<div class="input-group mb-3" style="width:25%; float:right;">
+					<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+					<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
+						<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+					</div>
+				</div>
+				<div class="container-fluid" style="overflow:scroll; height:40vh;">
+					<table class="table table-md" >
+					  <thead>
+					    <tr>
+					    	<th scope="col" style="width:33%; text-align: center;">#</th>
+					    	<th scope="col" style="width:34%; text-align: center;">아이디</th>
+					    	<th scope="col" style="width:33%; text-align: center;">비고</th>
+					    </tr>
+					  </thead>
+					  <tbody id="club_player_table_tbody">
+					  </tbody>
+					</table>				
+				</div>
+				{% endif %}
+		</div>
 
 
 		<!--하단 탭바-->
@@ -116,8 +111,8 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-5x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
@@ -131,6 +126,34 @@
 		</nav>
 		<!--하단 탭바 끝-->
 	
+
+<!-- 로그인 모달 -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        	<span aria-hidden="true">&times;</span>
+	        </button>
+	   </div>
+	   <div class="modal-body" >
+	   		<form method="post">
+		   		<div class="input-group mb-3">
+		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
+				</div>
+		        <div class="input-group mb-3">
+		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
+		        	<div class="input-group-append">
+				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
+				</div>
+			</form>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -161,8 +184,8 @@
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">라이더</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
+			<span class="input-group-text display-3">라이더</span>
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control display-3" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
 			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
@@ -195,46 +218,8 @@
   </div>
 </div>
 
-
-<!--기록 추가 모달-->
-<div class="modal fade" id="modal_record" tabindex="-1" aria-labelledby="modal_record_title" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			 <div class="modal-header">
-			 	<h5 class="modal-title" id="modal_record_title">기록 추가 </h5>
-			 	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			 		<span aria-hidden="true">&times;</span>
-			 	</button>
-			 </div>
-			<div class="modal-body">
-				<div class="input-group mb-3">
-					<span class="input-group-text">맵 이름</span>
-					<select id="modal_record_map_name" class="form-control">
-						{% for map in maps %}
-						<option value="{{map.pk}}">{{map.map_name}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="input-group mb-3">
-					<span class="input-group-text">기록 </span>
-					<input type="text" id="modal_record_time" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="맵 기록" aria-describedby="button-addon2" required>
-				</div>
-				<div class="input-group mb-3">
-					<span class="input-group-text">기록 경신일</span>
-					<input type="text" id="modal_record_date" class="form-control" placeholder="입력 형식 2020-01-01" aria-label="맵 기록" aria-describedby="button-addon2" value="2020-01-01" disabled>
-				</div>
-			</div><!--modal body end-->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-				<button type="button" id="modal_record_add_btn" class="btn btn-secondary bg-dark">기록추가</button>
-			</div>
-		</div>
-  	</div>
- </div>
-
 <!-- script start -->
 	<script>
-		
 		function getTime() {
 			var Now = new Date();
 			var NowTime = Now.getFullYear();
@@ -247,7 +232,7 @@
 			return NowTime;
 		}
 
-				//경기신청모달 고가 평균 폼 확인
+		//경기신청모달 고가 평균 폼 확인
 		function goga_form_check(data){
 			data_=data.split(':')
 
@@ -301,6 +286,25 @@
 			return true;
 		}
 
+		//경기 신청모달에서 참여인원 수 선택시
+		$('#modal_fmatch_select').change(function(e) {
+			console.log("change1")
+			var state=$('#modal_fmatch_select option:selected').val();
+			if( state== '2'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '3'){
+				console.log("change")
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			}
+			else if( state== '4'){
+				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
+				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
+			}
+		})
+		
 		//경기신청 버튼
 		$(document).on('click','#modal_fmatch_btn',function(e) {
 			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
@@ -326,9 +330,11 @@
 
 
 			if( $.trim(club_name) == '') {
+				console.log("club_name :" +club_name)
 				return swal("클럽명을 입력해주세요");
 			}
 			else if($.trim(post_writer) == '') {
+				 console.log("post writer: "+ club_name)
 				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
@@ -414,14 +420,13 @@
 
 		});
 
-		//하단 마이룸 버튼 클릭
-		$(document).on('click','#bottom_user_btn',function(e) {
+		//상단 네이바에서 로그인 버튼 클릭
+		$(document).on('click','#signin_btn',function(e) {
 			$('#modal_signup_btn').attr('id','modal_signin_btn');
 			$('#modal_signin_btn').text('로그인');
 			$('#staticBackdropLabel').text('로그인');
 			
 		});
-
 
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
@@ -438,146 +443,104 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-
-		$(document).on('click','#bottom_heart',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			if(active_btn=="heart")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			if(active_btn=="bell")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
-		
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		});
-		//개인 기록 테이블
-		function create_record_table(data,num) {
-			var rank;
-			var best_record;
-			var maps_id=data.maps_id;
-			$.ajax({
-				url : "{% url 'hzm:ajax_get_record_rank' %}",
-				type:'GET',
-				dataType:'json',
-				async:false,
-				data:{
-				
-					'maps_id':maps_id,
-				},
-				success:function(data){
-					rank=data.rank;
-					best_record=data.best_record;
-					console.log("rank");
-				},
-				error:function(error){
-				},
-			})
-			console.log("data")
-			$('#record_table_tbody').append('<tr>\
+		function create_player_before_auth_table(data,num){
+			$('#club_player_table_tbody').append('<tr id="tr_'+data.player_name+'">\
 				<td style="text-align:center;">'+num+'</td>\
-				<td style="text-align:center;">'+data.maps_id+'</td>\
-				<td style="text-align:center;">'+data.record+'</td>\
-				<td style="text-align:center;">'+best_record+'</td>\
-				<td style="text-align:center;">'+rank+'</td>\
-				</tr>');
+				<td style="text-align:center;" >'+data.player_name+'</td>\
+				<td style="text-align:center;" ><button class="btn bg-dark btn-secondary" style="margin-right:10%;" name="club_player_table_tbody_tr_accept" data-player_name="'+data.player_name+'">수락</button><button class="btn bg-dark btn-secondary" data-player_name="'+data.player_name+'" name="club_player_table_tbody_tr_reject" >거절</button></td>\
+				</tr>')
 		}
-		$(document).ready(function(e) {
-			$.ajax({
-				url: "{% url 'hzm:ajax_get_records' %}",
-				type: 'POST',
-				dataType: 'json',
-				data :{
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-				},
-				success: function(data) {
-					for(var i=0 ; i<data.length;i++){
-						create_record_table(data[i],i+1);
-					}
-				}
-			})
-		})
-		//기록추가 모달에서 추가 버튼 클릭 시 
-		$(document).on('click','#modal_record_add_btn',function(e) {
-			var map_record=$('#modal_record_time').val();
-			var maps_id=$('#modal_record_map_name option:selected').val();
-			var record_date=$('#modal_record_date').val();
 
-			if(goga_form_check(map_record) == false)
-				return swal("기록 입력 양식 00:00:00")
-			if(match_date_form_check(record_date) == false)
-				return swal("날짜 입력 양식 ex) 2020-01-01");
-
+		$(document).ready(function(e){
 			$.ajax({
-				url:"{% url 'hzm:ajax_add_map_record' %}",
+				url: "{% url 'hzm:ajax_get_player_before_auth' %}",
 				type:'POST',
-				dataType:'json',
-				data: {
-					'csrfmiddlewaretoken':"{{csrf_token}}",
-					'record':map_record,
-					'maps_id':maps_id,
-					'record_date':record_date,
+				dataType:'JSON',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}"
 				},
-				success: function(data) {
-					$('#modal_record').modal('hide');
-					modal_record_init();
-					$('#record_table_tbody').empty();
-					for(var i=0; i<data.length; i++) {
-						create_record_table(data[i],i+1)
-					}
+				success: function(data){
+					for(var i=0; i < data.length;i++)
+					create_player_before_auth_table(data[i],i+1);
 				},
-				error : function(error) {
+				error : function(e) {
 
 				},
 			})
 		});
 
-		function modal_record_init(){
-			$('#modal_record_date').val('');
-			$('#modal_record_time').val('');
-		}
-
-			 	/*검색기능*/
+		/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword_mapname").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
-				$("#record_table_tbody tr").filter(function() {
+				$("#club_player_table_tbody tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});
 		});
+		
+		//클럽원 수락 버튼
+		$(document).on('click','button[name=club_player_table_tbody_tr_td]',function(e) {
+			
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 수락
+		$(document).on('click','button[name=club_player_table_tbody_tr_accept]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 거절
+		$(document).on('click','button[name=club_player_table_tbody_tr_reject]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_reject_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+			
+
 	</script>
 	
 </body>

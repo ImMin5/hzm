@@ -34,7 +34,11 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
+			{% if pk %}
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+			{% else %}
 			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+			{% endif %}
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -43,7 +47,7 @@
 			      <li class="nav-item dropdown">
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="#" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}" >&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
 			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
@@ -65,7 +69,7 @@
 			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
+			        <a class="nav-link" href="{% url 'hzm:signup' %}" id="navbar_signup_btn" >가입하기</a>
 			      </li>
 			      {% endif %}
 			      
@@ -77,7 +81,7 @@
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
 			<!--점보트론 시작-->
 			<div class="jumbotron" style="background-image:url('/static/imgs/test_record.PNG') background-size: contain;">
-			  <h1 class="display-4">{% if pk %} {{player_name}} 	님 </br>{% endif %} 반갑습니다, 학지매 입니다!</h1>
+			  <h1 class="display-4"> {% if pk %} {{player.player_name}} 님 {% endif %} 반갑습니다.</br> {% if club.name %} {{club.name}} 입니다! {% endif %}	</h1>
 			  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
 			  <hr class="my-4">
 			  <p>친선경기 신청은 아래 버튼</p>
@@ -85,6 +89,17 @@
 			</div>
 			
 			<!--점보트론 끝-->
+			<div class="container-fluid" id="ad-banner" style="height:50vh; padding:0; background-color:black;">
+				
+				<button class="btn">ddd</button>
+			</div>
+			<!--ad
+			<div class="container-fluid" id="ad-banner" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			</div>
+			ad끝 -->
+
 			<!--
 			<div class="container-fluid" style="height:65vh; padding:0px;">
 				<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
@@ -117,24 +132,28 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
 					</div>
 					{% else %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
-					<div class="col-4" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="#">
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
+					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
 					</div>
-					<div class="col-4" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
+					<div class="col-3" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
 					<button class="btn"><a style="color: black; text-decoration:none" href="#" >
 								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
 								</button><h2>마이룸</h2></a>
@@ -146,7 +165,7 @@
 		<!--하단 탭바 끝-->
 	
 
-	<!-- 로그인 모달 -->
+<!-- 로그인 모달 -->
 <div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -172,6 +191,7 @@
     </div>
   </div>
 </div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -202,8 +222,8 @@
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text">라이더</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
+			<span class="input-group-text display-3">라이더</span>
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control display-3" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
 			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
@@ -438,39 +458,11 @@
 
 		});
 
-		//상단 네비바에서 가입하기 버튼 클릭
-		$(document).on('click','#signup_btn',function(e) {
-			$('#modal_signin_btn').attr('id','modal_signup_btn');
-			$('#modal_signup_btn').text('가입하기');
-			$('#staticBackdropLabel').text('가입하기');
-			
-		});
-
-		//상단 네이바에서 로그인 버튼 클릭
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-		//하단 마이페이지 버튼 클릭
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-
-		//로그인후 마이페이지 버튼을 눌렀을 경우
-		$(document).on('click','i[name="logout"]',function(e) {
-			console.log("logout");
-			
-		});
-
 		//모달에서 가입하기 버튼 클릭
 		$(document).on('click','#modal_signup_btn',function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
+			var club_name = $('#modal_club_name').val();
 
 			console.log(player_name);
 			console.log(player_passwd);
@@ -490,6 +482,7 @@
 					data : {
 						'player_name' : player_name,
 						'player_passwd' : player_passwd,
+						'club_name': club_name,
 						'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 					},
@@ -528,17 +521,20 @@
 
 				},
 				success:function(msg) {
+					console.log("login: "+msg);
 					if( msg=="login_fail1") {
 						return swal("존재하지 않는 아이디입니다");
 					}
 					else if (msg=="login_fail2") {
-						return swal("존재하지 않는 아이디입니다");
+						return swal("잘못된 접근입니다.");
 					}
 					else if(msg=="login_fail3"){
 						return swal("존재하지 않는 아이디입니다");
 					}
+					else if(msg=="auth_fail"){
+						return swal("승인 대기중입니다 잠시만 기다려주세요!");
+					}
 					else {
-						swal("환영합니다^^!");
 						location.reload();
 					}
 				},
@@ -562,31 +558,6 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user',function(e) {
-			if(active_btn=="user")
-				return false;
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-/*
-		$(document).on('click','#bottom_heart_btn',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell_btn',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
-		*/
 
 		
 

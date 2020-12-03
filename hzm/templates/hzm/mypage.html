@@ -31,7 +31,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -73,14 +73,14 @@
 	<!--middle container-->
 		<div class="container" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:10%;">
-				<h3 class="display-4">{{player_name}}의 마이룸</h3>
+				<h3 class="display-4">{{player.player_name}}의 마이룸</h3>
 			</div>
 			<div class="container-fluid" style="padding-top:5%;">
 				<form>
 					<div class="form-group">
 						<label for="exampleInputEmail1">카러플 닉네임</label>
 						<div class="input-group mb-3">
-						    <input type="text" class="form-control" id="mypage_player_name" value="{{player_name}}">
+						    <input type="text" class="form-control" id="mypage_player_name" value="{{player.player_name}}">
 						    <div class="input-group-append">
 						    	<button class="btn btn-outline-secondary" type="button" id="modal_mypage_check_id_btn")">중복확인</button>
 						    </div>
@@ -89,7 +89,7 @@
 					<div class="form-group">
 						<label for="exampleInputEmail1">소속클럽</label>
 						<div class="input-group mb-3">
-						    <input type="text" class="form-control" id="mypage_player_club" value="{{player.club_name}}">
+						    <input type="text" class="form-control" id="mypage_player_club" value="{{club.club_name}}" disabled>
 						</div>
 					</div>
 					<div class="form-group">
@@ -101,7 +101,7 @@
 					    <input type="password" class="form-control" id="mypage_password_change">
 					</div>
 				</form>
-				<button id="mypage_info_edit_btn" class="btn btn-primary">변경하기</button>
+				<button id="mypage_info_edit_btn" class="btn btn-primary bg-dark">변경하기</button>
 			</div>
 			<hr>
 			<div class="container-fluid">
@@ -126,11 +126,11 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
@@ -144,9 +144,9 @@
 		<!--하단 탭바 끝-->
 	
 
-	<!-- 로그인 모달 -->
-<div class="modal fade modal-xl" id="login" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- 로그인 모달 -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
       		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
@@ -154,7 +154,7 @@
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
 	   </div>
-	   <div class="modal-body">
+	   <div class="modal-body" >
 	   		<form method="post">
 		   		<div class="input-group mb-3">
 		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
@@ -170,6 +170,7 @@
     </div>
   </div>
 </div>
+
 
 <!--친선경기 신청 모달-->
 <div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
@@ -236,8 +237,8 @@
 
 <!-- script start -->
 	<script>
-
-
+		var blank_pattern = /[\s]/g;
+		
 		function getTime() {
 			var Now = new Date();
 			var NowTime = Now.getFullYear();
@@ -547,6 +548,10 @@
 		function id_check_btn(player_name){
 			console.log(player_name);
 			name = player_name;
+
+			if(blank_pattern.test(name)==true || name=='')
+				return swal("공백은 입력이 안됩니다~")
+
 			$.ajax({
 				url : "{% url 'hzm:ajax_id_check_btn' %}",
 				type:'GET',
@@ -576,7 +581,6 @@
 		//마이룸 정보수정
 		$(document).on('click','#mypage_info_edit_btn',function(e){
 			var player_name = $('#mypage_player_name').val();
-			var club_name = $('#mypage_player_club').val();
 			var password_now = $('#mypage_password_now').val();
 			var password_change = $('#mypage_password_change').val();
 
@@ -598,7 +602,6 @@
 					data: {
 						'csrfmiddlewaretoken':'{{csrf_token}}',
 						'player_name':player_name,
-						'club_name':club_name,
 						'password_now' : password_now,
 						'password_chnage':password_change,
 					},

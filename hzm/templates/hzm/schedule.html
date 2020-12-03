@@ -80,7 +80,7 @@
 			<div class="media" style="padding-top:5%; margin-bottom:5%;">
 				<i class="far fa-calendar-plus fa-4x" style="padding-left:5%;"></i>
 				<div class="media-body" style="margin-left:5%;">
-					<h5 class="mt-0">{{player_name}}님의 스케쥴 관리</h5>
+					<h5 class="mt-0">{{player.player_name}}님의 스케쥴 관리</h5>
 					경기가 가능한 날을 표시해 주세요!</br>
 					취소도 가능합니다^^
 			  	</div>
@@ -125,27 +125,15 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
 						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_bell" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-bell fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>알람</h2></a>
 					</div>
 					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이페이지</h2></a>
-					</div>
-					{% else %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
-					</div>
-					<div class="col-4" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-					<button class="btn" data-toggle="modal" data-target="#login"><a style="color: black; text-decoration:none" href="#" >
-								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이페이지</h2></a>
 					</div>
 					{% endif %}
 				</div>
@@ -158,7 +146,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{player_name}}님</h5>
+        <h5 class="modal-title">{{player.player_name}}님</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -312,7 +300,7 @@
 		      	$('#schedule_date').val(info.dateStr);
 		      },
 		      eventClick: function(info) {
-		      	if(info.event.title == '{{player_name}}'){
+		      	if(info.event.title == '{{player.player_name}}'){
 		      		console.log('yes');
 		      		
 		      		$('#modal_schedule_event_edit').modal('show');
@@ -500,6 +488,7 @@
 		 		});
 		 	})
 
+		 	//클럽원들 스케쥴을 불러옴
 		 	$(document).ready(function(e){
 		 		$.ajax({
 		 			url:"{% url 'hzm:ajax_get_all_schedules' %}",
@@ -520,7 +509,7 @@
 		 		var date = $('#schedule_date').val();
 		 		var time_start = $('#schedule_time_start').val();
 		 		var time_end = $('#schedule_time_end').val();
-		 		title = '{{player_name}}';
+		 		title = '{{player.player_name}}';
 		 		var date_start = date+'T'+time_start+':00';
 		 		console.log(date);
 		 		console.log(time_start);
@@ -671,6 +660,62 @@
 			NowTime += ':' + Now.getMinutes();
 			NowTime += ':' + Now.getSeconds();
 			return NowTime;
+		}
+
+		//경기신청모달 고가 평균 폼 확인
+		function goga_form_check(data){
+			data_=data.split(':')
+
+			if(data.length != 8)
+				return false;
+			else if(data[2] != ':')
+				return false;
+			else if(data[5] != ':')
+				return false;
+			else if(isNaN(data_[0]))
+				return false;
+			else if(isNaN(data_[1]))
+				return false;
+			else if(isNaN(data_[2]))
+				return false;
+
+			return true;
+		}
+
+		//경기신청모달 경기 날짜 폼 체크
+		function match_date_form_check(match_date) {
+			if(match_date.length != 10) 
+				return false;
+			else if(match_date[4] != '-')
+				return false;
+			else if(match_date[7] != '-')
+				return false;
+			
+			match_date_=match_date.split('-')
+
+			if(isNaN(match_date_[0]))
+				return false;
+			else if(isNaN(match_date_[1]))
+				return false;
+			else if(isNaN(match_date_[2]))
+				return false;
+
+			return true;
+		}
+		
+		//경기신청 모달 시간 체크
+		function time_form_check(time){
+			if(time.length != 5)
+				return false;
+			else if(time[2] != ':')
+				return false;
+
+			time_=time.split(':')
+			if(isNaN(time_[0]))
+				return false;
+			else if (isNaN(time_[1]))
+				return false;
+			return true;
 		}
 
 		//경기신청 버튼
