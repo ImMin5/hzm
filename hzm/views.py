@@ -206,7 +206,7 @@ def club(request,club_pk) :
 		return redirect('/')
 	try :
 		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(pk=club_pk)
+		club=Club.objects.get(pk=club_id)
 		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
 	except Exception as e :
 		print(e)
