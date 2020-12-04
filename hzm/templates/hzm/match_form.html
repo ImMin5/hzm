@@ -141,7 +141,7 @@
 							</div>
 						</div><!-- matchinfo body끝-->
 						<div class="container-fluid" id="matchinfo_footer" style="">
-							<button type="button" id="matchform_submit_btn" class="btn btn-primary bg-dark">신청하기</button>
+							<button type="button" id="matchform_submit_btn" class="btn btn-secondary bg-dark">신청하기</button>
 						</div>
 					</form>
 
@@ -269,7 +269,7 @@
       </div><!--modal body 끝-->
       <div class="modal-footer">
         <button type="button"  name="modal_redteam_close_btn" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_redteam_save_btn" class="btn btn-primary bg-dark">저장</button>
+        <button type="button" id="modal_redteam_save_btn" class="btn btn-secondary bg-dark">저장</button>
       </div>
     </div>
   </div>
@@ -460,6 +460,7 @@
 
 		});
 
+		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -475,9 +476,23 @@
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 				},
-				success:function(data) {
-					//swal("성공");
-					location.reload();
+				success:function(msg) {
+					console.log("login: "+msg);
+					if( msg=="login_fail1") {
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if (msg=="login_fail2") {
+						return swal("잘못된 접근입니다.");
+					}
+					else if(msg=="login_fail3"){
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if(msg=="auth_fail"){
+						return swal("승인 대기중입니다 잠시만 기다려주세요!");
+					}
+					else {
+						location.reload();
+					}
 				},
 				error : function(error) {
 					swal("아이디/비밀번호가 일치하지 않습니다.");
@@ -798,7 +813,6 @@
 			}
 		})
 		//경기정보 수정페이지에서 참여인원수 확인
-
 		function create_redteam_player(player_name) {
 			player_num = $('#matchinfo_redteam_member_edit_btn').attr('data-player_num');
 			console.log("player_nim:" + player_num)
@@ -925,6 +939,7 @@
 			init_modal_redteam();
 			$('#modal_redteam_member').modal('hide');
 		})
+		
 		//라이더 이름 불러오기
 		$(document).ready(function(e) {
 			var player_num="{{post.player_num}}";

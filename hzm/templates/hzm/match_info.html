@@ -41,7 +41,7 @@
 			      <li class="nav-item dropdown">
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}" data-toggle="modal" data-target="#friendlymatch">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
 			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
@@ -150,10 +150,11 @@
 							</div>
 						</div><!-- matchinfo body끝-->
 						<div class="container-fluid" id="matchinfo_footer" style="">
+							<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:match' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
 							{% if club_id == post.club_id %}
-							<button type="button" id="matchinfo_delete_btn" class="btn btn-primary bg-dark" disabled><a href="{% url 'hzm:delete_match_info' post.pk %}" style="color:white; text-decoration: none; " >삭제</a></button>
-							<button type="button" id="matchinfo_edit_btn" class="btn btn-primary bg-dark">수정</button>
-							<button type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-primary bg-dark" style="float:right;" data-red_p1_name="{{post.red_p1_name}}" data-red_p2_name="{{post.red_p2_name}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
+							<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="{% url 'hzm:delete_match_info' post.pk %}" style="color:white; text-decoration: none; " >삭제</a></button>
+							<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
+							<button type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-secondary bg-dark" style="float:right;" data-red_p1_name="{{post.red_p1_name}}" data-red_p2_name="{{post.red_p2_name}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
 							{% endif %}
 						</div>
 					</form>
@@ -289,7 +290,7 @@
       </div><!--modal body 끝-->
       <div class="modal-footer">
         <button type="button"  name="modal_redteam_close_btn" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_redteam_save_btn" class="btn btn-primary bg-dark">저장</button>
+        <button type="button" id="modal_redteam_save_btn" class="btn btn-secondary bg-dark">저장</button>
       </div>
     </div>
   </div>
@@ -300,7 +301,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">[ {{post.club_id}} vs ] 결과 입력 </h5>
+      		<h5 class="modal-title" id="staticBackdropLabel">[ {{post.club_id}} vs {{post.club_blue}} ] 결과 입력 </h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
@@ -324,7 +325,7 @@
 	   			<label for="exampleInputEmail1">최종 스코어</label>
 		   		<div class="input-group mb-3">
 		   			<div class="input-group-prepend" style="text-align: center; width:30%;">
-					    <span class="input-group-text" style="text-align:center; width:100%;">학지매</span>
+					    <span class="input-group-text" style="text-align:center; width:100%;">{{post.club_id}}</span>
 					</div>
 					<input id="modal_matchresult_win" type="number" class="form-control" aria-label="redteam_win" placeholder="RED팀 승리">
 					<div class="input-group-append">
@@ -333,7 +334,7 @@
 				</div>
 				<div class="input-group mb-3">
 		   			<div class="input-group-prepend" style="text-align: center; width:30%;">
-					    <span class="input-group-text" style="text-align: center; width:100%;">{{post.club_name}}</span>
+					    <span class="input-group-text" style="text-align: center; width:100%;">{{post.club_blue}}</span>
 					</div>
 					<input id="modal_matchresult_lose" type="number" class="form-control" aria-label="lose" placeholder="BLUE팀 승리">
 					<div class="input-group-append">
@@ -342,7 +343,7 @@
 				</div> 
 				<div class="modal-footer">
 					<button id="modal_matchresult_cancel_btn" type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-					<button id="modal_matchresult_save_btn" type="button" class="btn btn-primary bg-dark">저장</button>
+					<button id="modal_matchresult_save_btn" type="button" class="btn btn-secondary bg-dark">저장</button>
 				</div>
 			</form>
 		</div>
@@ -579,52 +580,7 @@
 		});
 
 
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-		});
-
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-		});
-
-
-		$(document).on('click','#modal_signup_btn',function(e) {
-			var player_name = $('#modal_player_name').val();
-			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
-
-			if(confirm('아이디를 생성하시겠습니까?')) {
-				$.ajax({
-					url:"{% url 'hzm:ajax_signup' %}",
-					type:'POST',
-					dataType : 'json',
-					data : {
-						'player_name' : player_name,
-						'player_passwd' : player_passwd,
-						'csrfmiddlewaretoken' : "{{csrf_token}}",
-
-					},
-					success:function(data) {
-						swal("아이디 생성 성공");
-						location.reload();
-					},
-					error : function(error) {
-						swal("아이디생성실패");
-					}
-				});
-			}
-			else
-				return;
-
-
-		});
-
+		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -640,9 +596,23 @@
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 				},
-				success:function(data) {
-					//swal("성공");
-					location.reload();
+				success:function(msg) {
+					console.log("login: "+msg);
+					if( msg=="login_fail1") {
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if (msg=="login_fail2") {
+						return swal("잘못된 접근입니다.");
+					}
+					else if(msg=="login_fail3"){
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if(msg=="auth_fail"){
+						return swal("승인 대기중입니다 잠시만 기다려주세요!");
+					}
+					else {
+						location.reload();
+					}
 				},
 				error : function(error) {
 					swal("아이디/비밀번호가 일치하지 않습니다.");

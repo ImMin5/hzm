@@ -133,3 +133,4 @@ local_settings.py
 .DS_Store
 *.pyc
 secret_config.py
+docker-compose.yml

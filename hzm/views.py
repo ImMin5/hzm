@@ -201,12 +201,14 @@ def personal_record(request) :
 
 def club(request,club_pk) :
 	pk=request.session.get('pk')
-
+	club_id=request.session.get('club_id')
+	print(club_id)
 	if pk is None :
 		return redirect('/')
 	try :
 		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(pk=club_id)
+		club=Club.objects.get(club_name=club_id)
+		print(club)
 		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
 	except Exception as e :
 		print(e)
@@ -215,11 +217,10 @@ def club(request,club_pk) :
 def match_form(request) :
 	pk = request.session.get('pk')
 	club_id = request.session.get('club_id')
-
+	clubs=Club.objects.all()
 	if pk is not None :
-		clubs=Club.objects.all()
 		return render(request,'hzm/match_form.html',{'pk':pk,'club_id':club_id,'clubs':clubs})	
-	return render(request,'hzm/match_form.html')
+	return render(request,'hzm/match_form.html',{'clubs':clubs})
 
 
 def match_filter(request) :

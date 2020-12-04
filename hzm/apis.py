@@ -611,6 +611,7 @@ def get_player_before_auth(request) :
 	return HttpResponse(json.dumps(serialized_players.data)) 
 
 def accept_player(request) :
+	
 	player_name=request.GET.get('player_name')
 	player=Player.objects.get(player_name=player_name)
 	player.accept=True
@@ -627,51 +628,5 @@ def reject_player(request) :
 
 
 
-def match_filter(request) :
 
-	pk=request.session.get('pk')
-	club_id = request.session.get('club_id')
-	condition=request.GET.get('filter')
-	print(condition)
-	if condition != "전체" :
-		posts = Post_list.objects.all().filter(Q(accept=True) & Q(club_id=condition)).order_by('-pk')
-	else :
-		posts = Post_list.objects.all().filter(Q(accept=True)).order_by('-pk')
-
-	count = posts.count();
-	paginator = Paginator(posts, 10)
-	pages = request.GET.get('page',1)
-
-	
-	clubs=Club.objects.all().order_by('-pk')
-
-	now = time.strftime('%Y-%m-%d %I:%M',time.localtime())
-	for post in posts :
-		match_date_start = post.match_date+' '+post.match_time_start
-		match_date_end = post.match_date+' '+post.match_time_end
-		print(now)
-		print(match_date_end)
-		if match_date_start > now :
-			post.state="경기준비"
-		elif match_date_end < now :
-			post.state="경기종료"
-		else :
-			post.state="진행중"
-		print(post.state)
-		post.save()
-
-	try :
-		posts = paginator.get_page(pages)
-	except PageNotAnInteger :
-		posts = paginator.page(1)
-	except EmptyPage :
-		posts = paginator.page(paginator.num_pages)
-		return HttpResponse("end")
-
-	if pk :
-		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(pk=player.club_id)
-		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count ,'pk':pk ,'clubs':clubs,'club':club})
-	else :
-		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count})
 

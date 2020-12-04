@@ -101,7 +101,7 @@
 					    <input type="password" class="form-control" id="mypage_password_change">
 					</div>
 				</form>
-				<button id="mypage_info_edit_btn" class="btn btn-primary bg-dark">변경하기</button>
+				<button id="mypage_info_edit_btn" class="btn btn-secondary bg-dark">변경하기</button>
 			</div>
 			<hr>
 			<div class="container-fluid">
@@ -126,7 +126,7 @@
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
 						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
 					</div>
 					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
