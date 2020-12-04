@@ -123,6 +123,7 @@ def match_info(request,post_pk) :
 	return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk, 'club_id':club_id})
 
 def match_before_info(request,post_pk) :
+	
 	try :
 		pk=request.session.get('pk')
 		player_name=request.session.get('player_name') 
@@ -201,7 +202,8 @@ def personal_record(request) :
 
 def club(request,club_pk) :
 	pk=request.session.get('pk')
-
+	club_id=request.session.get('club_id')
+	
 	if pk is None :
 		return redirect('/')
 	try :
@@ -215,11 +217,11 @@ def club(request,club_pk) :
 def match_form(request) :
 	pk = request.session.get('pk')
 	club_id = request.session.get('club_id')
-
+	clubs=Club.objects.all()
+	
 	if pk is not None :
-		clubs=Club.objects.all()
 		return render(request,'hzm/match_form.html',{'pk':pk,'club_id':club_id,'clubs':clubs})	
-	return render(request,'hzm/match_form.html')
+	return render(request,'hzm/match_form.html',{'clubs':clubs})
 
 
 def match_filter(request) :
