@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 ADD ./hzm_site /app/hzm_site/
 ADD ./manage.py /app/
 
-CMD ["python", "manage.py", "runserver", "0:9999"]
+CMD ["python3", "manage.py", "runserver", "0:9999"]
