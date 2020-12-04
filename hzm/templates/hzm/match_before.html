@@ -424,33 +424,6 @@
 		});
 
 
-		$(document).on('click','#signup_btn',function(e) {
-			$('#modal_signin_btn').attr('id','modal_signup_btn');
-			$('#modal_signup_btn').text('가입하기');
-			$('#staticBackdropLabel').text('가입하기');
-			
-		});
-
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-
-		//로그인후 마이룸 버튼을 눌렀을 경우
-		$(document).on('click','i[name="logout"]',function(e) {
-			console.log("logout");
-			
-		});
-
 
 //모달에서 가입하기 버튼 클릭
 		$(document).on('click','#modal_signup_btn',function(e) {
@@ -494,6 +467,7 @@
 			});
 		});
 
+		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
@@ -509,16 +483,29 @@
 					'csrfmiddlewaretoken' : "{{csrf_token}}",
 
 				},
-				success:function(data) {
-					swal("성공");
-					location.reload();
+				success:function(msg) {
+					console.log("login: "+msg);
+					if( msg=="login_fail1") {
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if (msg=="login_fail2") {
+						return swal("잘못된 접근입니다.");
+					}
+					else if(msg=="login_fail3"){
+						return swal("존재하지 않는 아이디입니다");
+					}
+					else if(msg=="auth_fail"){
+						return swal("승인 대기중입니다 잠시만 기다려주세요!");
+					}
+					else {
+						location.reload();
+					}
 				},
 				error : function(error) {
 					swal("아이디/비밀번호가 일치하지 않습니다.");
 				}
 			});
 		});
-
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
 				url:"{% url 'hzm:ajax_logout' %}",

@@ -25,7 +25,6 @@
 
 	 <!--알림창-->
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	 <script data-ad-client="ca-pub-8149974355008509" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 	<title>학지매</title>
 </head>
@@ -84,17 +83,17 @@
 			  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
 			  <hr class="my-4">
 			  <p>친선경기 신청은 아래 버튼</p>
-			  <a class="btn btn-primary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
+			  <a class="btn btn-secondary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
 			</div>
 			
 			<!--점보트론 끝-->
-
+			<!--
 			<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "150"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-
+			data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
+			data-ad-width   = "320" 
+			data-ad-height  = "150"></ins> 
+			<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			-->
 			<!--
 			<div class="container-fluid" style="height:65vh; padding:0px;">
 				<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
@@ -538,6 +537,7 @@
 				}
 			});
 		});
+
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
