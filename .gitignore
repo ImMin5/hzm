@@ -134,3 +134,4 @@ local_settings.py
 *.pyc
 secret_config.py
 docker-compose.yml
+docker/
