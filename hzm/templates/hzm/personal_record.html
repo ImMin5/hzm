@@ -14,7 +14,7 @@
 
 
 	 <!--커스텀-->
-	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
+	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
@@ -73,14 +73,8 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll;">
-			<div class="container-fluid">
-				<ins class="kakao_ad_area" style="display:none;" 
-				data-ad-unit    = "DAN-GIY6xD3Z5FLbU1lC" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-			</div>
-			<div class="media" style="padding-top:5%; margin-bottom:5%;">
+		<div class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
+			<div class="media" style="padding-top:2%; margin-bottom:5%;">
 				<i class="fas fa-car fa-4x" style="padding-left:5%;"></i>
 				<div class="media-body" style="margin-left:5%;">
 					<h5 class="mt-0">{{player_name}}님 개인기록실</h5>
@@ -98,13 +92,13 @@
 			</div>
 			<div class="container-fluid" style="overflow:scroll; height:40vh;">
 				<table class="table table-md" >
-				  <thead>
+				  <thead class="thead-light">
 				    <tr>
-				      <th scope="col" style="width:8%; text-align: center;">#</th>
-				      <th scope="col" style="width:29%; text-align: center;">맵 이름</th>
-				      <th scope="col" style="width:22%; text-align: center;">나의 최고 기록</th>
-				      <th scope="col" style="width:22%; text-align: center;">클럽 최고 기록</th>
-				      <th scope="col" style="width:17%; text-align: center;">클럽 내 등수</th>
+				      <th scope="col" style="width:8%; text-align: center; position:sticky; top:0;">#</th>
+				      <th scope="col" style="width:29%; text-align: center; position:sticky; top:0;">맵 이름</th>
+				      <th scope="col" style="width:22%; text-align: center; position:sticky; top:0;">나의 최고 기록</th>
+				      <th scope="col" style="width:22%; text-align: center; position:sticky; top:0;">클럽 최고 기록</th>
+				      <th scope="col" style="width:17%; text-align: center; position:sticky; top:0;">클럽 내 등수</th>
 				    </tr>
 				  </thead>
 				  <tbody id="record_table_tbody">
@@ -137,7 +131,7 @@
 					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
 							<span>
-								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:black;" ></i>
+								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
