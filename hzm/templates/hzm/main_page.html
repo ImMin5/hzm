@@ -2,21 +2,27 @@
 <html>
 <head>
 	<meta charset="uft-8">
-	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
+	<meta name="viewprot" content="width=device-width, inital-scale=1.0">
+
+
+
+	
 
 	<!--부트스트랩-->
 	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	 <script src="/static/js/jquery-3.5.1.min.js"></script>
 	 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-	
 
-
-
-	 <!--커스텀-->
-	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
+	 
+	 <!--커스텀-->	 
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
+	  <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?3">
+	  <!--커스텀-->
+	 
+
 	
 
 
@@ -33,9 +39,9 @@
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
 			{% if pk %}
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 			{% else %}
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
 			{% endif %}
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
@@ -45,19 +51,19 @@
 			      <li class="nav-item dropdown">
 			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
 			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" href="{% url 'hzm:match_form' %}" >&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+			      		 <a class="nav-link" name="navbar_link" href="{% url 'hzm:match_form' %}" >&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
 			      		{% if pk %}
-			      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
+			      		<a class="nav-link" name="navbar_link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
 			      		{% endif %}
-			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+			      		<a class="nav-link" name="navbar_link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
+			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
+			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" id="logout_btn">로그아웃</a>
@@ -73,8 +79,7 @@
 			      
 			  	</ul>
 			 </div>
-		</nav>
-	<!--navbar 끝-->
+		</nav><!--navbar 끝-->
 	<!--middle container-->
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
 			<!--점보트론 시작-->
@@ -84,34 +89,9 @@
 			  <hr class="my-4">
 			  <p>친선경기 신청은 아래 버튼</p>
 			  <a class="btn btn-secondary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
-			</div>
-			
-			<!--점보트론 끝-->
+			</div><!--점보트론 끝-->
+		</div> <!--middle container 끝-->
 
-
-			<!--
-			<div class="container-fluid" style="height:65vh; padding:0px;">
-				<div class="table-responsive" style="height : 40vh; overflow: scroll;" >
-
-				<table class="table table-dark" style="overflow:scroll; height: 25vh;" >
-					  <thead>
-					    <tr">
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">#</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">상태</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">학지매</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">Others</th>
-					      <th scope="col" style="background-color:#454d55; position:sticky; top:0;">결과</th>
-					    </tr>
-					  </thead>
-					  <tbody>
-					  
-					  </tbody>
-				</table>
-				</div>
-			</div>
-		</div>
--->
-</div>
 		<!--하단 탭바-->
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
 						<div class="container-fluid" style="padding:0;">
@@ -124,34 +104,53 @@
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
-					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+							<span>
+								<i class="fa fa-home" id="bottom_home_btn" style="color:black;"></i>
+							<span>
+							<h2>홈</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+							<span>
+								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>클럽</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
+					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
+							<span >
+								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
+							</span>
+							<h2>마이룸</h2>
+						</a>
 					</div>
 					{% else %}
-					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-5x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+							<span>
+								<i class="fa fa-home fa" id="bottom_home_btn" style="color:black;"></i>
+							<span>
+							<h2>홈</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
+					<div class="col-4" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="#">
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+							<span >
+								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
+							</span>
+							<h2>클럽</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_bell_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-					<button class="btn"><a style="color: black; text-decoration:none" href="#" >
-								<i class="fa fa-user fa-3x" id="bottom_user_btn" name="logout" style="color:black;" ></i>
-								</button><h2>마이룸</h2></a>
+					<div class="col-4" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="#" >
+							<span>
+								<i class="fa fa-user" id="bottom_user_btn" name="logout" style="color:gray;" ></i>
+							</span>
+							<h2>마이룸</h2></a>
 					</div>
 					{% endif %}
 				</div>
@@ -555,7 +554,17 @@
 		});
 
 
+		//하단 탭바 아이콘 크기 조절
+	$(document).ready(function(e) {
 		
+			console.log("screen")
+			if(screen.width >= 900){
+				
+				console.log("screen500")
+				console.log($('#bottom_user_btn').attr('class','fa fa-user'));
+			}
+	});
+</script>
 
 		
 

@@ -129,9 +129,8 @@ def match_before_info(request,post_pk) :
 		player_name=request.session.get('player_name') 
 		club_id=request.session.get('club_id')
 		post=Post_list.objects.get(pk=post_pk)
-
+		print(post_pk)
 		try :			
-			
 			if post.club_id != club_id :
 				return render(request,'hzm:main_page.html')
 		except Exception as e:
@@ -145,12 +144,12 @@ def match_before_info(request,post_pk) :
 
 		post = Post_list.objects.get(pk=post_pk)
 
-		if post.accept :
+		if post.accept == True :
 			raise('error')
-			
 
 		return render(request, 'hzm/match_before_info.html', {'post':post, 'pk':pk, 'player_name':player_name,'club_id':club_id})
 	except Exception as e :
+		print("match_berfor_info error")
 		print(e)
 		return HttpResponseRedirect(reverse('hzm:error_page'))
 

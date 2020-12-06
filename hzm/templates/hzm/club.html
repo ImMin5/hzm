@@ -17,6 +17,8 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
+	 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?1">
 	
 
 
@@ -34,7 +36,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">	{{club.club_name}} </a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">	{{club.club_name}} </a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -79,7 +81,7 @@
 				<hr>
 
 				{% if club.host == player.player_name %}
-				<button style="float :left; margin-left : 1%; " id="player_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">??</button>
+				<button style="float :left; margin-left : 1%; " id="player_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark"><i class="fas fa-cog"></i></button>
 
 				<div class="input-group mb-3" style="width:25%; float:right;">
 					<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
@@ -115,18 +117,29 @@
 </div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+							<span>
+								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
+							<span>
+							<h2>홈</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fas fa-flag-checkered fa-5x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+							<span>
+								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:black;" ></i>
+							<span>
+								<h2>클럽</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
+					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-3x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
+							<span >
+								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
+							</span>
+							<h2>마이룸</h2>
+						</a>
 					</div>
 				</div>
 			</div>

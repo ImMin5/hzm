@@ -1,0 +1,14 @@
+@media (min-width:1024px){
+
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+	#navbar_top #navbar_club_name{
+		font-size:4.1rem;
+	}
+	#navbarNav a{
+		font-size:2.2rem;
+	
+	}
+}

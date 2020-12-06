@@ -10,9 +10,11 @@
 
 	 <!--커스텀-->
 	 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
+	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?1">
 	
 
 
@@ -31,7 +33,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -71,10 +73,11 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container" style="height:100vh; padding:0px; overflow:scroll;">
-			<div class="container-fluid" style="padding-top:10%;">
-				<h3 class="display-4">{{player.player_name}}의 마이룸</h3>
-			</div>
+		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
+			<div class="container">
+				<div class="container-fluid" style="padding-top:10%;">
+					<h3 class="display-4">{{player.player_name}}의 마이룸</h3>
+				</div>
 			<div class="container-fluid" style="padding-top:5%;">
 				<form>
 					<div class="form-group">
@@ -114,39 +117,45 @@
 				</div>
 			</div>
 			<div class="container-fluid">
-			<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-w8qrkaDRSB98IuKJ" 
- data-ad-width   = "300" 
- data-ad-height  = "250"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-
-
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-w8qrkaDRSB98IuKJ" data-ad-width   = "300" data-ad-height  = "250">
+					
+				</ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 			</div>
+		</div>
 		</div>
 		<!-- middle container 끝-->
 		
 
 
 		<!--하단 탭바-->
-		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem;">
 			<div class="container-fluid">
 				<div class="row">
-					{% if pk %}
-					<div class="col-3" id="bottom_home" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-						<button class="btn" ><i class="fa fa-home fa-3x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:black;"></i></button><h2>홈</h2></a>
+					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+							<span>
+								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
+							<span>
+							<h2>홈</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_club" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
-						<button class="btn"><i class="fas fa-flag-checkered fa-3x" id="bottom_club_btn" style="color:black;" ></i></button><h2>클럽</h2></a>
+					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+							<span>
+								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>클럽</h2>
+						</a>
 					</div>
-					<div class="col-3" id="bottom_heart" style="display:block; text-align: center;"><a style="color: black; text-decoration:none" href="#" >
-						<button class="btn"><i class="fa fa-heart fa-3x" id="bottom_heart_btn" style="color:black;" ></i></button><h2>좋아요</h2></a>
-					</div>
-					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
+					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<button class="btn"><i class="fa fa-user fa-5x" id="bottom_user_btn" style="color:black;" ></i></button><h2>마이룸</h2></a>
+							<span >
+								<i class="fa fa-user" id="bottom_user_btn" style="color:black;" ></i>
+							</span>
+							<h2>마이룸</h2>
+						</a>
 					</div>
-					
-					{% endif %}
 				</div>
 			</div>
 		</nav>
@@ -597,12 +606,11 @@
 			console.log(password_now)
 			console.log(password_change)
 			if(!(password_now))
-				swal("비밀번호를 입력해주세요.")
+				return swal("비밀번호를 입력해주세요.")
 			else if(password_now == password_change){
-				swal("이전 비밀번호와 달라야 합니다");
 				$('#mypage_password_now').val('');
 				$('#mypage_password_change').val('');
-				return;
+				return swal("이전 비밀번호와 달라야 합니다");
 			}
 			else {
 				$.ajax({
@@ -612,7 +620,7 @@
 						'csrfmiddlewaretoken':'{{csrf_token}}',
 						'player_name':player_name,
 						'password_now' : password_now,
-						'password_chnage':password_change,
+						'password_change':password_change,
 					},
 					success:function(msg) {
 						if(msg=="good"){
