@@ -79,8 +79,7 @@
 			      
 			  	</ul>
 			 </div>
-		</nav>
-	<!--navbar 끝-->
+		</nav><!--navbar 끝-->
 	<!--middle container-->
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
 			<!--점보트론 시작-->
@@ -90,19 +89,18 @@
 			  <hr class="my-4">
 			  <p>친선경기 신청은 아래 버튼</p>
 			  <a class="btn btn-secondary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
-			</div>
-
-			<div id="test2" class="container-fluid" style="background-color:yellow; height:20vh;">
-				<button id="test2_btn">수정</button>
-			</div>
-
-			
-			<!--점보트론 끝-->
+			</div><!--점보트론 끝-->
 		</div> <!--middle container 끝-->
 
-
 		<!--하단 탭바-->
-		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem;">
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
+						<div class="container-fluid" style="padding:0;">
+<ins class="kakao_ad_area" style="display:none;" 
+ data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
+ data-ad-width   = "320" 
+ data-ad-height  = "100"></ins> 
+<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+</div>
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
@@ -156,7 +154,7 @@
 					</div>
 					{% endif %}
 				</div>
-			</div>
+			</div>	
 		</nav>
 		<!--하단 탭바 끝-->
 	
