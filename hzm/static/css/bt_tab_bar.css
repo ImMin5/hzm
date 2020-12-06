@@ -1,0 +1,23 @@
+
+@media (min-width:1024px){
+	#test2_btn{
+		background-color:black;
+	}
+	.col-4 span {
+		font-size:2rem;
+	}
+	.col-4 h2 {
+		font-size:1.4rem;
+	}
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+		#test2_btn{
+		background-color:red;
+	}
+	.col-4 span {
+		font-size:3.5rem;
+	}
+
+}

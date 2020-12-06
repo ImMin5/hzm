@@ -53,17 +53,26 @@ def id_check (request) :
 		return HttpResponse("good")
 
 def edit_mypage_info(request) :
-	pk = request.session.get('pk')
+	player_name=request.session.get('player_name')
 	name=request.POST.get('player_name')
 	password_now=request.POST.get('password_now')
 	password_change=request.POST.get('password_change')
-
-	if Player.objects.filter(player_name=name).exclude(pk=pk) :
+	p = Player.objects.all().filter(player_name=name).exclude(player_name=player_name)
+	print(player_name)
+	print(name)
+	print(password_now)
+	print(password_change)
+	print('---------')
+	if p.exists() :
+		print(p)
 		return HttpResponse("sameId")
 
 	try:
-		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(pk=player.club_id)
+		player=Player.objects.get(player_name=player_name)
+		club=Club.objects.get(club_name=player.club_id)
+		print(player.passwd)
+		print(password_now)
+		print(password_change)
 
 		if player.passwd == password_now :
 			if club.host == player.player_name :
@@ -72,13 +81,16 @@ def edit_mypage_info(request) :
 
 			player.player_name = name
 			if password_change is not None :
+				print("password change")
 				player.passwd = password_change
+			
 			player.save()
 			request.session['player_name'] = name
 			return HttpResponse("good")
 		else :
 			return HttpResponse("passwordfail")
 	except Exception as e :
+		print(e)
 		return HttpResponse("fail")
 
 def sign_in(request) :
