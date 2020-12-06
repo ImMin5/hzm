@@ -108,32 +108,29 @@
 
 		<!--하단 탭바-->
 	<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-</div>
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-							<span>
-								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
-							<span>
+		<div class="container-fluid" style="padding:0;">
+			<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320"  data-ad-height  = "100"></ins> 
+			<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+					<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+						<span>
+							<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
+						</span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
+				<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:black;" ></i>
-							<span>
-								<h2>클럽</h2>
+							</span>
+							<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
+				<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
@@ -143,7 +140,7 @@
 					</div>
 				</div>
 			</div>
-		</nav>
+	</nav>
 		<!--하단 탭바 끝-->
 	
 
