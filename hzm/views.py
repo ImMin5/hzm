@@ -192,7 +192,6 @@ def personal_record(request) :
 	player_name=request.session.get('player_name')
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
-
 	maps=Map.objects.all().order_by('map_name')	
 
 	if pk is None :
@@ -271,3 +270,14 @@ def match_filter(request) :
 		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count ,'pk':pk ,'clubs':clubs,'club':club})
 	else :
 		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count})
+
+
+def club_admin(request) :
+	pk=request.session.get('pk')
+	player_name=request.session.get('player_name')
+	players=Player.objects.all()
+	maps=Map.objects.all()
+	records=Record.objects.all().order_by('player_id')
+	if pk != 1 :
+		return render(request,'hzm/error.html')
+	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})

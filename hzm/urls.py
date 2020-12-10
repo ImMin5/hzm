@@ -51,4 +51,6 @@ urlpatterns = [
 	path('api/accept_player',apis.accept_player,name='ajax_accept_player'),
 	path('api/reject_player',apis.reject_player,name='ajax_reject_player'),
 	path('api/match_filter',views.match_filter,name='ajax_match_filter'),
+	path('club/admin',views.club_admin,name='club_admin'),
+	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 ]
