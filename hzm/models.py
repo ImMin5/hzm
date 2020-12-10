@@ -88,7 +88,7 @@ class Matchresult(models.Model):
 	club_name =models.CharField(max_length=128, blank=True, null= True)
 
 class Club(models.Model) :
-	club_name=models.CharField(primary_key=True,max_length=128)
+	club_name=models.CharField(max_length=128, blank=True, null= True)
 	host=models.CharField(max_length=128, blank=True, null= True)
 	description=models.TextField(max_length=300, blank=True, null= True)
 	
