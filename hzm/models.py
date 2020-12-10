@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Player(models.Model):
-	player_name = models.CharField(primary_key=True,max_length=128,editable=True)
+	player_name = models.CharField(max_length=128, blank=True, null= True)
 	passwd = models.CharField(max_length=128, blank=True, null= True)
 	club = models.ForeignKey('Club', on_delete=models.SET_NULL, blank=True, null=True)
 	win = models.IntegerField(default=0,blank=True, null= True)
@@ -22,7 +22,7 @@ class Record(models.Model):
 	match_club = models.CharField(max_length=128,blank=True, null=True)
 
 class Map(models.Model):
-	map_name = models.CharField(primary_key=True,max_length=128)
+	map_name = CharField(max_length=128, blank=True, null= True)
 	date = models.CharField(max_length=128,blank=True, null=True)
 
 class Post_list(models.Model):
