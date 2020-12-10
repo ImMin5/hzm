@@ -22,7 +22,7 @@ class Record(models.Model):
 	match_club = models.CharField(max_length=128,blank=True, null=True)
 
 class Map(models.Model):
-	map_name = CharField(max_length=128, blank=True, null= True)
+	map_name = models.CharField(max_length=128, blank=True, null= True)
 	date = models.CharField(max_length=128,blank=True, null=True)
 
 class Post_list(models.Model):
