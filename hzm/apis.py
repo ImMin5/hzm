@@ -565,10 +565,16 @@ def add_map_record(request) :
 	player=Player.objects.get(pk=player_id)
 	club_id=player.club_id
 
-	Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
-
-	record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
-		record_date=record_date,club_id=club_id)
+	try :
+		record=Record.objects.get(Q(player_id=player.pk) & Q(maps_id=maps_id))
+		record.record=map_record
+		record.date=record_date
+		record.club_id=club_id
+	except Exception as e :
+		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
+		record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
+			record_date=record_date,club_id=club_id)
+		
 	record.save()
 
 	records=Record.objects.filter(player_id=player.pk).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
@@ -583,7 +589,6 @@ def get_records(request) :
 
 	records=Record.objects.filter(Q(player_id=player_id)).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
 	serialized_records = RecordSerializer(records,many=True)		
-
 	return HttpResponse(json.dumps(serialized_records.data))
 
 def get_record_rank(request) :
@@ -638,7 +643,26 @@ def reject_player(request) :
 
 	return HttpResponse(player_name)
 
+def add_admin_record(request) :
+	player_id=request.POST.get('player_id')
+	maps_id=request.POST.get('maps_id')
+	map_record=request.POST.get('record')
+	record_date=request.POST.get('record_date')
+	player=Player.objects.get(pk=player_id)
+	club_id=1
 
+	try :
+		record=Record.objects.get(Q(player_id=player.pk) & Q(maps_id=maps_id))
+		record.record=map_record
+		record.date=record_date
+		record.club_id=club_id
+	except Exception as e :
+		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
+		record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
+			record_date=record_date,club_id=club_id)
+
+	record.save()
+	return HttpResponse("good")
 
 
 
