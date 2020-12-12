@@ -20,7 +20,7 @@ def main_page(request) :
 		player=Player.objects.get(pk=pk)
 		print("ppp")
 		club=Club.objects.get(pk=player.club_id)
-		print("ddd")
+		print(player.club_id)
 		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club})
 	else :
 		return render(request,'hzm/main_page.html')
@@ -206,7 +206,7 @@ def club(request,club_pk) :
 		return redirect('/')
 	try :
 		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(club_name=club_id)
+		club=Club.objects.get(pk=club_id)
 		print(club)
 		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
 	except Exception as e :
@@ -273,11 +273,18 @@ def match_filter(request) :
 
 
 def club_admin(request) :
-	pk=request.session.get('pk')
-	player_name=request.session.get('player_name')
-	players=Player.objects.all()
-	maps=Map.objects.all()
-	records=Record.objects.all().order_by('player_id')
+	try :
+		pk=request.session.get('pk')
+		player_name=request.session.get('player_name')
+		print("sssiba2")
+		players=Player.objects.all()
+		print("sssibal2")
+		maps=Map.objects.all().order_by('map_name')
+		print("sssibal3")
+		records=Record.objects.all().order_by('player_id')
+		print("sssibal")
+	except Exception as e :
+		print(e)
 	if pk != 1 :
 		return render(request,'hzm/error.html')
 	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})
