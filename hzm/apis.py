@@ -29,8 +29,7 @@ club_passwd ="hzm"
 
 def id_check_btn (request) :
 	player_name = request.GET.get('player_name')
-	print("id_check_btn")
-	print(player_name)
+	
 	try :
 		check_id = Player.objects.get(player_name=player_name)
 		print(check_id)
@@ -53,38 +52,38 @@ def id_check (request) :
 		return HttpResponse("good")
 
 def edit_mypage_info(request) :
+	pk=request.session.get('pk')
 	player_name=request.session.get('player_name')
 	name=request.POST.get('player_name')
 	password_now=request.POST.get('password_now')
 	password_change=request.POST.get('password_change')
-	p = Player.objects.all().filter(player_name=name).exclude(player_name=player_name)
-	print(player_name)
-	print(name)
-	print(password_now)
-	print(password_change)
-	print('---------')
+	p = Player.objects.filter(player_name=name).exclude(player_name=player_name)
+	
 	if p.exists() :
 		print(p)
 		return HttpResponse("sameId")
 
 	try:
 		player=Player.objects.get(player_name=player_name)
-		club=Club.objects.get(club_name=player.club_id)
-		print(player.passwd)
-		print(password_now)
-		print(password_change)
+		club=Club.objects.get(pk=player.club_id)
 
+		#비밀번호가 일치할 경우
 		if player.passwd == password_now :
+			#클럽장이 이름을 바꿀 경우
 			if club.host == player.player_name :
 				club.host = name
 				club.save()
-
-			player.player_name = name
-			if password_change is not None :
-				print("password change")
+			#일반 라이더가 이름을 바꿀 경우
+			if player.player_name != name :
+				player.player_name = name
+				player.save()
+			#비밀번호를 변경할 경우
+			if password_change :
+				print("password change to"+password_change)
 				player.passwd = password_change
+				player.save()
 			
-			player.save()
+			#세션에 바뀐 이름으로 넣어줌
 			request.session['player_name'] = name
 			return HttpResponse("good")
 		else :
@@ -107,7 +106,7 @@ def sign_in(request) :
 			if player.player_name is not None:
 				request.session['pk'] = player.pk
 				request.session['player_name'] = player.player_name
-				request.session['club_id'] = player.club_id
+				request.session['club_id'] = player.club.pk
 				return redirect('/')
 			else :
 				print('NONE')
@@ -566,59 +565,23 @@ def add_map_record(request) :
 	club_id=player.club_id
 
 	try :
+		map_=Map.objects.get(pk=maps_id)
 		record=Record.objects.get(Q(player_id=player.pk) & Q(maps_id=maps_id))
+		record.map_name=map_.map_name
 		record.record=map_record
 		record.date=record_date
 		record.club_id=club_id
 	except Exception as e :
 		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
-		record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
+		record=Record(maps_id=maps_id,map_name=map_.map_name,record=map_record,player_id=player.pk,\
 			record_date=record_date,club_id=club_id)
 		
 	record.save()
 
-	records=Record.objects.filter(player_id=player.pk).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
-	print(records)
+	records=Record.objects.filter(Q(player_id=player.pk) & Q(club_id=club_id)).order_by('map_name')
 	serialized_records = RecordSerializer(records,many=True)
 
 	return HttpResponse(json.dumps(serialized_records.data))
-
-def get_records(request) :
-	player_id=request.session.get('pk')
-	club_id=request.session.get('club_id')
-
-	records=Record.objects.filter(Q(player_id=player_id)).order_by('maps_id').values('maps_id').annotate(record=Min('record'))
-	serialized_records = RecordSerializer(records,many=True)		
-	return HttpResponse(json.dumps(serialized_records.data))
-
-def get_record_rank(request) :
-	maps_id=request.GET.get('maps_id')
-	pk=request.session.get('pk')
-	club_id=request.session.get('club_id')
-	print("pk in rank" )
-	print(pk)
-	all_records=Record.objects.filter(Q(maps_id=maps_id) & Q(club_id=club_id)).values('player_id').annotate(record=Min('record'))
-	records=[]
-	players=[]
-	print(all_records)
-	for i in range(all_records.count()) :
-		records.append(all_records[i]['record'])
-		players.append(all_records[i]['player_id'])
-		print(players)
-	
-	obj_records=Series(records)
-	if pk in players :
-		rank=int(obj_records.rank(method='min')[players.index(pk)])
-	best_record=0
-	records.sort()
-	
-	data = {
-		'rank':rank,
-		'best_record':records[0],
-	}
-
-	return JsonResponse(data)
-
 
 def get_player_before_auth(request) :
 	club_id=request.session.get('club_id')
@@ -663,6 +626,50 @@ def add_admin_record(request) :
 
 	record.save()
 	return HttpResponse("good")
+
+
+def get_records(request) :
+	player_id=request.session.get('pk')
+	club_id=request.session.get('club_id')
+
+	records=Record.objects.filter(Q(player_id=player_id) & Q(club_id=club_id)).order_by('map_name')
+
+
+	serialized_records = RecordSerializer(records,many=True)		
+	return HttpResponse(json.dumps(serialized_records.data))
+
+def get_record_rank(request) :
+	pk=request.session.get('pk')
+	club_id=request.session.get('club_id')
+
+	try :
+		all_records=Record.objects.filter(club_id=club_id).values('maps_id').annotate(record=Min('record')).order_by('map_name')
+		best_records=[]
+		maps=[]
+		rank=[]
+	
+		for i in range(all_records.count()) :
+			records=[]
+			players=[]
+			best_records.append(all_records[i]['record'])
+			maps.append(all_records[i]['maps_id'])
+			my_record=Record.objects.filter(Q(player_id=pk) &Q(maps_id=all_records[i]['maps_id']))
+			records_=Record.objects.filter(Q(club_id=club_id)&Q(maps_id=all_records[i]['maps_id'])).values('player_id').annotate(record=Min('record'))
+			for i in range(records_.count()) :
+				records.append(records_[i]['record'])
+				players.append(records_[i]['player_id'])
+			obj_records=Series(records)
+			rank.append(int(obj_records.rank(method='min')[players.index(pk)]))
+
+		data = {
+			'best_record[]': best_records,
+			'maps_id[]':maps,
+			'rank[]':rank,
+		}
+		return JsonResponse(data)
+
+	except Exception as e :
+		return HttpResponse("bad")	
 
 
 

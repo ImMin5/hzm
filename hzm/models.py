@@ -12,10 +12,12 @@ class Player(models.Model):
 	win = models.IntegerField(default=0,blank=True, null= True)
 	lose = models.IntegerField(default=0,blank=True, null= True)
 	accept = models.BooleanField(default=False)	
+	date = models.CharField(max_length=10, blank=True, null= True)
 
 class Record(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
 	maps = models.ForeignKey('Map',on_delete=models.CASCADE,blank=True,null=True)
+	map_name = models.CharField(max_length=30,blank=True, null=True)
 	club= models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
 	record = models.CharField(max_length=15,blank=True, null=True)
 	record_date = models.CharField(max_length=15,blank=True, null=True)
@@ -26,7 +28,7 @@ class Map(models.Model):
 	date = models.CharField(max_length=128,blank=True, null=True)
 
 class Post_list(models.Model):
-	club=models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
+	club=models.ForeignKey('Club', on_delete=models.SET_NULL, blank=True, null=True)
 	club_blue=models.CharField(max_length=128, blank=True, null= True)
 	post_writer = models.CharField(max_length=128, blank=True, null= True)
 	passwd = models.CharField(max_length=128, blank=True, null= True)

@@ -16,11 +16,12 @@ from django.db.models import Q
 
 def main_page(request) :
 	pk=request.session.get('pk')
+	records=Record.objects.all().order_by('maps_id')
+	maps=Map.objects.all().order_by('pk')
+
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
-		print("ppp")
 		club=Club.objects.get(pk=player.club_id)
-		print("ddd")
 		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club})
 	else :
 		return render(request,'hzm/main_page.html')
@@ -193,10 +194,19 @@ def personal_record(request) :
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
 	maps=Map.objects.all().order_by('map_name')	
+	records=Record.objects.filter(player_id=pk).order_by('map_name')
+
+	try :
+		club=Club.objects.get(pk=club_id)
+	except Exception as e :
+		print(e)
+		return redirect("/")
 
 	if pk is None :
 		return redirect("/")
-	return render(request, 'hzm/personal_record.html',{'maps':maps,'player_name':player_name, 'pk':pk,'club_id':club_id})
+		
+
+	return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player_name':player_name, 'pk':pk,'club':club})
 
 def club(request,club_pk) :
 	pk=request.session.get('pk')
@@ -206,7 +216,7 @@ def club(request,club_pk) :
 		return redirect('/')
 	try :
 		player=Player.objects.get(pk=pk)
-		club=Club.objects.get(club_name=club_id)
+		club=Club.objects.get(pk=club_id)
 		print(club)
 		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
 	except Exception as e :
@@ -281,3 +291,4 @@ def club_admin(request) :
 	if pk != 1 :
 		return render(request,'hzm/error.html')
 	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})
+
