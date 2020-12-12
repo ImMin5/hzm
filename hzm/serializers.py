@@ -29,10 +29,10 @@ class PlayerSerializer(serializers.ModelSerializer) :
 class RecordSerializer(serializers.ModelSerializer):
 	class Meta :
 		model = Models.Record
-		fields = ('pk','player_id','club_id','record','maps_id','record_date','match_club')
+		fields = ('pk','player_id','club_id','record','maps_id','map_name','record_date','match_club')
 
 class ClubSerializer(serializers.ModelSerializer):
 	class Meta :
 		model = Models.Club
-		fields = ('club_name')
+		fields = ('club_name','description')
 

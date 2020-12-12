@@ -34,7 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -103,6 +103,15 @@
 				    </tr>
 				  </thead>
 				  <tbody id="record_table_tbody">
+				  	{% for record in records %}
+				  	<tr>
+				  		<td style="text-align:center;">{{forloop.counter}}</td>
+				  		<td style="text-align:center;">{{record.map_name}}</td>
+				  		<td style="text-align:center;">{{record.record}}</td>
+				  		<td id="tr_best_record_{{record.maps_id}}" style="text-align:center;"></td>
+				  		<td id="tr_rank_{{record.maps_id}}" style="text-align:center;"></td>
+				  	</tr>
+				  	{% endfor %}
 				  </tbody>
 				</table>				
 			</div>
@@ -130,7 +139,7 @@
 						</a>
 					</div>
 					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
@@ -339,7 +348,7 @@
 					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
 					if($.trim(player[i]) != '') {
 						player_count++;
-						console.log("player["+i+"]:"+player[i]);
+						//console.log("player["+i+"]:"+player[i]);
 					}
 			}
 
@@ -351,12 +360,12 @@
 				return swal("카러플 닉네임을 입력해주세요");
 			}
 			else if(player_num != player_count){
-				console.log("player_num :"+player_num)
-				console.log("player_num input :"+player.length)
+				//console.log("player_num :"+player_num)
+				//console.log("player_num input :"+player.length)
 				return swal("라이더를  입력해 주세요");
 			}
 			else if(!(match_date)){
-				console.log("match date : "+match_date)
+				//console.log("match date : "+match_date)
 				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
 			}
 			else if(match_date_form_check(match_date) == false){
@@ -433,14 +442,6 @@
 
 		});
 
-		//하단 마이룸 버튼 클릭
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
-
 
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
@@ -457,32 +458,7 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-
-		$(document).on('click','#bottom_heart',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			if(active_btn=="heart")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			if(active_btn=="bell")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
+	
 		
 		//경기 신청모달에서 참여인원 수 선택시
 		$('#modal_fmatch_select').change(function(e) {
@@ -502,52 +478,18 @@
 				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
 			}
 		});
+
 		//개인 기록 테이블
 		function create_record_table(data,num) {
-			var rank;
-			var best_record;
-			var maps_id=data.maps_id;
-			$.ajax({
-				url : "{% url 'hzm:ajax_get_record_rank' %}",
-				type:'GET',
-				dataType:'json',
-				async:false,
-				data:{
-				
-					'maps_id':maps_id,
-				},
-				success:function(data){
-					rank=data.rank;
-					best_record=data.best_record;
-					console.log("rank");
-				},
-				error:function(error){
-				},
-			})
-			console.log("data")
 			$('#record_table_tbody').append('<tr>\
 				<td style="text-align:center;">'+num+'</td>\
-				<td style="text-align:center;">'+data.maps_id+'</td>\
+				<td style="text-align:center;">'+data.map_name	+'</td>\
 				<td style="text-align:center;">'+data.record+'</td>\
-				<td style="text-align:center;">'+best_record+'</td>\
-				<td style="text-align:center;">'+rank+'</td>\
+				<td id="tr_best_record_'+data.maps_id+'" style="text-align:center;"></td>\
+				<td id="tr_rank_'+data.maps_id+'" style="text-align:center;"></td>\
 				</tr>');
 		}
-		$(document).ready(function(e) {
-			$.ajax({
-				url: "{% url 'hzm:ajax_get_records' %}",
-				type: 'POST',
-				dataType: 'json',
-				data :{
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-				},
-				success: function(data) {
-					for(var i=0 ; i<data.length;i++){
-						create_record_table(data[i],i+1);
-					}
-				}
-			})
-		})
+
 		//기록추가 모달에서 추가 버튼 클릭 시 
 		$(document).on('click','#modal_record_add_btn',function(e) {
 			var map_record=$('#modal_record_time').val();
@@ -572,10 +514,13 @@
 				success: function(data) {
 					$('#modal_record').modal('hide');
 					modal_record_init();
+					
 					$('#record_table_tbody').empty();
 					for(var i=0; i<data.length; i++) {
 						create_record_table(data[i],i+1)
 					}
+					
+					get_record_rank()
 				},
 				error : function(error) {
 
@@ -596,6 +541,32 @@
 				});
 			});
 		});
+
+
+				//기록에 랭크 
+		function get_record_rank() {
+			$.ajax({
+				url : "{% url 'hzm:ajax_get_record_rank' %}",
+				type:'GET',
+				dataType:'json',
+				data:{
+				},
+				success:function(data){
+					console.log(data['best_record[]'].length)
+					for(var i=0; i < data['best_record[]'].length;i++){
+						$('#tr_best_record_'+data['maps_id[]'][i]).text(data['best_record[]'][i])
+						$('#tr_rank_'+data['maps_id[]'][i]).text(data['rank[]'][i])
+					}
+					
+				},
+				error:function(error){
+				},
+			})
+		}
+
+		$(document).ready(function(e) {
+			get_record_rank();
+		})
 	</script>
 	
 </body>
