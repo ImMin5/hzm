@@ -283,11 +283,18 @@ def match_filter(request) :
 
 
 def club_admin(request) :
-	pk=request.session.get('pk')
-	player_name=request.session.get('player_name')
-	players=Player.objects.all()
-	maps=Map.objects.all()
-	records=Record.objects.all().order_by('player_id')
+	try :
+		pk=request.session.get('pk')
+		player_name=request.session.get('player_name')
+		print("sssiba2")
+		players=Player.objects.all()
+		print("sssibal2")
+		maps=Map.objects.all().order_by('map_name')
+		print("sssibal3")
+		records=Record.objects.all().order_by('player_id')
+		print("sssibal")
+	except Exception as e :
+		print(e)
 	if pk != 1 :
 		return render(request,'hzm/error.html')
 	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})
