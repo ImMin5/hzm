@@ -282,20 +282,17 @@ def match_filter(request) :
 		return render(request, 'hzm/match.html',{'posts' : posts, 'post_count':count})
 
 
-def club_admin(request) :
+def club_admin(request,club_pk) :
 	try :
 		pk=request.session.get('pk')
 		player_name=request.session.get('player_name')
-		print("sssiba2")
-		players=Player.objects.all()
-		print("sssibal2")
+		club=Club.objects.get(pk=club_pk)
+		if club.host != player_name :
+			raise Exception('잘못된 접근입니다')
+		players=Player.objects.filter(club_id=club.pk)
 		maps=Map.objects.all().order_by('map_name')
-		print("sssibal3")
 		records=Record.objects.all().order_by('player_id')
-		print("sssibal")
+		return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'club':club})
 	except Exception as e :
-		print(e)
-	if pk != 1 :
-		return render(request,'hzm/error.html')
-	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})
+		return redirect('/')
 

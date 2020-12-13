@@ -651,15 +651,16 @@ def get_record_rank(request) :
 		for i in range(all_records.count()) :
 			records=[]
 			players=[]
-			best_records.append(all_records[i]['record'])
-			maps.append(all_records[i]['maps_id'])
-			my_record=Record.objects.filter(Q(player_id=pk) &Q(maps_id=all_records[i]['maps_id']))
 			records_=Record.objects.filter(Q(club_id=club_id)&Q(maps_id=all_records[i]['maps_id'])).values('player_id').annotate(record=Min('record'))
-			for i in range(records_.count()) :
-				records.append(records_[i]['record'])
-				players.append(records_[i]['player_id'])
-			obj_records=Series(records)
-			rank.append(int(obj_records.rank(method='min')[players.index(pk)]))
+			for k in range(records_.count()) :
+				records.append(records_[k]['record'])
+				players.append(records_[k]['player_id'])
+
+			if pk in players :
+				obj_records=Series(records)
+				maps.append(all_records[i]['maps_id'])
+				best_records.append(all_records[i]['record'])
+				rank.append(int(obj_records.rank(method='min')[players.index(pk)]))
 
 		data = {
 			'best_record[]': best_records,
@@ -669,6 +670,7 @@ def get_record_rank(request) :
 		return JsonResponse(data)
 
 	except Exception as e :
+		print(e)
 		return HttpResponse("bad")	
 
 

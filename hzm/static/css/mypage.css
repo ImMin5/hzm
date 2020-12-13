@@ -1,0 +1,15 @@
+#navbar_top {
+	z-index: 3;
+}
+#middle-container{
+	z-index:2;
+}
+
+@media (min-width:1024px){
+
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+	
+}

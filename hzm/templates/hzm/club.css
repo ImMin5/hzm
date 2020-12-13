@@ -1,0 +1,20 @@
+@media (min-width:1024px){
+	#club_edit_btn.btn {
+		color:purple;
+	}
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+	#club_edit_btn.btn {
+		font-size:2rem;
+		color:red;
+	}
+	.carousel-control-prev-icon{
+		height:50px;
+		width:50px;
+	}
+	.carousel-control-next-icon{
+		width:50px;
+	}
+}

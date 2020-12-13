@@ -34,7 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -74,7 +74,7 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
+		<div id="middle-container" class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
 			
 			<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
 
@@ -84,7 +84,7 @@
 					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
 				</div>
 			</div>
-			<div class="container-fluid" style="overflow:scroll; height:80vh;">
+			<div id="admin_record_container" class="container-fluid" style="overflow:scroll; height:80vh;">
 				<table class="table table-md" >
 				  <thead class="thead-light">
 				    <tr>
@@ -116,6 +116,27 @@
 				  	{% endfor %}
 				  </tbody>
 				</table>				
+			</div>
+			<div id="admin_accept_player" class="container-fluid">
+				<div class="input-group mb-3" style="width:25%; float:right;">
+						<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+						<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
+							<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+						</div>
+					</div>
+					<div class="container-fluid" style="overflow:scroll; height:40vh;">
+						<table class="table table-md" >
+						  <thead>
+						    <tr>
+						    	<th scope="col" style="width:33%; text-align: center;">#</th>
+						    	<th scope="col" style="width:34%; text-align: center;">아이디</th>
+						    	<th scope="col" style="width:33%; text-align: center;">비고</th>
+						    </tr>
+						  </thead>
+						  <tbody id="club_player_table_tbody">
+						  </tbody>
+						</table>				
+					</div>
 			</div>
 		</div><!--middle container 끝-->
 
@@ -552,23 +573,7 @@
 				<td style="text-align:center;">'+rank+'</td>\
 				</tr>');
 		}
-		/*
-		$(document).ready(function(e) {
-			$.ajax({
-				url: "{% url 'hzm:ajax_get_records' %}",
-				type: 'POST',
-				dataType: 'json',
-				data :{
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-				},
-				success: function(data) {
-					for(var i=0 ; i<data.length;i++){
-						create_record_table(data[i],i+1);
-					}
-				}
-			})
-		})
-*/
+
 
 		function modal_record_init(){
 			$('#modal_record_time').val('');
@@ -617,6 +622,93 @@
 
 				},
 			})
+		});
+
+		function create_player_before_auth_table(data,num){
+			$('#club_player_table_tbody').append('<tr id="tr_'+data.player_name+'">\
+				<td style="text-align:center;">'+num+'</td>\
+				<td style="text-align:center;" >'+data.player_name+'</td>\
+				<td style="text-align:center;" ><button class="btn bg-dark btn-secondary" style="margin-right:10%;" name="club_player_table_tbody_tr_accept" data-player_name="'+data.player_name+'">수락</button><button class="btn bg-dark btn-secondary" data-player_name="'+data.player_name+'" name="club_player_table_tbody_tr_reject" >거절</button></td>\
+				</tr>')
+		}
+
+		$(document).ready(function(e){
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_player_before_auth' %}",
+				type:'POST',
+				dataType:'JSON',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}"
+				},
+				success: function(data){
+					for(var i=0; i < data.length;i++)
+					create_player_before_auth_table(data[i],i+1);
+				},
+				error : function(e) {
+
+				},
+			})
+		});
+
+		//클럽원 수락 버튼
+		$(document).on('click','button[name=club_player_table_tbody_tr_td]',function(e) {
+			
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 수락
+		$(document).on('click','button[name=club_player_table_tbody_tr_accept]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 거절
+		$(document).on('click','button[name=club_player_table_tbody_tr_reject]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_reject_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
 		});
 	</script>
 	

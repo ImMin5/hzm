@@ -76,14 +76,14 @@ class Post_list(models.Model):
 	blue_win = models.IntegerField(default=0,blank=True, null= True)
 	red_win = models.IntegerField(default=0,blank=True, null= True)
 	
-class Schedule(models.Model):
+class Schedule(models.Model) :
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
 	club = models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
 	title = models.CharField(max_length=128,blank=True, null=True)
 	date_start = models.CharField(max_length=128, blank=True, null= True)
 	date_end = models.CharField(max_length=128, blank=True, null= True)
 
-class Matchresult(models.Model):
+class Matchresult(models.Model) :
 	match=models.ForeignKey('Post_list', on_delete=models.SET_NULL, blank=True, null=True)
 	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
 	result = models.BooleanField(default=False)
