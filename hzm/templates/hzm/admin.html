@@ -17,7 +17,7 @@
 	 <!--커스텀-->
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
 
 
@@ -34,7 +34,7 @@
 	
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -51,9 +51,6 @@
 			      	</div>
 			      </li>
 			      {% if pk %}
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
@@ -74,7 +71,7 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
+		<div id="middle-container" class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
 			
 			<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
 
@@ -84,7 +81,7 @@
 					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
 				</div>
 			</div>
-			<div class="container-fluid" style="overflow:scroll; height:80vh;">
+			<div id="admin_record_container" class="container-fluid" style="overflow:scroll; height:80vh;">
 				<table class="table table-md" >
 				  <thead class="thead-light">
 				    <tr>
@@ -117,6 +114,27 @@
 				  </tbody>
 				</table>				
 			</div>
+			<div id="admin_accept_player" class="container-fluid">
+				<div class="input-group mb-3" style="width:25%; float:right;">
+						<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+						<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
+							<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+						</div>
+					</div>
+					<div class="container-fluid" style="overflow:scroll; height:40vh;">
+						<table class="table table-md" >
+						  <thead>
+						    <tr>
+						    	<th scope="col" style="width:33%; text-align: center;">#</th>
+						    	<th scope="col" style="width:34%; text-align: center;">아이디</th>
+						    	<th scope="col" style="width:33%; text-align: center;">비고</th>
+						    </tr>
+						  </thead>
+						  <tbody id="club_player_table_tbody">
+						  </tbody>
+						</table>				
+					</div>
+			</div>
 		</div><!--middle container 끝-->
 
 
@@ -132,7 +150,7 @@
 </div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+					<div class="col-3" id="bottom_home" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
@@ -140,15 +158,23 @@
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
@@ -476,32 +502,6 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-
-		$(document).on('click','#bottom_heart',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			if(active_btn=="heart")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			if(active_btn=="bell")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
 		
 		//경기 신청모달에서 참여인원 수 선택시
 		$('#modal_fmatch_select').change(function(e) {
@@ -552,23 +552,7 @@
 				<td style="text-align:center;">'+rank+'</td>\
 				</tr>');
 		}
-		/*
-		$(document).ready(function(e) {
-			$.ajax({
-				url: "{% url 'hzm:ajax_get_records' %}",
-				type: 'POST',
-				dataType: 'json',
-				data :{
-					'csrfmiddlewaretoken' : "{{csrf_token}}",
-				},
-				success: function(data) {
-					for(var i=0 ; i<data.length;i++){
-						create_record_table(data[i],i+1);
-					}
-				}
-			})
-		})
-*/
+
 
 		function modal_record_init(){
 			$('#modal_record_time').val('');
@@ -617,6 +601,94 @@
 
 				},
 			})
+		});
+
+		function create_player_before_auth_table(data,num){
+			$('#club_player_table_tbody').append('<tr id="tr_'+data.player_name+'">\
+				<td style="text-align:center;">'+num+'</td>\
+				<td style="text-align:center;" >'+data.player_name+'</td>\
+				<td style="text-align:center;" ><button class="btn bg-dark btn-secondary" style="margin-right:10%;" name="club_player_table_tbody_tr_accept" data-player_name="'+data.player_name+'">수락</button><button class="btn bg-dark btn-secondary" data-player_name="'+data.player_name+'" name="club_player_table_tbody_tr_reject" >거절</button></td>\
+				</tr>')
+		}
+
+		$(document).ready(function(e){
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_player_before_auth' %}",
+				type:'POST',
+				dataType:'JSON',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}"
+				},
+				success: function(data){
+					for(var i=0; i < data.length;i++)
+					create_player_before_auth_table(data[i],i+1);
+				},
+				error : function(e) {
+
+				},
+			})
+		});
+
+		//클럽원 수락 버튼
+		$(document).on('click','button[name=club_player_table_tbody_tr_td]',function(e) {
+			
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+					swal("수락 실패");
+				},
+			});
+		});
+
+		//클럽원 신청 수락
+		$(document).on('click','button[name=club_player_table_tbody_tr_accept]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_accept_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
+		});
+
+		//클럽원 신청 거절
+		$(document).on('click','button[name=club_player_table_tbody_tr_reject]',function(e) {
+			var player_name=$(this).attr('data-player_name');
+			console.log(player_name)
+			$.ajax({
+				url: "{% url 'hzm:ajax_reject_player' %}",
+				type:'GET',
+				data: {
+					'player_name' : player_name,
+				},
+				success : function(data) {
+					console.log(data)
+					$('#tr_'+data).remove();
+	
+				},
+				error: function(error) {
+				},
+			});
 		});
 	</script>
 	

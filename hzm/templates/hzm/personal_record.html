@@ -17,8 +17,9 @@
 	 <!--커스텀-->
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
-	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/personal_record.css?4">		
 
 
 	 <!--폰트 어썸-->
@@ -52,9 +53,6 @@
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-			      </li>
-			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
 			      <li class="nav-item">
@@ -74,12 +72,12 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
+		<div id="middle-container" class="container-fluid" style="height:100vh; overflow:scroll;">
 			<div class="media" style="padding-top:2%; margin-bottom:5%;">
 				<i class="fas fa-car fa-4x" style="padding-left:5%;"></i>
 				<div class="media-body" style="margin-left:5%;">
-					<h5 class="mt-0">{{player_name}}님 개인기록실</h5>
-					개인 기록을 기록해 주세요</br>
+					<h5 class="mt-0">{{player.player_name}}님 개인기록실</h5>
+					친선전 전적 : {{player.win}}승 {{player.lose}}패</br>
 			  	</div>
 			</div>
 			<hr>
@@ -91,8 +89,8 @@
 					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
 				</div>
 			</div>
-			<div class="container-fluid" style="overflow:scroll; height:60vh;">
-				<table class="table table-md" >
+			<div id="table_container" class="container-fluid" style="overflow:scroll; height:60vh;">
+				<table class="table table-md">
 				  <thead class="thead-light">
 				    <tr>
 				      <th scope="col" style="width:8%; text-align: center; position:sticky; top:0;">#</th>
@@ -119,45 +117,48 @@
 
 
 		<!--하단 탭바-->
-<!--하단 탭바-->
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-</div>
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320"  data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			</div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+					<div class="col-3" id="bottom_home">
+						<a href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
-							<span>
-							<h2>홈</h2>
-						</a>
-					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
-							<span>
-								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
-							<span>
-								<h2>클럽</h2>
-						</a>
-					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
-							<span >
-								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
 							</span>
-							<h2>마이룸</h2>
+								<h2>홈</h2>
+							</a>
+						</div>
+					<div class="col-3" id="bottom_club" >
+							<a  href="{% url 'hzm:club' club.pk %}" >
+								<span>
+									<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
+								</span>
+								<h2>클럽</h2>
+							</a>
+					</div>
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:black;" ></i>
+							<span>
+								<h2>개인기록</h2>
 						</a>
+					</div>
+					<div class="col-3" id="bottom_user" >
+							<a href="{% url 'hzm:mypage' %}" >
+								<span >
+									<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
+								</span>
+								<h2>마이룸</h2>
+							</a>
+						</div>
 					</div>
 				</div>
-			</div>
-		</nav>
-		<!--하단 탭바 끝-->
+		</nav><!--하단 탭바 끝-->
 	
 
 <!--친선경기 신청 모달-->

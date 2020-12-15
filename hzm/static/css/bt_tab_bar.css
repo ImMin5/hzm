@@ -3,10 +3,18 @@
 	#test2_btn{
 		background-color:black;
 	}
-	.col-4 span {
+	.col-3 {
+		display:block; 
+		text-align: center;
+	}
+	.col-3 a{
+		color: black; 
+		text-decoration:none;
+	}
+	.col-3 span {
 		font-size:2rem;
 	}
-	.col-4 h2 {
+	.col-3 h2 {
 		font-size:1.4rem;
 	}
 }
@@ -16,7 +24,14 @@
 		#test2_btn{
 		background-color:red;
 	}
-	.col-4 span {
+	.col-3 {
+		display:block; text-align: center;
+	}
+	.col-3 a{
+		color: black; 
+		text-decoration:none;
+	}
+	.col-3 span {
 		font-size:3.5rem;
 	}
 

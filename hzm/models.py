@@ -59,7 +59,9 @@ class Match(models.Model):
 	passwd = models.CharField(max_length=SIZE_PLAYER_PASSWORD, blank=True, null= True)
 	player_num = models.IntegerField(default=2,blank=True, null= True)
 	red_player_name = ArrayField(models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True), blank=True, null= True)
+	red_player_id = ArrayField(models.IntegerField(default=0, blank=True, null= True), blank=True, null= True)
 	blue_player_name = ArrayField(models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True), blank=True, null= True)
+	blue_player_id = ArrayField(models.IntegerField(default=0, blank=True, null= True), blank=True, null= True)
 	match_date = models.CharField(max_length=SIZE_DATE, blank=True, null= True)
 	match_time_start = models.CharField(max_length=SIZE_TIME,blank=True, null=True)
 	match_time_end = models.CharField(max_length=SIZE_TIME,blank=True, null=True)
@@ -90,6 +92,7 @@ class Club(models.Model) :
 	club_name=models.CharField(max_length=128, blank=True, null= True)
 	host=models.CharField(max_length=128, blank=True, null= True)
 	description=models.TextField(max_length=300, blank=True, null= True)
+	member = models.IntegerField(default=0, blank=True, null=True)
 
 
 class Matchred(models.Model) :

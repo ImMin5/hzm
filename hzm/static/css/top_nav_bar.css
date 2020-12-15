@@ -1,9 +1,21 @@
-@media (min-width:1024px){
 
+@media (min-width:1024px){
+	#navbar_top{
+		z-index: 10;
+		position:sticky; 
+		top:0;
+	}
 }
 
-
 @media (min-width:768px) and (max-width:1024px){
+	.navbar{
+		z-index: 10;
+	}
+	#navbar_top{
+		z-index: 10;
+		position:sticky; 
+		top:0;
+	}
 	#navbar_top #navbar_club_name{
 		font-size:4.1rem;
 	}

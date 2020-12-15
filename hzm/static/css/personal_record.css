@@ -1,0 +1,19 @@
+@media (min-width:1024px){
+    #middle-container{
+        padding:5%;
+    }
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+    #record_table_tbody tr td{
+        font-size:1.3rem;
+        
+    }
+    #table_container{
+        padding:0;
+    }
+    #middle-container{
+        padding:1%;
+    }
+}

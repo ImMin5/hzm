@@ -11,11 +11,10 @@
 
 	 <!--커스텀-->
 	 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
-	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
+	 <link rel="stylesheet" type="text/css" href="/static/css/match_before.css?4">
 
 
 	 <!--폰트 어썸-->
@@ -29,7 +28,7 @@
 </head>
 <body style="height:100%;">
 	<!--navbar 시작-->
-	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
+	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
 				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		    		<span class="navbar-toggler-icon"></span>
@@ -47,9 +46,6 @@
 				      	</div>
 				      </li>
 				      {% if pk %}
-				      <li class="nav-item">
-				        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-				      </li>
 				      <li class="nav-item">
 				        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 				      </li>
@@ -70,35 +66,34 @@
 		<!--navbar 끝-->
 
 		<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
+		<div id="middle-container" class="container-fluid">
 			<div class="container-fluid" style="padding-top:5%;">
 				
 			</div>
-			<div class="table-responsive" style="padding-left:5%; padding-right:5%;">
+			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 					<h1 class="display-3">경기 신청 현황</h1>
 					<hr>
 					<p>{{count}}개의 신청 대기중인 경기</p>
-										<thead class="thead-dark">
+					<thead id="thead_matches" class="thead-dark">
 						<tr>
-							<th style="width:5%;" scope="col">#</th>
-							<th style="width:10%; text-align:center;" scope="col">상태</th>
-							<th style="width:10%; text-align:center;" scope="col">인원</th>
-							<th style="width:30%; text-align:center;" scope="col">제목</th>
-							<th style="width:20%; text-align:center;" scope="col">작성자</th>
-							<th style="width:25%; text-align:center;" scope="col">작성일</th>	
+							<th style="width:7%;" scope="col">#</th>
+							<th style="width:12%;" scope="col">상태</th>
+							<th style="width:10%;"  scope="col">인원</th>
+							<th style="width:29%;" scope="col">제목</th>
+							<th style="width:18%;" scope="col">작성자</th>
+							<th style="width:24%;" scope="col">작성일</th>	
 						</tr>
 					</thead>
-					<tbody id="tbody_post_lists" onload="create_post_list_table(data)">
-						{% for post in posts %}
-						<tr onclick="location.href='/match_before/info/{{post.pk}}/'" >
-							<td><a style="text-decoration:none; color:black;">{{post.pk}}</a></td>
-							<td style="font-size:0.8rem;" align="center">승인대기
-							</td>
-							<td> {{post.player_num}} : {{post.player_num}}</td>
-							<td style="text-align:center;"> {{post.club_red_name}} vs {{post.club_blue_name}}</td>
-							<td style="text-align:center;">{{post.post_writer}}</td>
-							<td style="text-align:center; font-size:0.8rem;">{{post.date}}</td>
+					<tbody id="tbody_matches" onload="create_post_list_table(data)">
+						{% for match in matches %}
+						<tr onclick="location.href='/match_before/info/{{match.pk}}/'" >
+							<td><a style="text-align:center; text-decoration:none; color:black;">{{match.pk}}</a></td>
+							<td>승인대기</td>
+							<td>{{match.player_num}} : {{match.player_num}}</td>
+							<td>{{match.club_red_name}} vs {{match.club_blue_name}}</td>
+							<td>{{match.post_writer}}</td>
+							<td>{{match.date}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -107,17 +102,17 @@
 				<nav aria-label="Page navigation example">
 				  <ul class="pagination pagination-lg justify-content-center">
 				  	{% if posts.has_previous %}
-				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
-				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.previous_page_number}}"">이전</a></li>
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.previous_page_number}}" >{{matches.previous_page_number}}</a></li>
 				     {% else %}
 				       <li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
 				    {% endif %}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.number}}">{{matches.number}}</a></li>
 				    {% if posts.has_next %}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.next_page_number}}">{{matches.next_page_number}}</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.next_page_number}}">다음</a></li>
 				    {% else%}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.number}}">다음</a></li>
 				    {% endif %}
 				  </ul>
 				</nav>
@@ -131,35 +126,41 @@
 		<!--하단 탭바-->
 
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-</div>
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100">
+				</ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			</div>
 
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+					<div class="col-3" id="bottom_home">
+						<a  href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
 							<span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.id %}" >
+					<div class="col-3" id="bottom_club" >
+						<a  href="{% url 'hzm:club' club.id %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user" >
+						<a  href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
 							</span>
