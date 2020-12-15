@@ -21,6 +21,9 @@ SIZE_TITLE = 12
 #MATCH 
 SIZE_STATE =4
 
+#FREEBOARD
+SIZE_FREEBOARD_DESCRIPTION=500
+
 #공통
 SIZE_DATE = 10
 SIZE_TIME = 8
@@ -35,16 +38,16 @@ class Player(models.Model):
 	win = models.IntegerField(default=0,blank=True, null= True)
 	lose = models.IntegerField(default=0,blank=True, null= True)
 	accept = models.BooleanField(default=False)	
-	date = models.CharField(max_length=10, blank=True, null= True)
+	date = models.CharField(max_length=SIZE_DATE, blank=True, null= True)
 
 class Record(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
 	maps = models.ForeignKey('Map',on_delete=models.CASCADE,blank=True,null=True)
-	map_name = models.CharField(max_length=30,blank=True, null=True)
+	map_name = models.CharField(max_length=SIZE_MAP_NAME,blank=True, null=True)
 	club= models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
-	record = models.CharField(max_length=15,blank=True, null=True)
-	record_date = models.CharField(max_length=10,blank=True, null=True)
-	match_club = models.CharField(max_length=12,blank=True, null=True)
+	record = models.CharField(max_length=SIZE_RECORD,blank=True, null=True)
+	record_date = models.CharField(max_length=SIZE_DATE,blank=True, null=True)
+	match_club = models.CharField(max_length=SIZE_CLUB_NAME,blank=True, null=True)
 
 class Map(models.Model):
 	map_name = models.CharField(max_length=30, blank=True, null= True)
@@ -79,19 +82,19 @@ class Schedule(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
 	club = models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
 	title = models.CharField(max_length=128,blank=True, null=True)
-	date_start = models.CharField(max_length=128, blank=True, null= True)
-	date_end = models.CharField(max_length=128, blank=True, null= True)
+	date_start = models.CharField(max_length=SIZE_DATE_TIME, blank=True, null= True)
+	date_end = models.CharField(max_length=SIZE_DATE_TIME, blank=True, null= True)
 
 class Matchresult(models.Model):
 	match=models.ForeignKey('Match', on_delete=models.SET_NULL, blank=True, null=True)
 	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
 	result = models.BooleanField(default=False)
-	club_name =models.CharField(max_length=128, blank=True, null= True)
+	club_name =models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
 
 class Club(models.Model) :
-	club_name=models.CharField(max_length=128, blank=True, null= True)
-	host=models.CharField(max_length=128, blank=True, null= True)
-	description=models.TextField(max_length=300, blank=True, null= True)
+	club_name=models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
+	host=models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
+	description=models.TextField(max_length=SIZE_DESCRIPTION, blank=True, null= True)
 	member = models.IntegerField(default=0, blank=True, null=True)
 
 
@@ -101,3 +104,9 @@ class Matchred(models.Model) :
 	player_name = ArrayField(models.CharField(max_length=SIZE_PLAYER_NAME,blank=True, null=True))
 	player_id = ArrayField(models.IntegerField(default=0, blank=True, null = True))
 
+class Freeboard(models.Model) :
+	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	post_writer=models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
+	date=models.CharField(max_length=SIZE_DATE, blank=True, null= True)
+	view = models.IntegerField(default=0, blank=True, null=True)
+	description=models.TextField(max_length=SIZE_FREEBOARD_DESCRIPTION, blank=True, null= True)
