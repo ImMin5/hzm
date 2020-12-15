@@ -53,4 +53,5 @@ urlpatterns = [
 	path('api/match_filter',views.match_filter,name='ajax_match_filter'),
 	path('club/<int:club_pk>/admin/',views.club_admin,name='club_admin'),
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
+	path('test/',views.matchred,name='matchred'),
 ]

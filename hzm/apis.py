@@ -142,8 +142,8 @@ def logout(request) :
 
 def add_fmatch(request) :
 	post_writer = request.POST.get('post_writer')
-	club_red = request.POST.get('club_red')
-	club_blue = request.POST.get('club_blue')
+	club_red_name = request.POST.get('club_red')
+	club_blue_name = request.POST.get('club_blue')
 	match_date = request.POST.get('match_date')
 	match_time_start = request.POST.get('match_time_start')
 	match_time_end = request.POST.get('match_time_end')
@@ -151,33 +151,20 @@ def add_fmatch(request) :
 	passwd = request.POST.get('passwd')
 	blue_goga_avg = request.POST.get('blue_goga_avg')
 	date = request.POST.get('date')
-	p1 = request.POST.get('p1')
-	p2 = request.POST.get('p2')
-	
-	if player_num == '3' :
-		p3 = request.POST.get('p3')
-	elif player_num == '4' :
-		p3 = request.POST.get('p3')
-		p4 = request.POST.get('p4')
+	players= request.POST.get('player[]')
+	players_= players.split(',')
 
-	print(date)
-	print(club_red)
-	club=Club.objects.get(club_name=club_red)
 
-	post = Post_list(post_writer=post_writer, club_id=club.club_name,club_blue=club_blue, player_num=player_num, \
+	club=Club.objects.get(club_name=club_red_name)
+
+	match = Match(post_writer=post_writer, club_red_id=club.pk,club_red_name=club.club_name ,club_blue_name=club_blue_name,\
+		player_num=player_num, blue_player_name=players_,\
 		match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end,\
-		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date,\
-		blue_p1_name=p1,blue_p2_name=p2)
-	
-	if player_num == '3' :
-		post.blue_p3_name=p3
-	elif player_num =='4' :
-		post.blue_p3_name=p3
-		post.blue_p4_name=p4
+		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date)
 
-	post.save()
+	match.save()
 
-	return redirect('hzm:match_before')
+	return redirect('/')
 
 def add_schedule(request) :
 	pk = request.session['pk']
@@ -587,7 +574,6 @@ def get_player_before_auth(request) :
 	club_id=request.session.get('club_id')
 	players=Player.objects.filter(Q(club_id=club_id) & Q(accept=False))
 	serialized_players = PlayerSerializer(players,many=True)		
-
 	return HttpResponse(json.dumps(serialized_players.data)) 
 
 def accept_player(request) :
@@ -652,10 +638,18 @@ def get_record_rank(request) :
 			records=[]
 			players=[]
 			records_=Record.objects.filter(Q(club_id=club_id)&Q(maps_id=all_records[i]['maps_id'])).values('player_id').annotate(record=Min('record'))
+<<<<<<< HEAD
 			for k in range(records_.count()) :
 				records.append(records_[k]['record'])
 				players.append(records_[k]['player_id'])
 
+=======
+			
+			for k in range(records_.count()) :
+				records.append(records_[k]['record'])
+				players.append(records_[k]['player_id'])
+				
+>>>>>>> fdbb698d03613e68de2a419ff813a0e6df0dbb59
 			if pk in players :
 				obj_records=Series(records)
 				maps.append(all_records[i]['maps_id'])
@@ -670,8 +664,12 @@ def get_record_rank(request) :
 		return JsonResponse(data)
 
 	except Exception as e :
+<<<<<<< HEAD
 		print(e)
 		return HttpResponse("bad")	
+=======
+		return HttpResponse(e)	
+>>>>>>> fdbb698d03613e68de2a419ff813a0e6df0dbb59
 
 
 
