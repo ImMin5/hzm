@@ -1,42 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YPRPE75FJG');
-</script>
 	<meta charset="uft-8">
-	<meta name="viewprot" content="width=device-width, inital-scale=1.0">
-	<link rel="apple-touch-icon-precomposed" sizes="196x196" href="/static/imgs/icon/ios/apple-touch-icon-196x196.png" />
-	<link rel="icon" type="image/png" sizes="192x192" href="/static/imgs/icon/android/icon-192.png" />
+	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
-	<!-- meta data -->
-	<meta property="og:title" content="학지매">
-	<meta property="description" content="카트라이더 러쉬플러스 친선경기 매칭 사이트">
-	<meta property="og:description" content="놀러와">
-	<meta property="og:img" content="http://club-hzm.ga/static/imgs/favicon.png">
 
 	<!--부트스트랩-->
-	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	 <script src="/static/js/jquery-3.5.1.min.js"></script>
-	 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
-	 
-	 <!--커스텀-->	 
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
+	 <!--커스텀-->
+	 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	  <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?3">
-	  <!--커스텀-->
-	 
-
-	
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
+	 <link rel="stylesheet" type="text/css" href="/static/css/match_before.css?4">
 
 
 	 <!--폰트 어썸-->
@@ -45,126 +23,118 @@
 	 <!--알림창-->
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
 	<title>학지매</title>
 </head>
 <body style="height:100%;">
-	
-	<!--내비게이션 바-->
-		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-			{% if pk %}
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
-			{% else %}
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
-			{% endif %}
-	 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-	    		<span class="navbar-toggler-icon"></span>
-	  		</button>
-	 	 	<div class="collapse navbar-collapse" id="navbarNav">
-			    <ul class="navbar-nav">
-			      <li class="nav-item dropdown">
-			      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
-			      	<div class="dropdown-menu">
-			      		 <a class="nav-link" name="navbar_link" href="{% url 'hzm:match_form' %}" >&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
-			      		{% if pk %}
-			      		<a class="nav-link" name="navbar_link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
-			      		{% endif %}
-			      		<a class="nav-link" name="navbar_link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
-			      	</div>
-				  </li>
-				  <li class="nav-item">
-			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
-			      </li>
-			      {% if pk %}
-			      <li class="nav-item">
-			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:schedule' %}">일정관리</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="logout_btn">로그아웃</a>
-			      </li>
-			      {% else %}
-			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
-			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:signup' %}" id="navbar_signup_btn" >가입하기</a>
-			      </li>
-			      {% endif %}
-			      
-			  	</ul>
-			 </div>
-		</nav><!--navbar 끝-->
-	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
-			<!--점보트론 시작-->
-			<div class="jumbotron" style="padding-bottom: 1%;">
-			  <h1 class="display-4"> {% if pk %} {{player.player_name}} 님 {% endif %} 반갑습니다.</br> {% if club.name %} {{club.name}} 입니다! {% endif %}	</h1>
-			  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
-			  <hr class="my-4">
-			  <p>친선경기 신청은 아래 버튼</p>
-			  <a class="btn btn-secondary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
-			</div><!--점보트론 끝-->
-			<!--
-			<!--유투브 채널 추천 슬라이드 
-				<div class="container-fluid" style="padding:0px;">
-					<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-					  <ol class="carousel-indicators">
-					    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-					    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-					    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-					  </ol>
-					  <div class="carousel-inner">
-					    <div class="carousel-item active">
-					      <div id="main_slide01_wrap" class="container-fluid" style="height:20vh; background-color:white;">
-					      	<img id="main_slide01"  src="https\:\/\/yt3\.ggpht\.com\/Txvvv-YFZP3bwUBnxneXMBLY_UCV6KPy9M1-GSsuBzGStghkXzZyyLQWGTMoWeV4F5Mua5hU\=w2120-fcrop64\=1\,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" >
-					      </div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>First slide label</h5>
-					        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-					      </div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Second slide label</h5>
-					        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					      </div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Third slide label</h5>
-					        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-					      </div>
-					    </div>
-					  </div>
-					  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-					    <span style="width:40px; height:40px;" class="carousel-control-prev-icon" aria-hidden="true"></span>
-					    <span class="sr-only">Previous</span>
-					  </a>
-					  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-					    <span style="width:40px; height:40px;" class="carousel-control-next-icon" aria-hidden="true"></span>
-					    <span class="sr-only">Next</span>
-					  </a>
-					</div>
-				</div>공지사항 슬라이드 끝 -->
+	<!--navbar 시작-->
+	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		    		<span class="navbar-toggler-icon"></span>
+		  		</button>
+		 	 	<div class="collapse navbar-collapse" id="navbarNav">
+				    <ul class="navbar-nav">
+				      <li class="nav-item dropdown">
+				      	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">친선 경기</a>
+				      	<div class="dropdown-menu">
+				      		 <a class="nav-link" href="{% url 'hzm:match_form' %}">&nbsp;경기 신청 <span class="sr-only">(current)</span></a>
+				      		{% if pk %}
+				      		<a class="nav-link" href="{% url 'hzm:match_before' %}">&nbsp;경기 신청 현황</a>
+				      		{% endif %}
+				      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
+				      	</div>
+                      </li>
+                      <li class="nav-item">
+				        <a class="nav-link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
+				      </li>
+				      {% if pk %}
+				      <li class="nav-item">
+				        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" id="logout_btn">로그아웃</a>
+				      </li>
+				      {% else %}
+				       <li class="nav-item">
+				        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" id="signup_btn" data-toggle="modal" data-target="#login">가입하기</a>
+				      </li>
+				      {% endif %}
+			</ul>
+		</div>
+	</nav>
+		<!--navbar 끝-->
 
-		</div> <!--middle container 끝-->
+		<!--middle container-->
+		<div id="middle-container" class="container-fluid">
+			<div class="container-fluid" style="padding-top:5%;">
+				
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped table-hover">
+					<h1 class="display-3">자유게시판</h1>
+					<hr>
+					<p>{{count}}개의 글</p>
+					<thead id="thead_matches" class="thead-dark">
+						<tr>
+							<th style="width:10%;" scope="col">#</th>
+							<th style="width:40%;" scope="col">제목</th>
+							<th style="width:20%;"  scope="col">작성자</th>
+							<th style="width:30%;" scope="col">작성일</th>
+						</tr>
+					</thead>
+					<tbody id="tbody_matches" onload="create_post_list_table(data)">
+						{% for match in matches %}
+						<tr onclick="location.href='/match_before/info/{{match.pk}}/'" >
+							<td><a style="text-align:center; text-decoration:none; color:black;">{{match.pk}}</a></td>
+							<td>승인대기</td>
+							<td>{{match.player_num}} : {{match.player_num}}</td>
+							<td>{{match.club_red_name}} vs {{match.club_blue_name}}</td>
+							<td>{{match.post_writer}}</td>
+							<td>{{match.date}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination pagination-lg justify-content-center">
+				  	{% if posts.has_previous %}
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
+				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
+				     {% else %}
+				       <li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
+				    {% endif %}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
+				    {% if posts.has_next %}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
+				    {% else%}
+				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
+				    {% endif %}
+				  </ul>
+				</nav>
+			</div>
+		</div>
+		<!-- middle container 끝-->
+
+		
 
 		<!--하단 탭바-->
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 </div>
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
 					<div class="col-3" id="bottom_home">
 						<a href="{% url 'hzm:main_page' %}" >
-							<span><i class="fa fa-home" id="bottom_home_btn" style="color:black;"></i><span>
+							<span><i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i><span>
 							<h2>홈</h2>
 						</a>
 					</div>
@@ -196,7 +166,7 @@
 					<div class="col-3" id="bottom_home">
 						<a href="{% url 'hzm:main_page' %}" >
 							<span>
-								<i class="fa fa-home fa" id="bottom_home_btn" style="color:black;"></i>
+								<i class="fa fa-home fa" id="bottom_home_btn" style="color:gray;"></i>
 							<span>
 							<h2>홈</h2>
 						</a>
@@ -253,10 +223,6 @@
 				</div>
 			</form>
 		</div>
-			<div class="ad-banner" style="margin 0 auto;">
-				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-0kOSYgjwyvWtHOVO" data-ad-width   = "250" data-ad-height  = "250"></ins> 
-				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-			</div>
       </div>
     </div>
   </div>
@@ -292,8 +258,8 @@
       		</select>
       	</div>
 		<div class="input-group mb-3">
-			<span class="input-group-text display-3">라이더</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control display-3" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
+			<span class="input-group-text">라이더</span>
+			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
 			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
 			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
@@ -339,8 +305,7 @@
 			NowTime += ':' + Now.getSeconds();
 			return NowTime;
 		}
-
-		//경기신청모달 고가 평균 폼 확인
+				//경기신청모달 고가 평균 폼 확인
 		function goga_form_check(data){
 			data_=data.split(':')
 
@@ -393,26 +358,165 @@
 				return false;
 			return true;
 		}
+		//경기신청 버튼
+		$(document).on('click','#modal_fmatch_btn',function(e) {
+			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
+			var formData = new FormData();
+			var post_writer = $('#modal_fmatch_name').val();
+			var club_name = $('#modal_fmatch_clubname').val();
+			var match_date = $('#modal_fmatch_date').val();
+			var match_time_start = $('#modal_fmatch_time_start').val();
+			var match_time_end = $('#modal_fmatch_time_end').val();
+			var player_num = $('#modal_fmatch_select').val();
+			var passwd = $('#modal_fmatch_passwd').val();
+			var player = Array();
+			var date = getTime();
+			var player_count=0;
+			
+			for(var i = 0; i <player_num; i++) {
+					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
+					if($.trim(player[i]) != '') {
+						player_count++;
+						console.log("player["+i+"]:"+player[i]);
+					}
+			}
 
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+
+			if( $.trim(club_name) == '') {
+				console.log("club_name :" +club_name)
+				return swal("클럽명을 입력해주세요");
 			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
+			else if($.trim(post_writer) == '') {
+				 console.log("post writer: "+ club_name)
+				return swal("카러플 닉네임을 입력해주세요");
 			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
+			else if(player_num != player_count){
+				console.log("player_num :"+player_num)
+				console.log("player_num input :"+player.length)
+				return swal("라이더를  입력해 주세요");
 			}
-		})
-		
+			else if(!(match_date)){
+				console.log("match date : "+match_date)
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(match_date_form_check(match_date) == false){
+				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
+			}
+			else if(goga_form_check(blue_goga_avg) == false) {	
+				return swal("고가 입력 양식 00:00:00");
+			} 
+			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
+				return swal("시간 입력 양식 ex) 11:11")
+			}
+			else if(!(match_time_start))
+				return swal("시작 시간을 입력해주세요");
+			else if(!(match_time_end))
+				return swal("종료 시간을 입력해주세요");
+			else if(match_time_start > match_time_end)
+				return swal("시작시간이 종료시간보다 늦습니다!");
+			else if(!(passwd))
+				return swal("비밀번호를 입력해주세요");
+
+			console.log("match date : "+match_date);
+			console.log(match_time_start);
+			console.log(match_time_end);
+
+			swal({
+				title: "이길 수 있겠어?",
+				text: "무르기 없기~",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willDelete) => {
+				if (willDelete) {
+
+					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
+					formData.append('p1',player[0]);
+					formData.append('p2',player[1]);
+					formData.append('p3',player[2]);
+					formData.append('p4',player[3]);
+					formData.append('post_writer',post_writer);
+					formData.append('club_name',club_name);
+					formData.append('match_date',match_date);
+					formData.append('match_time_start',match_time_start);
+					formData.append('match_time_end',match_time_end);
+					formData.append('player_num',player_num);
+					formData.append('passwd',passwd);
+					formData.append('blue_goga_avg',blue_goga_avg);
+					formData.append('date',date);
+					console.log("date : "+date)
+					$.ajax({
+						url : "{% url 'hzm:ajax_add_fmatch' %}",
+						type : 'POST',
+						contentType : false,
+						processData : false,
+						data : formData,
+						success : function(data) {
+							$('#friendlymatch').modal('hide');
+							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
+							
+						},
+						error : function(error) {
+							swal("신청실패", "아마도 통신오류??..", "error");
+							$('#friendlymatch').modal('hide');
+						},
+					});
+
+
+
+				} else {
+					swal("담에 봐요!");
+					$('#friendlymatch').modal('hide');
+				}
+			});
+
+		});
+
+
+
+//모달에서 가입하기 버튼 클릭
+		$(document).on('click','#modal_signup_btn',function(e) {
+			var player_name = $('#modal_player_name').val();
+			var player_passwd = $('#modal_player_passwd').val(); 
+
+			console.log(player_name);
+			console.log(player_passwd);
+
+			swal({
+				title: "아이디를 생성 하시겠습니까?",
+				text: "학지매에 오신것을 환영합니다~",
+				icon: "info",
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willcreate) =>{
+				if(willcreate){
+					$.ajax({
+						url:"{% url 'hzm:ajax_signup' %}",
+						type:'POST',
+						data : {
+							'player_name' : player_name,
+							'player_passwd' : player_passwd,
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+						},
+						success:function(data) {
+							swal("아이디 생성 성공");
+							location.reload();
+						},
+						error : function(error) {
+							swal("아이디생성실패");
+						}
+					});
+
+				}
+				else{
+					return;
+				}
+
+			});
+		});
+
 		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
@@ -452,8 +556,6 @@
 				}
 			});
 		});
-
-		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
 				url:"{% url 'hzm:ajax_logout' %}",
@@ -467,29 +569,9 @@
 				}
 			})
 		});
-/*
-		$(document).ready(function(e){
-			part= [];
-			part[0]='snippet';
-			part[1]='statistics';
-			$.ajax({
-				url: "https://www.googleapis.com/youtube/v3/channelSections",
-				type:'GET',
-				data : {
-					'key': 'AIzaSyAV5d9ttIrEiwQ3YwWNqQcjL49YpUAnqOo',
-					'channelId':'UCeivPjjK9-cdj8-gw4-7JRg',
-					'part':part,
 
-				},
-				success:function(data) {
-					console.log(data.snippet)
-					console.log("youtube")
-				}
 
-			});
-		})
-		*/
-</script>
+	</script>
 	
 </body>
 

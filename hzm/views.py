@@ -324,3 +324,6 @@ def matchred(request) :
 
 
 	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })
+def freeboard(request) :
+
+	return render(request,'hzm/freeboard.html')
