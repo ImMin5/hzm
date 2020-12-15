@@ -574,7 +574,6 @@ def get_player_before_auth(request) :
 	club_id=request.session.get('club_id')
 	players=Player.objects.filter(Q(club_id=club_id) & Q(accept=False))
 	serialized_players = PlayerSerializer(players,many=True)		
-
 	return HttpResponse(json.dumps(serialized_players.data)) 
 
 def accept_player(request) :
