@@ -6,7 +6,7 @@ from hzm.models import *
 admin.site.register(Player)
 admin.site.register(Record)
 admin.site.register(Map)
-admin.site.register(Post_list)
+admin.site.register(Match)
 admin.site.register(Schedule)
 admin.site.register(Club)
 admin.site.register(Matchresult)

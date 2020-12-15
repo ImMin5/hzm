@@ -31,7 +31,7 @@
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
 			{% if pk %}
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 			{% else %}
 			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
 			{% endif %}
@@ -89,8 +89,8 @@
 									<span class="input-group-text">클럽이름</span>
 									<select id="matchform_club_red" class="form-control" value="" >
 										{% if clubs %}
-										{% for club in clubs %}
-										<option>{{club.club_name}}</option>
+										{% for c in clubs %}
+										<option>{{c.club_name}}</option>
 										{% endfor %}
 										{% endif %}
 									</select>
@@ -142,7 +142,7 @@
 								<input type="text" id="matchform_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
 							</div>
 						</div><!-- matchinfo body끝-->
-						<div class="container-fluid" id="matchinfo_footer" style="">
+						<div class="container-fluid" id="matchinfo_footer">
 							<button type="button" id="matchform_submit_btn" class="btn btn-secondary bg-dark">신청하기</button>
 						</div>
 					</form>
@@ -177,7 +177,7 @@
 						</a>
 					</div>
 					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.id %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
@@ -448,10 +448,6 @@
 				if (willDelete) {
 
 					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-					formData.append('p1',player[0]);
-					formData.append('p2',player[1]);
-					formData.append('p3',player[2]);
-					formData.append('p4',player[3]);
 					formData.append('post_writer',post_writer);
 					formData.append('club_red',club_red);
 					formData.append('club_blue',club_blue);
@@ -462,6 +458,7 @@
 					formData.append('passwd',passwd);
 					formData.append('blue_goga_avg',blue_goga_avg);
 					formData.append('date',date);
+					formData.append('player[]',player);
 					console.log("date : "+date)
 					$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",

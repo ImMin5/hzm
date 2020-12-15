@@ -18,6 +18,7 @@ def main_page(request) :
 	pk=request.session.get('pk')
 	records=Record.objects.all().order_by('maps_id')
 	maps=Map.objects.all().order_by('pk')
+	Matchred.objects.create(club_id=1,player_name=['삼성동슈마호'],player_id=['1','2'])
 
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
@@ -164,24 +165,25 @@ def match_before(request) :
 		return redirect('/')
 
 	try :
+		club=Club.objects.get(pk=club_id)
 		player=Player.objects.get(pk=pk)
 	except Exception as e :
 		return redirect('/')
 
-	posts = Post_list.objects.all().filter(Q(accept=False) & Q(club_id=club_id)).order_by('-pk')
-	count = posts.count()
-	paginator = Paginator(posts, 10)
+	matches = Match.objects.all().filter(Q(accept=False) & Q(club_red_id=club_id)).order_by('-pk')
+	count = matches.count()
+	paginator = Paginator(matches, 2)
 	pages = request.GET.get('page',1)
 
 	try :
-		posts = paginator.get_page(pages)
+		matches = paginator.get_page(pages)
 	except PageNotAnInteger :
-		posts = paginator.page(1)
+		matches = paginator.page(1)
 	except EmptyPage :
-		posts = paginator.page(paginator.num_pages)
+		matches = paginator.page(paginator.num_pages)
 		return HttpResponse("end")
 
-	return render(request, 'hzm/match_before.html',{'posts' : posts, 'count':count, 'pk':pk, 'player_name':player_name,'club_id':club_id})
+	return render(request, 'hzm/match_before.html',{'posts' : matches, 'count':count, 'pk':pk, 'player_name':player_name,'club':club})
 
 def delete_result(request) :
 	return render(request,'hzm/test.html')
@@ -227,9 +229,10 @@ def match_form(request) :
 	pk = request.session.get('pk')
 	club_id = request.session.get('club_id')
 	clubs=Club.objects.all()
+	club=Club.objects.get(pk=club_id)
 
 	if pk is not None :
-		return render(request,'hzm/match_form.html',{'pk':pk,'club_id':club_id,'clubs':clubs})	
+		return render(request,'hzm/match_form.html',{'pk':pk,'club':club,'clubs':clubs})	
 	return render(request,'hzm/match_form.html',{'clubs':clubs})
 
 
@@ -299,3 +302,9 @@ def club_admin(request) :
 		return render(request,'hzm/error.html')
 	return render(request,'hzm/admin.html',{'players':players,'maps':maps,'records':records})
 
+def matchred(request) :
+	matchreds = Matchred.objects.all().order_by('player_name')
+	matchred = Matchred.objects.get(pk=5)
+
+
+	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })

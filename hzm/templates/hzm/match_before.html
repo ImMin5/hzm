@@ -30,7 +30,7 @@
 <body style="height:100%;">
 	<!--navbar 시작-->
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
-				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
+				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		    		<span class="navbar-toggler-icon"></span>
 		  		</button>
@@ -83,10 +83,10 @@
 						<tr>
 							<th style="width:5%;" scope="col">#</th>
 							<th style="width:10%; text-align:center;" scope="col">상태</th>
-							<th style="width:10%;" scope="col">인원</th>
+							<th style="width:10%; text-align:center;" scope="col">인원</th>
 							<th style="width:30%; text-align:center;" scope="col">제목</th>
 							<th style="width:20%; text-align:center;" scope="col">작성자</th>
-							<th style="width:25%;" scope="col">작성일</th>	
+							<th style="width:25%; text-align:center;" scope="col">작성일</th>	
 						</tr>
 					</thead>
 					<tbody id="tbody_post_lists" onload="create_post_list_table(data)">
@@ -96,9 +96,9 @@
 							<td style="font-size:0.8rem;" align="center">승인대기
 							</td>
 							<td> {{post.player_num}} : {{post.player_num}}</td>
-							<td style="text-align:center;"> {{post.club_id}} vs {{post.club_blue}}</td>
+							<td style="text-align:center;"> {{post.club_red_name}} vs {{post.club_blue_name}}</td>
 							<td style="text-align:center;">{{post.post_writer}}</td>
-							<td style="font-size:0.8rem;">{{post.date}}</td>
+							<td style="text-align:center; font-size:0.8rem;">{{post.date}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -151,7 +151,7 @@
 						</a>
 					</div>
 					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.id %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
