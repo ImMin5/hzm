@@ -59,7 +59,9 @@ class Match(models.Model):
 	passwd = models.CharField(max_length=SIZE_PLAYER_PASSWORD, blank=True, null= True)
 	player_num = models.IntegerField(default=2,blank=True, null= True)
 	red_player_name = ArrayField(models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True), blank=True, null= True)
+	red_player_id = ArrayField(models.IntegerField(default=0, blank=True, null= True), blank=True, null= True)
 	blue_player_name = ArrayField(models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True), blank=True, null= True)
+	blue_player_id = ArrayField(models.IntegerField(default=0, blank=True, null= True), blank=True, null= True)
 	match_date = models.CharField(max_length=SIZE_DATE, blank=True, null= True)
 	match_time_start = models.CharField(max_length=SIZE_TIME,blank=True, null=True)
 	match_time_end = models.CharField(max_length=SIZE_TIME,blank=True, null=True)
@@ -72,26 +74,16 @@ class Match(models.Model):
 	result = models.BooleanField(default=False)
 	blue_win = models.IntegerField(default=0,blank=True, null= True)
 	red_win = models.IntegerField(default=0,blank=True, null= True)
-<<<<<<< HEAD
-	
-class Schedule(models.Model) :
-=======
 
 class Schedule(models.Model):
->>>>>>> fdbb698d03613e68de2a419ff813a0e6df0dbb59
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
 	club = models.ForeignKey('Club', on_delete=models.CASCADE, blank=True, null=True)
 	title = models.CharField(max_length=128,blank=True, null=True)
 	date_start = models.CharField(max_length=128, blank=True, null= True)
 	date_end = models.CharField(max_length=128, blank=True, null= True)
 
-<<<<<<< HEAD
-class Matchresult(models.Model) :
-	match=models.ForeignKey('Post_list', on_delete=models.SET_NULL, blank=True, null=True)
-=======
 class Matchresult(models.Model):
 	match=models.ForeignKey('Match', on_delete=models.SET_NULL, blank=True, null=True)
->>>>>>> fdbb698d03613e68de2a419ff813a0e6df0dbb59
 	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
 	result = models.BooleanField(default=False)
 	club_name =models.CharField(max_length=128, blank=True, null= True)
@@ -100,6 +92,7 @@ class Club(models.Model) :
 	club_name=models.CharField(max_length=128, blank=True, null= True)
 	host=models.CharField(max_length=128, blank=True, null= True)
 	description=models.TextField(max_length=300, blank=True, null= True)
+	member = models.IntegerField(default=0, blank=True, null=True)
 
 
 class Matchred(models.Model) :

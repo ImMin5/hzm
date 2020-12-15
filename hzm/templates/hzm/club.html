@@ -59,9 +59,6 @@
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-			      </li>
-			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
 			      <li class="nav-item">
@@ -83,11 +80,10 @@
 							<h4 style="float:left; width:100%; display:inline-block; ">클럽장 : {{club.host}}			
 							{% if club.host == player.player_name %}
 							<span style="padding-top:2%; font-size:1.5rem; " id="club_edit_btn" onclick='location.href="{% url 'hzm:club_admin' club.pk %}"' ><i class="fas fa-cog"></i></span></h4>
+							{% endif %}
+							<h5>클럽원 {{club.member}}명</h5>
 						</div>
-
-				{% endif %}
-						</br>
-						<div class="badge text-wrap" style="padding:0px; font-size:1.1em; height:3vh;overflow: scroll;">{{club.description}}</div>
+						<div class="badge text-wrap" style="padding:0px; font-size:1.1em; height:3vh;overflow: scroll;">클럽소개 :{{club.description}}</div>
 				  	</div>
 				</div>
 				<hr>
@@ -104,22 +100,22 @@
 					    <div class="carousel-item active">
 					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
 					      <div class="carousel-caption d-none d-md-block">
-					        <h5>First slide label</h5>
-					        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+					        <h5>일</h5>
+					        <p></p>
 					      </div>
 					    </div>
 					    <div class="carousel-item">
 					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
 					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Second slide label</h5>
-					        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+					        <h5>이</h5>
+					        <p></p>
 					      </div>
 					    </div>
 					    <div class="carousel-item">
 					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
 					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Third slide label</h5>
-					        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+					        <h5>삼</h5>
+					        <p></p>
 					      </div>
 					    </div>
 					  </div>
@@ -144,24 +140,32 @@
 		</div>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-					<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+				<div class="col-3" id="bottom_home">
+					<a href="{% url 'hzm:main_page' %}" >
 						<span>
 							<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
 						</span>
 							<h2>홈</h2>
 						</a>
 					</div>
-				<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+				<div class="col-3" id="bottom_club" >
+						<a  href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:black;" ></i>
 							</span>
 							<h2>클럽</h2>
 						</a>
-					</div>
-				<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
+				</div>
+				<div class="col-3" id="bottom_record">
+					<a href="{% url 'hzm:personal_record' %}" >
+						<span>
+							<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+						<span>
+							<h2>개인기록</h2>
+					</a>
+				</div>
+				<div class="col-3" id="bottom_user" >
+						<a href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
 							</span>
