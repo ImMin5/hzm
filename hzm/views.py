@@ -16,9 +16,9 @@ from django.db.models import Q
 
 def main_page(request) :
 	pk=request.session.get('pk')
-	records=Record.objects.all().order_by('maps_id')
-	maps=Map.objects.all().order_by('pk')
-	Matchred.objects.create(club_id=1,player_name=['삼성동슈마호'],player_id=['1','2'])
+	#records=Record.objects.all().order_by('maps_id')
+	#maps=Map.objects.all().order_by('pk')
+	
 
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
