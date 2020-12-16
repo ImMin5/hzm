@@ -40,6 +40,7 @@ urlpatterns = [
 	path('api/accept_match_info/<int:match_pk>/',apis.accept_match_info, name='accept_match_info'),
 	path('api/check_post_passwd',apis.check_post_passwd,name='ajax_check_post_passwd'),
 	path('api/save_match_info',apis.save_match_info,name='ajax_save_match_info'),
+	path('api/save_admin_match_info',apis.save_admin_match_info,name='ajax_admin_save_match_info'),
 	path('api/get_redteam_player',apis.get_redteam_player,name='ajax_get_redteam_player'),
 	path('api/get_redteam_subplayer',apis.get_redteam_subplayer,name='ajax_get_redteam_subplayer'),
 	path('api/save_redteam_player',apis.save_redteam_player,name='ajax_save_redteam_player'),
@@ -56,4 +57,5 @@ urlpatterns = [
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 	path('freeboard/',views.freeboard,name='freeboard'),
 	path('freeboard/<int:post_pk>/',views.freeboard_info,name='freeboard_info'),
+	path('api/save_club_description',apis.save_club_description,name='ajax_save_club_description')
 ]

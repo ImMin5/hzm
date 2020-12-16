@@ -56,10 +56,10 @@ class Map(models.Model):
 	date = models.CharField(max_length=10,blank=True, null=True)
 
 class Match(models.Model):
-	club_red_id = models.IntegerField(blank=True, null= True)
-	club_red_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
-	club_blue_id = models.IntegerField(blank=True, null= True)
-	club_blue_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
+	red_club_id = models.IntegerField(blank=True, null= True)
+	red_club_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
+	blue_club_id = models.IntegerField(blank=True, null= True)
+	blue_club_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
 	post_writer = models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
 	passwd = models.CharField(max_length=SIZE_PLAYER_PASSWORD, blank=True, null= True)
 	player_num = models.IntegerField(default=2,blank=True, null= True)
@@ -77,8 +77,8 @@ class Match(models.Model):
 	accept = models.BooleanField(default=False)
 	state = models.CharField(max_length=SIZE_STATE, blank=True, null= True)
 	result = models.BooleanField(default=False)
-	blue_win = models.IntegerField(default=0,blank=True, null= True)
 	red_win = models.IntegerField(default=0,blank=True, null= True)
+	blue_win = models.IntegerField(default=0,blank=True, null= True)
 
 class Schedule(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)

@@ -15,7 +15,7 @@
 
 
 	 <!--커스텀-->
-	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/admin.css?1">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
@@ -71,25 +71,31 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div id="middle-container" class="container-fluid" style="height:100vh; padding:5%; overflow:scroll;">
-			
-			<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
+		<div id="middle-container" class="container-fluid">
 
-			<div class="input-group mb-3" style="width:25%; float:right;">
-				<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
-				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
-					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+			<div id="ClubDescriptionBox">
+				<div class="form-floating">
+					<label>클럽 설명:</label><button class="btn btn-secondary bg-dark" id="ClubDescriptionBtn" style="float:right">저장</button>
+					<textarea class="form-control" placeholder="클럽설명" id="ClubDescription" style="height: 100px">{{club.description}}</textarea>
 				</div>
 			</div>
-			<div id="admin_record_container" class="container-fluid" style="overflow:scroll; height:80vh;">
-				<table class="table table-md" >
-				  <thead class="thead-light">
+			<div id="admin_record_container" class="container-fluid">
+				<button style="float :left; margin-left : 1%; " id="record_add_btn" data-toggle="modal" data-target="#modal_record" type="button" class="btn btn-dark">기록 추가</button>
+
+				<div class="input-group mb-3" style="width:25%; float:right;">
+					<input type="text" id="keyword_record" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+					<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
+						<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
+					</div>
+				</div>
+				<table class="table table-md table-bordered" >
+				  <thead id="AdminRecordThead" class="thead-light">
 				    <tr>
-				      <th scope="col" style="width:10%; text-align: center; position:sticky; top:0;">record 고유값</th>
-				      <th scope="col" style="width:20%; text-align: center; position:sticky; top:0;">맵 이름 </th>
-				      <th scope="col" style="width:20%; text-align: center; position:sticky; top:0;">라이더 </th>
-				      <th scope="col" style="width:20%; text-align: center; position:sticky; top:0;">기록</th>
-				      <th scope="col" style="width:20%; text-align: center; position:sticky; top:0;">비고</th>
+				      <th id="AdminThRecord" scope="col">record</th>
+				      <th scope="col">맵 이름 </th>
+				      <th scope="col">라이더 </th>
+				      <th scope="col">기록</th>
+				      <th scope="col">비고</th>
 				    </tr>
 				  </thead>
 				  <tbody id="record_table_tbody">
@@ -107,7 +113,11 @@
 				  				<td>{{player.player_name}}({{player.pk}})</td>
 				  			{% endif %}
 				  		{% endfor %}
-				  		<td>{{record.record}}</td>
+						  <td>{{record.record}}</td>
+						  <td>
+							  <button class="btn btn-secondary bg-dark">수정</button>
+							  <button class="btn btn-secondary bg-dark">삭제</button>
+						  </td>
 				  		
 				  	</tr>
 				  	{% endfor %}
@@ -116,18 +126,18 @@
 			</div>
 			<div id="admin_accept_player" class="container-fluid">
 				<div class="input-group mb-3" style="width:25%; float:right;">
-						<input type="text" id="keyword_mapname" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
+						<input type="text" id="keyword_player" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
 						<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
 							<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
 						</div>
 					</div>
-					<div class="container-fluid" style="overflow:scroll; height:40vh;">
-						<table class="table table-md" >
-						  <thead>
+					<div class="container-fluid" style="overflow:scroll; padding:0">
+						<table class="table table-md table-bordered" >
+						  <thead id="AdminAcceptThead" class="thead-light">
 						    <tr>
-						    	<th scope="col" style="width:33%; text-align: center;">#</th>
-						    	<th scope="col" style="width:34%; text-align: center;">아이디</th>
-						    	<th scope="col" style="width:33%; text-align: center;">비고</th>
+						    	<th scope="col" style=" text-align: center;">#</th>
+						    	<th scope="col" style=" text-align: center;">아이디</th>
+						    	<th scope="col" style=" text-align: center;">비고</th>
 						    </tr>
 						  </thead>
 						  <tbody id="club_player_table_tbody">
@@ -135,6 +145,87 @@
 						</table>				
 					</div>
 			</div>
+			
+			<div class="container-fluid" id="AdminMatchFormContainer">
+				<form>
+					<div class="container-fluid" id="matchinfo_body">
+						<div class="input-group mb-3">
+							<span class="input-group-text"> 신청자 </span>
+							<input type="text" id="matchinfo_postwriter" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2" value="" >
+						</div>
+						  <div class="input-group mb-3">
+							  <span class="input-group-text">경기 인원</span>
+							  <select id="matchinfo_player_num" class="form-control" value="4" >
+								  <option id="matchinfo_player_num_option1" value="2" > 2 vs 2</option>
+								  <option id="matchinfo_player_num_option2" value="3" > 3 vs 3</option>
+								  <option id="matchinfo_player_num_option3" value="4" selected> 4 vs 4</option>
+							  </select>
+						  </div>
+
+						  <label for="exampleInputEmail1">RED팀 </label>
+						  <div class="input-group mb-3">
+							<span class="input-group-text">클럽이름</span>
+							<input type="text" id="matchinfo_red_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{club.club_name}}" >
+						</div>
+						<div class="input-group mb-3" id="matchinfo_redteam_member">
+							<div class="input-group mb-3">
+								<span class="input-group-text">고가평균</span>
+								<input type="text" id="matchinfo_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="RED팀 고가평균" aria-describedby="button-addon2" step="2"  required>
+							</div>
+							
+							<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
+							<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
+							<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
+							<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value=""  required>	
+							<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{match.red_player_name.0}}" data-p2="{{match.red_player_name.1}}" data-p3="{{match.red_player_name.2}}" data-p4="{{match.red_player_name.3}}" data-player_num="4" >라이더수정</button>
+						</div>
+						<label for="exampleInputEmail1">BLUE팀</label>
+						<div class="input-group mb-3">
+							<span class="input-group-text">클럽이름</span>
+							<input type="text" id="matchinfo_blue_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{match.club_blue_name}}" >
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group mb-3">
+								<span class="input-group-text">고가평균</span>
+								<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2"  required title="00:00:00">
+							</div>
+							<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2"  required>
+							<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2"  required>
+							
+							<input type="text" id="matchinfo_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2"  required>
+						
+							
+							<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2"  required>
+						</div>
+						<label for="exampleInputEmail1">경기정보</label>
+						<div class="input-group mb-3">
+							<span class="input-group-text">희망날짜</span>
+							<input type="date" id="matchinfo_match_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2"  required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">시작시간</span>
+							<input type="time" id="matchinfo_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2"   required>
+							<span class="input-group-text">종료시간</span readonly>
+							<input type="time" id="matchinfo_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">RED WIN</span>
+							<input type="number" id="matchinfo_red_win" class="form-control" placeholder="RED팀 승리" aria-label="WIN" aria-describedby="button-addon2"  required>
+							<span class="input-group-text">Blue WIN</span readonly>
+							<input type="number" id="matchinfo_blue_win" class="form-control" placeholder="BLUE팀 승리" aria-label="WIN" aria-describedby="button-addon2" required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">비밀번호</span>
+							<input type="text" id="matchinfo_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
+						</div>
+					</div><!-- matchinfo body끝-->
+					<div class="container-fluid" id="matchinfo_footer" style="">
+						<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:match' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
+						<button type="button" id="matchinfo_save_btn" class="btn btn-secondary bg-dark">저장</button>
+					</div>
+				</form>
+			</div><!--AdminMatchForm 끝-->
+
 		</div><!--middle container 끝-->
 
 
@@ -187,70 +278,58 @@
 		</nav>
 		<!--하단 탭바 끝-->
 	
-
-<!--친선경기 신청 모달-->
-<div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_fmatch_title">친선경기 신청 </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form>
-      <div class="modal-body">
-      	<div class="input-group mb-3">
-			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" required>
+<!--라이더변경 모달-->
+<div class="modal fade" id="modal_redteam_member" tabindex="-1">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">RED팀 라이더 변경</h5>
+		  <button type="button" name="modal_redteam_close_btn" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
 		</div>
-			<div class="input-group mb-3">
-			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2" required>
+		<div class="modal-body" style="height:30vh;">
+		  <div class="container-fluid" style="padding:0; height:100%;" >
+			  <div style="border : solid gray 1px; float:left; width:45%; height :100%; display:inline-block; overflow: auto;">
+				  <div class="container" style="text-align: center; padding-top:3%;"><h6>참가 라이더</h6></div>
+				  <table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_left" style="border : none;">
+					  <thead class="thead-light" >
+						  <tr >
+							  <td style="text-align:center; background-color: #e9ecef; position:sticky; top:0; font-size:0.8rem" class="td-sm"></td>
+							  <td style="text-align:center; background-color: #e9ecef; position:sticky; top:0; font-size:0.8rem" class="td-sm">라이더 닉네임</td>
+						  </tr>
+					  </thead>
+					  <tbody name="modal_tbody_redteam_player">
+						  
+					  </tbody>
+				  </table>
+			  </div>
+			  <div style="min-width:1%;  max-width: 10%; width: 10%; height:100%; display: inline-block;">        		
+				  <i id="modal_floor_arrow_right_btn" class="far fa-arrow-alt-circle-right" onclick='move_modal_floor_unused_used(1)' style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
+				  <i id="modal_floor_arrow_left_btn" class="far fa-arrow-alt-circle-left" onclick='move_modal_floor_used_unused(1)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
+			  </div>
+			  <div style="border : solid gray 1px; float:right; width:45%; height :100%; display:inline-block; overflow: scroll;">
+				  <div class="container" style="text-align: center; padding-top:3%;"><h6>후보 라이더</h6></div>
+				  <table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_right" style="border : none;">
+					  <thead class="thead-light" >
+						  <tr>
+							  <td style="text-align:center; background-color: #e9ecef; position:sticky; top:0; font-size:0.8rem;"></td>
+							  <td style="text-align:center; background-color: #e9ecef; position:sticky; top:0; font-size:0.8rem;" class="td-sm">라이더 닉네임</td>
+						  </tr>
+					  </thead>
+					  <tbody name="modal_tbody_redteam_subplayer">
+					  </tbody>
+				  </table>
+			  </div>
+		  </div><!--table container 끝-->
+		</div><!--modal body 끝-->
+		<div class="modal-footer">
+		  <button type="button"  name="modal_redteam_close_btn" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
+		  <button type="button" id="modal_redteam_save_btn" class="btn btn-secondary bg-dark">저장</button>
 		</div>
-      	<div class="input-group mb-3">
-      		<span class="input-group-text">경기 인원</span>
-      		<select id="modal_fmatch_select" class="form-control" required>
-      			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
-      			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
-      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
-      		</select>
-      	</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">라이더</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">고가 평균</span>
-			<input type="text" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="시작시간" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" required>
-			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2" required>
-		</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_fmatch_btn" class="btn btn-secondary bg-dark">신청하기</button>
-      </div>
-  </form>
-    </div>
+	  </div>
+	</div>
   </div>
-</div>
-
 
 <!--기록 추가 모달-->
 <div class="modal fade" id="modal_record" tabindex="-1" aria-labelledby="modal_record_title" aria-hidden="true">
@@ -365,126 +444,6 @@
 			return true;
 		}
 
-		//경기신청 버튼
-		$(document).on('click','#modal_fmatch_btn',function(e) {
-			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
-			var formData = new FormData();
-			var post_writer = $('#modal_fmatch_name').val();
-			var club_name = $('#modal_fmatch_clubname').val();
-			var match_date = $('#modal_fmatch_date').val();
-			var match_time_start = $('#modal_fmatch_time_start').val();
-			var match_time_end = $('#modal_fmatch_time_end').val();
-			var player_num = $('#modal_fmatch_select').val();
-			var passwd = $('#modal_fmatch_passwd').val();
-			var player = Array();
-			var date = getTime();
-			var player_count=0;
-			
-			for(var i = 0; i <player_num; i++) {
-					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
-					if($.trim(player[i]) != '') {
-						player_count++;
-						console.log("player["+i+"]:"+player[i]);
-					}
-			}
-
-
-			if( $.trim(club_name) == '') {
-				return swal("클럽명을 입력해주세요");
-			}
-			else if($.trim(post_writer) == '') {
-				return swal("카러플 닉네임을 입력해주세요");
-			}
-			else if(player_num != player_count){
-				console.log("player_num :"+player_num)
-				console.log("player_num input :"+player.length)
-				return swal("라이더를  입력해 주세요");
-			}
-			else if(!(match_date)){
-				console.log("match date : "+match_date)
-				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
-			}
-			else if(match_date_form_check(match_date) == false){
-				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
-			}
-			else if(goga_form_check(blue_goga_avg) == false) {	
-				return swal("고가 입력 양식 00:00:00");
-			} 
-			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
-				return swal("시간 입력 양식 ex) 11:11")
-			}
-			else if(!(match_time_start))
-				return swal("시작 시간을 입력해주세요");
-			else if(!(match_time_end))
-				return swal("종료 시간을 입력해주세요");
-			else if(match_time_start > match_time_end)
-				return swal("시작시간이 종료시간보다 늦습니다!");
-			else if(!(passwd))
-				return swal("비밀번호를 입력해주세요");
-
-			console.log("match date : "+match_date);
-			console.log(match_time_start);
-			console.log(match_time_end);
-
-			swal({
-				title: "이길 수 있겠어?",
-				text: "무르기 없기~",
-				icon: "warning",
-				buttons: true,
-				dangerMode: true,
-			})
-			.then((willDelete) => {
-				if (willDelete) {
-
-					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-					formData.append('p1',player[0]);
-					formData.append('p2',player[1]);
-					formData.append('p3',player[2]);
-					formData.append('p4',player[3]);
-					formData.append('post_writer',post_writer);
-					formData.append('club_name',club_name);
-					formData.append('match_date',match_date);
-					formData.append('match_time_start',match_time_start);
-					formData.append('match_time_end',match_time_end);
-					formData.append('player_num',player_num);
-					formData.append('passwd',passwd);
-					formData.append('blue_goga_avg',blue_goga_avg);
-					formData.append('date',date);
-					console.log("date : "+date)
-					$.ajax({
-						url : "{% url 'hzm:ajax_add_fmatch' %}",
-						type : 'POST',
-						contentType : false,
-						processData : false,
-						data : formData,
-						success : function(data) {
-							$('#friendlymatch').modal('hide');
-							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
-							
-						},
-						error : function(error) {
-							swal("신청실패", "아마도 통신오류??..", "error");
-							$('#friendlymatch').modal('hide');
-						},
-					});
-
-
-
-				} else {
-					swal("담에 봐요!");
-					$('#friendlymatch').modal('hide');
-				}
-			});
-
-		});
-
-		//하단 마이룸 버튼 클릭
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
 
 
 		//로그아웃 버튼 클릭
@@ -502,25 +461,6 @@
 			})
 		});
 
-		
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		});
 		//개인 기록 테이블
 		function create_record_table(data,num) {
 			var rank;
@@ -560,9 +500,18 @@
 
 			 	/*검색기능*/
 		$(document).ready(function(){
-			$("#keyword_mapname").on("keyup", function() {
+			$("#keyword_record").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
 				$("#record_table_tbody tr").filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
+
+		$(document).ready(function(){
+			$("#keyword_player").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("#club_player_table_tbody tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});
@@ -690,6 +639,324 @@
 				},
 			});
 		});
+		//클럽소개 저장버튼
+		$(document).on('click','#ClubDescriptionBtn',function(){
+			var description=$('#ClubDescription').val();
+			console.log(description)
+
+			$.ajax({
+				url:"{% url 'hzm:ajax_save_club_description' %}",
+				type:'POST',
+				data : {
+					'csrfmiddlewaretoken':"{{csrf_token}}",
+					'description':description,
+				},
+				success: function(data){
+					swal("저장성공")
+				},
+				error: function(error) {
+					swal("저장실패")
+				}
+			})
+		});
+
+		//경기 정보 저장 버튼
+		$(document).on('click','#matchinfo_save_btn',function(e) {
+			var player_num=$('#matchinfo_player_num').val();
+			var post_writer=$('#matchinfo_postwriter').val()
+			var passwd=$('#matchinfo_passwd').val()
+
+			var red_club_name=$('#matchinfo_red_club_name').val();
+			console.log(red_club_name)
+			var red_club_id="{{club.pk}}";
+			console.log(red_club_id)
+			var red_p1=$('#matchinfo_red_p1_name').val();
+			var red_p2=$('#matchinfo_red_p2_name').val();
+			if(player_num>=3) var red_p3=$('#matchinfo_red_p3_name').val();
+			if(player_num>=4) var red_p4=$('#matchinfo_red_p4_name').val();
+			
+			var blue_club_name=$('#matchinfo_blue_club_name').val();
+			console.log(blue_club_name)
+			var blue_p1=$('#matchinfo_blue_p1_name').val();
+			var blue_p2=$('#matchinfo_blue_p2_name').val();
+			if(player_num>=3) var blue_p3=$('#matchinfo_blue_p3_name').val();
+			if(player_num>=4) var blue_p4=$('#matchinfo_blue_p4_name').val();
+			
+			var match_date=$('#matchinfo_match_date').val();
+			var time_start=$('#matchinfo_time_start').val();
+			var time_end=$('#matchinfo_time_end').val();
+			var red_goga_avg=$('#matchinfo_red_goga_avg').val();
+			var blue_goga_avg=$('#matchinfo_blue_goga_avg').val();
+			var match_pk="{{match.pk}}";
+
+			var red_win =$('#matchinfo_red_win').val();
+			var blue_win =$('#matchinfo_blue_win').val();
+			var date = getTime();
+
+			var team="all"
+
+			if( team=="red" || team=="all") {
+				if($.trim(red_club_name) == '')return swal("RED팀 클럽명을 입력해주세요")
+				if(goga_form_check(red_goga_avg)==false )return swal("RED팀 고가 양식 00:00:00");
+				else if($.trim(red_p1) == '') return swal("RED 라이더1 을 입력해주세요.");
+				else if($.trim(red_p2) == '') return swal("RED 라이더2 을 입력해주세요.");
+				if(player_num >=3 && $.trim(red_p3) == '') return swal("RED 라이더3 을 입력해주세요.");
+				if(player_num >=4 && $.trim(red_p4) == '') return swal("RED 라이더4 을 입력해주세요.");
+			}
+		
+			 
+			if( team=="blue" || team=="all") {
+				if($.trim(blue_club_name) == '')return swal("BLUE팀 클럽명을 입력해주세요");
+				if(goga_form_check(blue_goga_avg)==false )return swal("BLUE팀 고가 양식 00:00:00");
+				else if($.trim(blue_p1) == '') return swal("BLUE 라이더1 을 입력해주세요.");
+				else if($.trim(blue_p2) == '') return swal("BLUE 라이더2 을 입력해주세요.");
+				if(player_num >=3 && $.trim(blue_p3) == '') return swal("BLUE 라이더3 을 입력해주세요.");
+				if(player_num >=4 && $.trim(blue_p4) == '') return swal("BLUE 라이더4 을 입력해주세요.");
+			}
+
+			if(match_date_form_check(match_date) == false) return swal("날짜 입력 양식 ex)2020-01-01");
+			if(!(time_start)) return swal("시작 시간을 입력해 주세요");
+			else if(!(time_end)) return swal("종료 시간을 입력해 주세요");
+			else if(time_form_check(time_start) == false || time_form_check(time_end)==false) return swal("시간 입력 양식 ex)00:00 ")
+			else if(time_start > time_end) return swal("시작시간이 종료시간보다 늦습니다!");
+			else if($.trim(red_win) == '') return swal("RED팀 승리횟수 입력");
+			else if($.trim(blue_win) == '') return swal("BLUE팀 승리횟수 입력")
+			
+				
+
+			$.ajax({
+				url : "{% url 'hzm:ajax_admin_save_match_info' %}",
+				type : 'POST',
+				data:{
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+					'match_pk' : match_pk,
+					'red_p1_name' : red_p1,
+					'red_p2_name' : red_p2,
+					'red_p3_name' : red_p3,
+					'red_p4_name' : red_p4,
+					'blue_p1_name' : blue_p1,
+					'blue_p2_name' : blue_p2,
+					'blue_p3_name' : blue_p3,
+					'blue_p4_name' : blue_p4,
+					'match_date' : match_date,
+					'time_start':time_start,
+					'time_end':time_end,
+					'red_goga_avg':red_goga_avg,
+					'blue_goga_avg' :blue_goga_avg,
+					'player_num':player_num,
+					'red_win':red_win,
+					'blue_win':blue_win,
+					'red_club_id':red_club_id,
+					'red_club_name':red_club_name,
+					'blue_club_name':blue_club_name,
+					'passwd':passwd,
+					'post_writer':post_writer,
+					'date':date,
+				},
+				success : function(msg){
+					swal("저장완료","success").then((value)=>{ location.reload();})
+				}
+			});
+		})
+
+		//라이더 숫자 바뀔때 
+		$('#matchinfo_player_num').change(function(e) {
+			var state=$('#matchinfo_player_num option:selected').val();
+			var team="all"
+			$(this).val(state);
+			console.log("change team : "+team + state);
+			
+			if( team=="red" || team=="all" ){
+				if( state== '2'){
+					$('#matchinfo_red_p3_name').attr('disabled',true);
+					$('#matchinfo_red_p4_name').attr('disabled',true);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+
+				}
+				else if( state== '3'){
+					$('#matchinfo_red_p3_name').attr('disabled',false);
+					$('#matchinfo_red_p4_name').attr('disabled',true);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+				}
+				else if( state== '4'){
+					console.log("state:"+state)
+					$('#matchinfo_red_p3_name').attr('disabled',false);
+					$('#matchinfo_red_p4_name').attr('disabled',false);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+				}
+			}
+			if( team=="blue" || team=="all" ){
+				if( state== '2'){
+					$('#matchinfo_blue_p3_name').attr('disabled',true);
+					$('#matchinfo_blue_p4_name').attr('disabled',true);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+				}
+				else if( state== '3'){
+					console.log("change")
+					$('#matchinfo_blue_p3_name').attr('disabled',false);
+					$('#matchinfo_blue_p4_name').attr('disabled',true);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+				}
+				else if( state== '4'){
+					$('#matchinfo_blue_p3_name').attr('disabled',false);
+					$('#matchinfo_blue_p4_name').attr('disabled',false);
+					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
+				}
+			}
+		})
+		function create_redteam_player(player_name) {
+			player_num = $('#matchinfo_redteam_member_edit_btn').attr('data-player_num');
+			console.log("player_nim:" + player_num)
+			if(player_name=="None")
+				return;
+			$('tbody[name=modal_tbody_redteam_player]').append('<tr name="modal_tobody_tr_red_player">\
+				<td><input type="checkbox"></input></td>\
+				<td name="regular" data-player_name="'+player_name+'" 	data-player_num='+player_num+'>'+player_name+'</td>\
+				</tr>')
+
+		}
+		function create_redteam_subplayer(player_name) {
+			if(player_name=="None")
+				return;
+			$('tbody[name=modal_tbody_redteam_subplayer]').append('<tr name="modal_tobody_tr_red_subplayer" >\
+				<td><input type="checkbox"></input></td>\
+				<td name="sub" data-player_name="'+player_name+'" data-player_num='+player_num+'>'+player_name+'</td>\
+				</tr>')
+
+		}
+
+		$(document).on('click','#matchinfo_redteam_member_edit_btn',function(e) {
+			console.log("ddd")
+			player_num=$(this).attr('data-player_num');
+			red_p1=$('#matchinfo_red_p1_name').val();
+			red_p2=$('#matchinfo_red_p2_name').val();
+			red_p3=$('#matchinfo_red_p3_name').val();
+			red_p4=$('#matchinfo_red_p4_name').val();
+			club_id="{{club.pk}}"
+
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_redteam_subplayer' %}",
+				type: 'GET',
+				dataType: 'json',
+				data : {
+					'player_num' : player_num,
+					'red_p1' :red_p1,
+					'red_p2' :red_p2,
+					'red_p3' :red_p3,
+					'red_p4' :red_p4,
+					'club_id' :club_id,
+				},
+				success:function(data) {
+					for(var i=0; i<data.length ; i++){
+						create_redteam_subplayer(data[i].player_name);
+					}
+				}
+			});
+
+
+			$.ajax({
+				url: "{% url 'hzm:ajax_get_redteam_player' %}",
+				type: 'GET',
+				dataType: 'json',
+				data : {
+					'player_num' : player_num,
+					'red_p1' :red_p1,
+					'red_p2' :red_p2,
+					'red_p3' :red_p3,
+					'red_p4' :red_p4,
+					'club_id' :club_id,
+				},
+				success:function(data) {
+					for(var i=0; i<data.length ; i++){
+						create_redteam_player(data[i].player_name);
+					}
+				}
+			});
+			
+		});
+
+		$(document).on('click','td[name=regular]',function(e) {
+			console.log("regular");
+			var player = $(this).text();
+			create_redteam_subplayer(player);
+			$(this).parent().remove();
+		});
+
+		$(document).on('click','td[name=sub]',function(e) {
+			console.log("sub");
+			check_player_num=$('td[name=regular]')
+			player_num=$(this).attr('data-player_num');
+			console.log(check_player_num.length)
+			console.log(player_num)
+
+			if(check_player_num.length < player_num){
+				console.log(check_player_num)
+
+			var player = $(this).text();
+			create_redteam_player(player);
+			$(this).parent().remove();
+			}
+			else{
+				swal("인원초과");
+			}
+
+		});
+
+		function init_modal_redteam(){
+			$('tbody[name=modal_tbody_redteam_player]').empty();
+			$('tbody[name=modal_tbody_redteam_subplayer]').empty();
+		}
+		//라이더 수정 모달 초기화
+		$(document).keydown(function(event) {
+			init_modal_redteam();
+			$('#modal_redteam_member').modal('hide');
+		});
+
+		$(document).on('click','button[name=modal_redteam_close_btn]',function(e){
+			init_modal_redteam();
+			$('#modal_redteam_member').modal('hide');
+		});
+
+		$(document).on('click','#modal_redteam_save_btn',function(e){
+			players=$('tbody td[name=regular]');
+			var player_num=players.length;
+			var red_p1;
+			var red_p2;
+			var red_p3;
+			var red_p4;
+
+
+			$('#matchinfo_red_p1_name').val('');
+			$('#matchinfo_red_p2_name').val('');
+			$('#matchinfo_red_p3_name').val('');
+			$('#matchinfo_red_p4_name').val('');
+
+			if(player_num>=1) $('#matchinfo_red_p1_name').val(players[0].dataset.player_name);
+			if(player_num>=2) $('#matchinfo_red_p2_name').val(players[1].dataset.player_name);
+			if(player_num>=3) $('#matchinfo_red_p3_name').val(players[2].dataset.player_name);
+			if(player_num>=4) $('#matchinfo_red_p4_name').val(players[3].dataset.player_name);
+			init_modal_redteam();
+			$('#modal_redteam_member').modal('hide');
+		})
+		//라이더 이름 불러오기
+
+		$(document).ready(function(e) {
+			var player_num="{{match.player_num}}";
+			var red_p3_name="{{match.red_player_name.2}}";
+			var red_p4_name="{{match.red_player_name.3}}";
+			var blue_p3_name="{{match.blue_player_name.2}}";
+			var blue_p4_name="{{match.blue_player_name.3}}";
+			console.log("blue"+blue_p4_name);
+			if(player_num >= 3){ 
+				if(red_p3_name != "None") $('#matchinfo_red_p3_name').val(red_p3_name);
+				$('#matchinfo_blue_p3_name').val(blue_p3_name);
+			}
+			if(player_num >=4) {
+				if(red_p4_name != "None") $('#matchinfo_red_p4_name').val(red_p4_name);
+				$('#matchinfo_blue_p4_name').val(blue_p4_name);
+			}
+		});
+
 	</script>
 	
 </body>
