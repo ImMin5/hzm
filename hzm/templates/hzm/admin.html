@@ -15,7 +15,7 @@
 
 
 	 <!--커스텀-->
-	 <link rel="stylesheet" type="text/css" href="/static/css/admin.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/admin.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
@@ -478,12 +478,10 @@
 				success:function(data){
 					rank=data.rank;
 					best_record=data.best_record;
-					console.log("rank");
 				},
 				error:function(error){
 				},
 			})
-			console.log("data")
 			$('#record_table_tbody').append('<tr>\
 				<td style="text-align:center;">'+num+'</td>\
 				<td style="text-align:center;">'+data.map_name+'</td>\
@@ -582,7 +580,6 @@
 		$(document).on('click','button[name=club_player_table_tbody_tr_td]',function(e) {
 			
 			var player_name=$(this).attr('data-player_name');
-			console.log(player_name)
 			$.ajax({
 				url: "{% url 'hzm:ajax_accept_player' %}",
 				type:'GET',
@@ -590,7 +587,6 @@
 					'player_name' : player_name,
 				},
 				success : function(data) {
-					console.log(data)
 					$('#tr_'+data).remove();
 	
 				},
