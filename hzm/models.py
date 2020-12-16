@@ -17,19 +17,20 @@ SIZE_CLUB_NAME = 12
 SIZE_RECORD = 8
 
 #SCHEDULE
-SIZE_TITLE = 12
+SIZE_TITLE = 30
 #MATCH 
 SIZE_STATE =4
 
 #FREEBOARD
-SIZE_FREEBOARD_DESCRIPTION=500
+SIZE_FREEBOARD_DESCRIPTION=1000
+SIZE_POST_COMMENT=200
 
 
 #공통
 SIZE_POST_TITLE=20
 SIZE_DATE = 10
-SIZE_TIME = 8
-SIZE_DATE_TIME = 19
+SIZE_TIME = 11
+SIZE_DATE_TIME = 22
 SIZE_DESCRIPTION =300
 
 
@@ -111,6 +112,15 @@ class Freeboard(models.Model) :
 	club=models.ForeignKey('Club', on_delete=models.SET_NULL, blank=True, null=True)
 	post_writer=models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
 	title = models.CharField(max_length=SIZE_POST_TITLE, blank=True, null= True)
-	date=models.CharField(max_length=SIZE_DATE, blank=True, null= True)
+	date=models.CharField(max_length=SIZE_DATE_TIME, blank=True, null= True)
 	view = models.IntegerField(default=0, blank=True, null=True)
 	description=models.TextField(max_length=SIZE_FREEBOARD_DESCRIPTION, blank=True, null= True)
+	notice=models.BooleanField(default=False)
+	comment_count=models.IntegerField(default=0,blank=True, null= True)
+
+class Freeboardcomment(models.Model) :
+	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	post=models.ForeignKey('Freeboard', on_delete=models.SET_NULL, blank=True, null=True)
+	player_name = models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
+	date=models.CharField(max_length=SIZE_DATE_TIME, blank=True, null= True)
+	comments=models.CharField(max_length=SIZE_POST_COMMENT,blank=True, null = True)

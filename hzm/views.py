@@ -12,6 +12,9 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Q
 #from datetime import datetime
 # Create your views here.
+SIZE_FREEBOARD_DESCRIPTION=1000
+SIZE_POST_COMMENT=200
+
 
 def record_win_lose(player_id,club_id) :
 	matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[player_id]))
@@ -24,7 +27,7 @@ def record_win_lose(player_id,club_id) :
 		else :
 			player.lose += 1
 	player.save()
-	return ;
+	return False
 
 
 
@@ -34,14 +37,16 @@ def main_page(request) :
 	#records=Record.objects.all().order_by('maps_id')
 	#maps=Map.objects.all().order_by('pk')
 
-	
-	
+	freeboard=Freeboard.objects.all().order_by('date')
+	paginator = Paginator(freeboard, 5)
+	freeboards = paginator.get_page(1)
+
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=player.club_id)
-		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club})
+		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club,'freeboards':freeboards})
 	else :
-		return render(request,'hzm/main_page.html')
+		return render(request,'hzm/main_page.html',{'freeboards':freeboards})
 
 def mypage(request) :
 	pk=request.session.get('pk')
@@ -334,11 +339,12 @@ def matchred(request) :
 
 	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })
 def freeboard(request) :
-
+	pk=request.session.get('pk')
 	posts=Freeboard.objects.all().order_by('-date')
 	count = posts.count()
 	paginator = Paginator(posts, 2)
 	pages = request.GET.get('page',1)
+
 
 	try :
 		posts = paginator.get_page(pages)
@@ -347,14 +353,35 @@ def freeboard(request) :
 	except EmptyPage :
 		posts = paginator.page(paginator.num_pages)
 		return HttpResponse("end")
-
-	return render(request,'hzm/freeboard.html',{'count':count,'posts':posts})
+	
+	if pk is not None :
+		club_id=request.session.get('pk')
+		club=Club.objects.get(pk=club_id)
+		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk, 'club':club})
+	else :
+		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk})
 
 def freeboard_info(request,post_pk) :
+	print(SIZE_POST_COMMENT)
 	try :
 		pk=request.session.get('pk')
+		if pk is not None :
+			player=Player.objects.get(pk=pk)
 		post=Freeboard.objects.get(pk=post_pk)
-		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post})
+		comments=Freeboardcomment.objects.filter(post_id=post.pk).order_by('date')
+		club=Club.objects.get(pk=post.club_id)
+		return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+
 	except Exception as e :
-		return redirect('hzm:error')
+		print(e)
+		return redirect('hzm:error_page')
+def freeboard_write(request) :
+	pk=request.session.get('pk')
+	try :
+		player=Player.objects.get(pk=pk)
+		club=Club.objects.get(pk=player.club_id)
+		return render(request,'hzm/freeboard_form.html',{'pk':pk,'player':player,'club':club,'maxlength':SIZE_DESCRIPTION})
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
 	

@@ -56,6 +56,9 @@ urlpatterns = [
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 	path('freeboard/',views.freeboard,name='freeboard'),
+	path('freeboard/write',views.freeboard_write,name='freeboard_write'),
 	path('freeboard/<int:post_pk>/',views.freeboard_info,name='freeboard_info'),
-	path('api/save_club_description',apis.save_club_description,name='ajax_save_club_description')
+	path('api/save_club_description',apis.save_club_description,name='ajax_save_club_description'),
+	path('api/add_freeboard_comment',apis.add_freeboard_comment ,name='ajax_add_freeboard_comment'),
+	path('api/add_freeboard_writing',apis.add_freeboard_writing ,name='ajax_add_freeboard_writing'),
 ]

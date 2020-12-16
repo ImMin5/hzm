@@ -1,6 +1,6 @@
 
 #middle-container{
-	height:100vh;
+	min-height:100vh;
     overflow:scroll;
     padding-top:5%;
 }
