@@ -1,5 +1,5 @@
 #navbar_top{
-	max-height:10vh;
+
 }
 @media (min-width:1024px){
 	#navbar_top{
@@ -19,10 +19,10 @@
 		top:0;
 	}
 	#navbar_top #navbar_club_name{
-		font-size:4.1rem;
+		font-size:4rem;
 	}
 	#navbarNav a{
-		font-size:2.2rem;
+		font-size:2.36rem;
 	
 	}
 }

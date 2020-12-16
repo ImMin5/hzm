@@ -14,7 +14,7 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard_info.css?1">
 
 
 	 <!--폰트 어썸-->
@@ -74,48 +74,68 @@
 
 		<!--middle container-->
 		<div id="middle-container" class="container-fluid">
-            <div class="container-fluid" style="padding-top:5%;">
-				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-                    <h3>{{post.title}}</h3>
-                    <div id="WirterInfo">
+			<!--본문시작-->
+			<div id="ArticleWrap" class="container-fluid" >
+				<!-- POST HEADR-->
+				<div id="article-header" class="container-fluid">
+					<div id="TittleBox">
+						<h6><a href="{% url 'hzm:freeboard' %}">자유게시판 ></a></h6>
+						<h2>{{post.title}}</h2>
+					</div>
+                    <div style="display:inline-block; width:85vw;" id="WirterInfo">
                         <div id="Profile">
-                            <span>{{post.post_writer}}</span><span></span>
-                            <span>{{post.date}}</span>
+                            <div id="ProfileWriter"> 
+								<span style="padding-right:5px;"><b>{{post.post_writer}}</b></span>
+								<span style="padding-right:5px;"><i class="fas fa-crown"></i></span><span>{{club.club_name}}</span>
+							</div>
+                            <div id="ProfileDate"><span>{{post.date}}</span></div>
                         </div>
-                    </div>
+					</div> 
+					<div style="display:inline-block;" id="ArticleTool"><a id="url_copy">URL 복사</a></div>
 
 					<hr>
-				</div>
-				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-					<form>
-						<div class="container-fluid" id="matchinfo_body">
-							
-
-					      
-							
-						</div><!-- matchinfo body끝-->
-						<div class="container-fluid" id="matchinfo_footer" style="">
-							<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:freeboard' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
-							{% if post.player_id == pk %}
-							<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="" style="color:white; text-decoration: none; " >삭제</a></button>
-							<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
-							{% endif %}
-						</div>
-					</form>
-
-					
+				</div><!-- POST HEADER END-->
+				<div class="container-fluid" style="padding:0;">
+					<div id="post_body" class="container-fluid">
+						{{post.description}}
+					</div><!-- post body끝-->
+					<div class="container-fluid" id="matchinfo_footer">
+						<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:freeboard' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
+						{% if post.player_id == pk %}
+						<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="" style="color:white; text-decoration: none; " >삭제</a></button>
+						<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
+						{% endif %}
+					</div>
 					{% if pk %}
-					<div class="container-fluid" style="padding-left:5%; padding-right:5%;"	>
-						<hr>
-						<h4>댓글 </h4>
+					<div class="container-fluid" style="padding:0;">
+						<hr>	
+						<ul id="CommentList">
+							<div class="comment_tab"><h4 class="h4">댓글 </h4></div>
+							{% for comment in comments %}
+							<div class="CommentBox">
+								<li>
+									<div class="CommentArea">
+										<div class="comment_player"><b>{{comment.player_name}}</b></div>
+										<p><span>{{comment.comments}}</span></p>
+										<div class="comment_date">{{comment.date}}</div>
+									</div>
+									<hr>
+								</li>
+							</div>
+							{% endfor %}
+						</ul>
+						
+						<div class="form-floating" style="border:1px solid gray; border-radius:0.3rem;">
+							<span style="font-size:1.1rem; padding:10px;"><b>{{player.player_name}}</b></span>
+							<textarea id="comment" class="form-control" placeholder="댓글을 남겨보세요" style="height: 100px" maxlength="{{maxlength}}"></textarea>
+							<div id="comment-tool"><button id="add_comment" class="btn" style="color:gray; background-color:none; border:none;">등록</button></div>
+						</div>
 					</div>
 					{% endif %}
 				</div>
+			</div><!--본문끝-->
 			
-			</div>
-			
-		</div>
-		<!-- middle container 끝-->
+		</div><!-- middle container 끝-->
 
 		
 
@@ -292,7 +312,44 @@
 				}
 			})
 		});
+		// URL복사
+		function urlClipCopy() {
+			console.log(window.location.href)
+			var dummy   = document.createElement("input");
+			var text    = location.href;
+			document.body.appendChild(dummy);
+			dummy.value = text;
+			dummy.select();
+			document.execCommand("copy");
+			document.body.removeChild(dummy);
+			swal("복사 성공!")	
+		}
 
+		$(document).on('click','#url_copy',function(e) {urlClipCopy()});
+
+		//댓글추가
+		$(document).on('click','#add_comment',function(e) {
+			var comment = $('#comment').val();
+			var post_pk = "{{post.pk}}";
+			var date=getTime();
+
+			console.log(post_pk)
+			console.log(comment)
+			if( $.trim(comment) == '') return swal("내용을 입력해주세요");
+			$.ajax({
+				url : "{% url 'hzm:ajax_add_freeboard_comment' %}",
+				type : 'POST',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+					'comment':comment,
+					'post_pk':post_pk,
+					'date':date,
+				},
+				success:function(data) {
+					location.reload();
+				}
+			})
+		})
 
 	</script>
 	

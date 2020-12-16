@@ -685,7 +685,7 @@ def accept_player(request) :
 	player.save()
 	club.save()
 	
-	return HttpResponse("player_name")
+	return HttpResponse(player_name)
 	
 def reject_player(request) :
 	player_name=request.GET.get('player_name')
@@ -777,3 +777,42 @@ def save_club_description(request) :
 		return HttpResponse("save")
 	except Exception as e :
 		return HttpResponse("fail")
+
+def add_freeboard_comment(request) :
+	pk=request.session.get('pk')
+	player_name=request.session.get('player_name')
+	post_pk=request.POST.get('post_pk')
+	comment=request.POST.get('comment')
+	date=request.POST.get('date')
+	print(post_pk)
+
+	try :
+		freeboard=Freeboard.objects.get(pk=post_pk)
+		freeboard.comment_count += 1
+		freeboard.save()
+		freeboardcomment=Freeboardcomment(player_id=pk,post_id=post_pk,\
+			player_name=player_name,date=date,comments=comment)
+		freeboardcomment.save()
+	except Exception as e :
+		print(e)
+		return HttpResponse("fail")
+
+	return HttpResponse("good")
+
+
+def add_freeboard_writing(request) :
+	pk=request.session.get('pk')
+	club_id=request.session.get('club_id')
+	title=request.POST.get('title')
+	description=request.POST.get('description')
+	date=request.POST.get('date')
+	try :
+		player=Player.objects.get(pk=pk)
+		post=Freeboard(player_id=player.pk,club_id=club_id,post_writer=player.player_name,\
+			title=title,date=date,description=description)
+		post.save()
+
+		return HttpResponse("good")
+	except Exception as e :
+		print(e)
+		return HttpResponse(e)

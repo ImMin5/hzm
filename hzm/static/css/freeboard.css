@@ -1,6 +1,10 @@
 #middle-container {
-    height:90vh;
+    height:100vh;
     
+}
+
+.table{
+    border-collapse:collapse;
 }
 
 #write_post_btn{
