@@ -29,7 +29,7 @@
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-	<title>학지매</title>
+	<title>학지매-개인기록</title>
 </head>
 <body style="height:100%;">
 	
@@ -348,25 +348,7 @@
 		});
 
 	
-		
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		});
+
 
 		//개인 기록 테이블
 		function create_record_table(data,num) {

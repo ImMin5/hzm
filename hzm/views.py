@@ -14,7 +14,7 @@ from django.db.models import Q
 # Create your views here.
 
 def record_win_lose(player_id,club_id) :
-	matches=Match.objects.filter(Q(club_red_id=club_id) & Q(red_player_id__contains=[player_id]))
+	matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[player_id]))
 	player=Player.objects.get(pk=player_id)
 	player.win=0
 	player.lose=0
@@ -131,29 +131,34 @@ def match_info(request,match_pk) :
 	club_id=request.session.get('club_id')
 	
 	try :
-		club=Club.objects.get(pk=club_id)
 		match = Match.objects.get(pk=match_pk)
+		if match.accept == False :
+			return render(request, 'hzm/error.html')
+		if pk :
+			club=Club.objects.get(pk=club_id)
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'club':club})
+		else :
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk})
 	except Exception as e :
 		return render(request, 'hzm/error.html')
-	
-	if match.accept == False :
-		return render(request, 'hzm/error.html')
-	return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'club':club})
 
 def match_before_info(request,match_pk) :
 	
 	try :
 		match=Match.objects.get(pk=match_pk)
+		
 		if match.accept == True :
 			raise("잘못된접근")
+
 		pk=request.session.get('pk')
 		player_name=request.session.get('player_name') 
 		club_id=request.session.get('club_id')
 		club=Club.objects.get(pk=club_id)
 		try :			
-			if match.club_red_id != club_id :
+			if match.red_club_id != club.pk :
 				return render(request,'hzm:main_page.html')
 		except Exception as e:
+			print(e)
 			return render('hzm:error')
 
 
@@ -187,7 +192,7 @@ def match_before(request) :
 	except Exception as e :
 		return redirect('/')
 
-	matches = Match.objects.all().filter(Q(accept=False) & Q(club_red_id=club_id)).order_by('-pk')
+	matches = Match.objects.all().filter(Q(accept=False) & Q(red_club_id=club_id)).order_by('-pk')
 	count = matches.count()
 	paginator = Paginator(matches, 2)
 	pages = request.GET.get('page',1)
@@ -266,7 +271,7 @@ def match_filter(request) :
 	else :
 		posts = Post_list.objects.all().filter(Q(accept=True)).order_by('-pk')
 
-	count = posts.count();
+	count = posts.count()
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
@@ -311,9 +316,13 @@ def club_admin(request,club_pk) :
 		club=Club.objects.get(pk=club_pk)
 		if club.host != player_name :
 			raise Exception('잘못된 접근입니다')
+
 		players=Player.objects.filter(club_id=club.pk)
 		maps=Map.objects.all().order_by('map_name')
 		records=Record.objects.all().order_by('player_id')
+		if pk == 1 :
+			clubs=Club.objects.all().order_by('pk')
+			return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'clubs':clubs,'club':club})
 		return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'club':club})
 	except Exception as e :
 		return redirect('/')
@@ -326,4 +335,26 @@ def matchred(request) :
 	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })
 def freeboard(request) :
 
-	return render(request,'hzm/freeboard.html')
+	posts=Freeboard.objects.all().order_by('-date')
+	count = posts.count()
+	paginator = Paginator(posts, 2)
+	pages = request.GET.get('page',1)
+
+	try :
+		posts = paginator.get_page(pages)
+	except PageNotAnInteger :
+		posts = paginator.page(1)
+	except EmptyPage :
+		posts = paginator.page(paginator.num_pages)
+		return HttpResponse("end")
+
+	return render(request,'hzm/freeboard.html',{'count':count,'posts':posts})
+
+def freeboard_info(request,post_pk) :
+	try :
+		pk=request.session.get('pk')
+		post=Freeboard.objects.get(pk=post_pk)
+		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post})
+	except Exception as e :
+		return redirect('hzm:error')
+	

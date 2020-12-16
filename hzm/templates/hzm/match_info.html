@@ -23,7 +23,7 @@
 	 <!--알림창-->
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	
-	<title>학지매</title>
+	<title>학지매-경기정보</title>
 
 
 </head>
@@ -75,7 +75,7 @@
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:5%;">
 				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-					<h1 class="display-4">[#{{match.pk}}] {{match.club_red_name}} vs {{match.club_blue_name}}</h1>
+					<h1 class="display-4">[#{{match.pk}}] {{match.red_club_name}} vs {{match.blue_club_name}}</h1>
 					<h6>작성자 :	{{match.post_writer}}</h6>
 					<hr>
 				</div>
@@ -99,7 +99,7 @@
 					      		</select>
 					      	</div>
 
-					      	<label for="exampleInputEmail1">RED팀 {{match.club_red_name}}</label>
+					      	<label for="exampleInputEmail1">RED팀 {{match.red_club_name}}</label>
 							<div class="input-group mb-3" id="matchinfo_redteam_member">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
@@ -120,7 +120,7 @@
 								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>	
 								<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{match.red_player_name.0}}" data-p2="{{match.red_player_name.1}}" data-p3="{{match.red_player_name.2}}" data-p4="{{match.red_player_name.3}}" data-player_num="{{match.player_num}}" disabled>라이더수정</button>
 							</div>
-							<label for="exampleInputEmail1">BLUE팀 {{match.club_blue_name}}</label>
+							<label for="exampleInputEmail1">BLUE팀 {{match.blue_club_name}}</label>
 							<div class="input-group mb-3">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
@@ -151,7 +151,7 @@
 						</div><!-- matchinfo body끝-->
 						<div class="container-fluid" id="matchinfo_footer" style="">
 							<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:match' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
-							{% if club.pk == match.club_red_id %}
+							{% if club.pk == match.red_club_id %}
 							<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="{% url 'hzm:delete_match_info' match.pk %}" style="color:white; text-decoration: none; " >삭제</a></button>
 							<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
 							<button type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-secondary bg-dark" style="float:right;" data-red_p1_name="{{match.red_player_name.0}}" data-red_p2_name="{{match.red_player_name.1}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
@@ -160,7 +160,7 @@
 					</form>
 
 					
-					{% if match.club_red_id == club.pk %}
+					{% if match.red_club_id == club.pk %}
 					<div class="container-fluid" style="padding-left:5%; padding-right:5%;"	>
 						<hr>
 						<h4>댓글 </h4>
@@ -336,7 +336,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">[ {{match.club_red_name}} vs {{match.club_blue_name}} ] 결과 입력 </h5>
+      		<h5 class="modal-title" id="staticBackdropLabel">[ {{match.red_club_name}} vs {{match.blue_club_name}} ] 결과 입력 </h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
@@ -461,9 +461,6 @@
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
-
-			console.log(player_name);
-			console.log(player_passwd);
 			$.ajax({
 				url:"{% url 'hzm:ajax_signin' %}",
 				type:'POST',
@@ -474,7 +471,6 @@
 
 				},
 				success:function(msg) {
-					console.log("login: "+msg);
 					if( msg=="login_fail1") {
 						return swal("존재하지 않는 아이디입니다");
 					}
@@ -551,9 +547,6 @@
 			var pk = "{{match.pk}}"
 			var post_passwd = $('#matchinfo_passwd').val();
 			var player_num = "{{match.player_num}}"
-			console.log(post_passwd);
-			console.log(pk);
-
 			$.ajax({
 				url : "{% url 'hzm:ajax_check_post_passwd' %}",
 				type:'POST',
@@ -565,7 +558,6 @@
 				success : function(data) {
 
 					$('#matchinfo_passwd').val('')
-					console.log(data);
 					if(data.team == "red"){
 						read_common();
 						read_red(player_num);
@@ -753,7 +745,6 @@
 			var state=$('#matchinfo_player_num option:selected').val();
 			var team=$('#matchinfo_player_num').attr('data-team');
 			$(this).val(state);
-			console.log("change team : "+team + state);
 			
 			if( team=="red" || team=="all" ){
 				if( state== '2'){
@@ -768,7 +759,6 @@
 					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
 				}
 				else if( state== '4'){
-					console.log("state:"+state)
 					$('#matchinfo_red_p3_name').attr('disabled',false);
 					$('#matchinfo_red_p4_name').attr('disabled',false);
 					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
@@ -781,7 +771,6 @@
 					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
 				}
 				else if( state== '3'){
-					console.log("change")
 					$('#matchinfo_blue_p3_name').attr('disabled',false);
 					$('#matchinfo_blue_p4_name').attr('disabled',true);
 					$('#matchinfo_redteam_member_edit_btn').attr('data-player_num',state)
@@ -794,32 +783,10 @@
 			}
 		})
 
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		})
-		//경기정보 수정페이지에서 참여인원수 확인
-
-
-
+		
 		//
 		function create_redteam_player(player_name) {
 			player_num = $('#matchinfo_redteam_member_edit_btn').attr('data-player_num');
-			console.log("player_nim:" + player_num)
 			if(player_name=="None")
 				return;
 			$('tbody[name=modal_tbody_redteam_player]').append('<tr name="modal_tobody_tr_red_player">\
@@ -839,7 +806,6 @@
 		}
 
 		$(document).on('click','#matchinfo_redteam_member_edit_btn',function(e) {
-			console.log("ddd")
 			player_num=$(this).attr('data-player_num');
 			red_p1=$('#matchinfo_red_p1_name').val();
 			red_p2=$('#matchinfo_red_p2_name').val();
@@ -889,21 +855,21 @@
 		});
 
 		$(document).on('click','td[name=regular]',function(e) {
-			console.log("regular");
+			//console.log("regular");
 			var player = $(this).text();
 			create_redteam_subplayer(player);
 			$(this).parent().remove();
 		});
 
 		$(document).on('click','td[name=sub]',function(e) {
-			console.log("sub");
+			//console.log("sub");
 			check_player_num=$('td[name=regular]')
 			player_num=$(this).attr('data-player_num');
-			console.log(check_player_num.length)
-			console.log(player_num)
+			//console.log(check_player_num.length)
+			//console.log(player_num)
 
 			if(check_player_num.length < player_num){
-				console.log(check_player_num)
+				//console.log(check_player_num)
 
 			var player = $(this).text();
 			create_redteam_player(player);
@@ -954,7 +920,6 @@
 			var red_p4_name="{{match.red_player_name.3}}";
 			var blue_p3_name="{{match.blue_player_name.2}}";
 			var blue_p4_name="{{match.blue_player_name.3}}";
-			console.log("blue"+blue_p4_name);
 			if(player_num >= 3){ 
 				if(red_p3_name != "None") $('#matchinfo_red_p3_name').val(red_p3_name);
 				$('#matchinfo_blue_p3_name').val(blue_p3_name);
@@ -985,7 +950,6 @@
 				$('#modal_matchresult_red_p4_name').val(red_p4_name)
 				$('#modal_matchresult_red_p4_name').attr('data-player_name',red_p4_name)
 			}
-			console.log(player_num);
 		});
 
 		//경기결과 모달에서 저장버튼

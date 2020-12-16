@@ -143,8 +143,8 @@ def logout(request) :
 
 def add_fmatch(request) :
 	post_writer = request.POST.get('post_writer')
-	club_red_name = request.POST.get('club_red')
-	club_blue_name = request.POST.get('club_blue')
+	red_club_name = request.POST.get('club_red')
+	blue_club_name = request.POST.get('club_blue')
 	match_date = request.POST.get('match_date')
 	match_time_start = request.POST.get('match_time_start')
 	match_time_end = request.POST.get('match_time_end')
@@ -152,13 +152,14 @@ def add_fmatch(request) :
 	passwd = request.POST.get('passwd')
 	blue_goga_avg = request.POST.get('blue_goga_avg')
 	date = request.POST.get('date')
-	players= request.POST.get('player[]')
-	players_= players.split(',')
+	player= request.POST.get('player[]')
+	print(player)
+	players_= player.split(',')
 
 
-	club=Club.objects.get(club_name=club_red_name)
+	club=Club.objects.get(club_name=red_club_name)
 
-	match = Match(post_writer=post_writer, club_red_id=club.pk,club_red_name=club.club_name ,club_blue_name=club_blue_name,\
+	match = Match(post_writer=post_writer,red_club_id=club.pk,red_club_name=club.club_name ,blue_club_name=blue_club_name,\
 		player_num=player_num, blue_player_name=players_,\
 		match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end,\
 		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date)
@@ -179,7 +180,7 @@ def add_schedule(request) :
 	print(title)
 
 	schedule = Schedule(player_id=pk,date_start=date_start,date_end=date_end,title=title)
-	schedule.save();
+	schedule.save()
 
 	data = {
 		'title' : schedule.title,
@@ -390,6 +391,11 @@ def save_match_info(request) :
 	match_time_end=request.POST.get('time_end')
 	red_goga_avg=request.POST.get('red_goga_avg')
 	blue_goga_avg=request.POST.get('blue_goga_avg')
+	red_club_id=request.POST.get('red_clud_id')
+	red_club_name=request.POST.get('red_clud_name')
+	blue_club_name=request.POST.get('blue_clud_name')
+	post_writer=request.POST.get('post_writer')
+	passwd=request.POST.get('passwd')
 	
 	players_red=[]
 	players_red_id=[]
@@ -460,8 +466,98 @@ def save_match_info(request) :
 	match.save()		
 	return redirect('/match/')
 	#return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
+	
+	
+def save_admin_match_info(request) :
+	red_club_id=request.POST.get('club_red_id')
+	red_club_name=request.POST.get('club_red_name')
+	blue_club_name=request.POST.get('club_blue_name')
+	post_writer=request.POST.get('post_writer')
+	passwd=request.POST.get('passwd')
+	player_num=request.POST.get('player_num')
+	match_date=request.POST.get('match_date')
+	match_time_start=request.POST.get('time_start')
+	match_time_end=request.POST.get('time_end')
+	red_goga_avg=request.POST.get('red_goga_avg')
+	blue_goga_avg=request.POST.get('blue_goga_avg')
+	red_win=request.POST.get('red_win')
+	blue_win=request.POST.get('blue_win')
+	date = request.POST.get('date')
+	result=False
+	
+	players_red=[]
+	players_red_id=[]
+	players_blue=[]
+	if player_num >= '1':
+		red_p1_name=request.POST.get('red_p1_name')
+		blue_p1_name=request.POST.get('blue_p1_name')
+		try :
+			player=Player.objects.get(player_name=red_p1_name)
+			print("player1")
+			print(player.player_name)
+			players_red.append(player.player_name)
+			players_red_id.append(player.pk)
+		except Exception as e :
+			print("red1 is none")
+		players_blue.append(blue_p1_name)
 
- 
+	if player_num >= '2' :
+		red_p2_name=request.POST.get('red_p2_name')
+		blue_p2_name=request.POST.get('blue_p2_name')
+
+		try :
+			player=Player.objects.get(player_name=red_p2_name)
+			print("player2")
+			print(player.player_name)
+			players_red.append(player.player_name)
+			players_red_id.append(player.pk)
+		except Exception as e :
+			print("red2 is none")
+		players_blue.append(blue_p2_name)
+
+	if player_num >= '3' :
+		red_p3_name=request.POST.get('red_p3_name')
+		blue_p3_name=request.POST.get('blue_p3_name')
+		try :
+			player=Player.objects.get(player_name=red_p3_name)
+			print("player3")
+			print(player.player_name)
+			players_red.append(player.player_name)
+			players_red_id.append(player.pk)
+		except Exception as e :
+			print("red2 is none")
+		players_blue.append(blue_p3_name)
+	
+	if player_num >= '4' :
+		red_p4_name=request.POST.get('red_p4_name')
+		blue_p4_name=request.POST.get('blue_p4_name')
+		try :
+			player=Player.objects.get(player_name=red_p4_name)
+			print("player4")
+			print(player.player_name)
+			players_red.append(player.player_name)
+			players_red_id.append(player.pk)
+		except Exception as e :
+			print("red2 is none")
+		players_blue.append(blue_p4_name)
+
+	if red_win > blue_win :
+		result=True
+	else :
+		result=False
+
+	
+	match=Match(red_club_id=red_club_id,red_club_name=red_club_name, blue_club_name=blue_club_name \
+		,post_writer=post_writer,passwd=passwd \
+		,red_player_name=players_red,red_player_id=players_red_id, blue_player_name = players_blue \
+		,match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end \
+		,red_goga_avg=red_goga_avg, blue_goga_avg=blue_goga_avg ,date=date\
+		,player_num=player_num,red_win=red_win, blue_win=blue_win,result=result, accept=True)
+
+
+	match.save()		
+	return redirect('/match/')
+
 def get_redteam_subplayer(request) :
 	player_num=request.GET.get('player_num')
 	red_p1_name=request.GET.get('red_p1')
@@ -562,7 +658,7 @@ def add_map_record(request) :
 		record.date=record_date
 		record.club_id=club_id
 	except Exception as e :
-		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
+		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete()
 		record=Record(maps_id=maps_id,map_name=map_.map_name,record=map_record,player_id=player.pk,\
 			record_date=record_date,club_id=club_id)
 		
@@ -612,7 +708,7 @@ def add_admin_record(request) :
 		record.date=record_date
 		record.club_id=club_id
 	except Exception as e :
-		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete();
+		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete()
 		record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
 			record_date=record_date,club_id=club_id)
 
@@ -666,7 +762,18 @@ def get_record_rank(request) :
 		return HttpResponse(e)	
 
 def record_win_lose(player_id,club_id) :
-	matches=Match.objects.get.filter(Q(club_red_id=club_id) & Q(red_player_id__contains=[player_id]))
+	matches=Match.objects.get.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[player_id]))
 	print(matches)
-	return ;
+	return True
 
+def save_club_description(request) :
+	try :
+		club_id=request.session.get('club_id')
+		description=request.POST.get('description')
+		print(description)
+		club=Club.objects.get(pk=club_id)
+		club.description=description
+		club.save()
+		return HttpResponse("save")
+	except Exception as e :
+		return HttpResponse("fail")

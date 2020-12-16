@@ -14,7 +14,7 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/match_before.css?4">
+	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard.css?2">
 
 
 	 <!--폰트 어썸-->
@@ -24,12 +24,16 @@
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-	<title>학지매</title>
+	<title>학지매-자유게시판</title>
 </head>
 <body style="height:100%;">
 	<!--navbar 시작-->
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
-				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+		{% if pk %}
+		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+		{% else %}
+		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
+		{% endif %}
 		 	 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		    		<span class="navbar-toggler-icon"></span>
 		  		</button>
@@ -77,8 +81,9 @@
 				<table class="table table-striped table-hover">
 					<h1 class="display-3">자유게시판</h1>
 					<hr>
-					<p>{{count}}개의 글</p>
-					<thead id="thead_matches" class="thead-dark">
+					<p style="width:50%; margin-right:0; padding:0;">{{count}}개의 글</p>
+					<button id="write_post_btn" class="btn btn-secondary bg-dark">글쓰기</button>
+					<thead id="thead_posts" class="thead-dark">
 						<tr>
 							<th style="width:10%;" scope="col">#</th>
 							<th style="width:40%;" scope="col">제목</th>
@@ -86,37 +91,36 @@
 							<th style="width:30%;" scope="col">작성일</th>
 						</tr>
 					</thead>
-					<tbody id="tbody_matches" onload="create_post_list_table(data)">
-						{% for match in matches %}
-						<tr onclick="location.href='/match_before/info/{{match.pk}}/'" >
-							<td><a style="text-align:center; text-decoration:none; color:black;">{{match.pk}}</a></td>
-							<td>승인대기</td>
-							<td>{{match.player_num}} : {{match.player_num}}</td>
-							<td>{{match.club_red_name}} vs {{match.club_blue_name}}</td>
-							<td>{{match.post_writer}}</td>
-							<td>{{match.date}}</td>
+					<tbody id="tbody_posts" >
+						{% for post in posts %}
+						<tr onclick="location.href='/freeboard/{{post.pk}}/'" >
+							<td><a style="text-align:center; text-decoration:none; color:black;">{{post.pk}}</a></td>
+							<td>{{post.title}}</td>
+							<td>{{post.post_writer}}</td>
+							<td>{{post.date}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
 				</table>
-
-				<nav aria-label="Page navigation example">
-				  <ul class="pagination pagination-lg justify-content-center">
-				  	{% if posts.has_previous %}
-				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
-				  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
-				     {% else %}
-				       <li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
-				    {% endif %}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
-				    {% if posts.has_next %}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
-				    {% else%}
-				    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
-				    {% endif %}
-				  </ul>
-				</nav>
+				<div id="freeboard_pagenation">
+					<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-lg justify-content-center">
+						{% if posts.has_previous %}
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
+						{% else %}
+						<li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
+						{% endif %}
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
+						{% if posts.has_next %}
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
+						{% else%}
+							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
+						{% endif %}
+					</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 		<!-- middle container 끝-->

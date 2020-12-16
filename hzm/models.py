@@ -24,7 +24,9 @@ SIZE_STATE =4
 #FREEBOARD
 SIZE_FREEBOARD_DESCRIPTION=500
 
+
 #공통
+SIZE_POST_TITLE=20
 SIZE_DATE = 10
 SIZE_TIME = 8
 SIZE_DATE_TIME = 19
@@ -54,10 +56,10 @@ class Map(models.Model):
 	date = models.CharField(max_length=10,blank=True, null=True)
 
 class Match(models.Model):
-	club_red_id = models.IntegerField(blank=True, null= True)
-	club_red_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
-	club_blue_id = models.IntegerField(blank=True, null= True)
-	club_blue_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
+	red_club_id = models.IntegerField(blank=True, null= True)
+	red_club_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
+	blue_club_id = models.IntegerField(blank=True, null= True)
+	blue_club_name = models.CharField(max_length=SIZE_CLUB_NAME, blank=True, null= True)
 	post_writer = models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
 	passwd = models.CharField(max_length=SIZE_PLAYER_PASSWORD, blank=True, null= True)
 	player_num = models.IntegerField(default=2,blank=True, null= True)
@@ -75,8 +77,8 @@ class Match(models.Model):
 	accept = models.BooleanField(default=False)
 	state = models.CharField(max_length=SIZE_STATE, blank=True, null= True)
 	result = models.BooleanField(default=False)
-	blue_win = models.IntegerField(default=0,blank=True, null= True)
 	red_win = models.IntegerField(default=0,blank=True, null= True)
+	blue_win = models.IntegerField(default=0,blank=True, null= True)
 
 class Schedule(models.Model):
 	player = models.ForeignKey('Player', on_delete=models.CASCADE, blank=True, null=True)
@@ -106,7 +108,9 @@ class Matchred(models.Model) :
 
 class Freeboard(models.Model) :
 	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	club=models.ForeignKey('Club', on_delete=models.SET_NULL, blank=True, null=True)
 	post_writer=models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
+	title = models.CharField(max_length=SIZE_POST_TITLE, blank=True, null= True)
 	date=models.CharField(max_length=SIZE_DATE, blank=True, null= True)
 	view = models.IntegerField(default=0, blank=True, null=True)
 	description=models.TextField(max_length=SIZE_FREEBOARD_DESCRIPTION, blank=True, null= True)
