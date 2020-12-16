@@ -1,0 +1,40 @@
+#middle-container {
+    height:90vh;
+    
+}
+
+#write_post_btn{
+    margin-bottom:1%;
+}
+
+@media (min-width:1024px){
+    #middle-container{
+        padding:5%;
+    }
+    #thead_posts tr th {
+        text-align: center;
+    }
+    #tbody_posts tr td {
+        text-align: center;
+    }
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+
+    #thead_posts tr th {
+        text-align: center;
+    }
+    #tbody_posts tr td {
+        text-align: center;
+        font-size:1.3rem;
+    }
+    #middle-container{
+        padding:1%;
+    }
+
+    #write_post_btn{
+        margin-bottom:2%;
+    }
+    
+}

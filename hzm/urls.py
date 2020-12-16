@@ -55,4 +55,5 @@ urlpatterns = [
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 	path('api/add_admin_record',apis.add_admin_record,name='ajax_add_admin_record'),
 	path('freeboard/',views.freeboard,name='freeboard'),
+	path('freeboard/<int:post_pk>/',views.freeboard_info,name='freeboard_info'),
 ]

@@ -24,7 +24,9 @@ SIZE_STATE =4
 #FREEBOARD
 SIZE_FREEBOARD_DESCRIPTION=500
 
+
 #공통
+SIZE_POST_TITLE=20
 SIZE_DATE = 10
 SIZE_TIME = 8
 SIZE_DATE_TIME = 19
@@ -106,7 +108,9 @@ class Matchred(models.Model) :
 
 class Freeboard(models.Model) :
 	player=models.ForeignKey('Player', on_delete=models.SET_NULL, blank=True, null=True)
+	club=models.ForeignKey('Club', on_delete=models.SET_NULL, blank=True, null=True)
 	post_writer=models.CharField(max_length=SIZE_PLAYER_NAME, blank=True, null= True)
+	title = models.CharField(max_length=SIZE_POST_TITLE, blank=True, null= True)
 	date=models.CharField(max_length=SIZE_DATE, blank=True, null= True)
 	view = models.IntegerField(default=0, blank=True, null=True)
 	description=models.TextField(max_length=SIZE_FREEBOARD_DESCRIPTION, blank=True, null= True)

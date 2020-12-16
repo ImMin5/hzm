@@ -131,14 +131,16 @@ def match_info(request,match_pk) :
 	club_id=request.session.get('club_id')
 	
 	try :
-		club=Club.objects.get(pk=club_id)
 		match = Match.objects.get(pk=match_pk)
+		if match.accept == False :
+			return render(request, 'hzm/error.html')
+		if pk :
+			club=Club.objects.get(pk=club_id)
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'club':club})
+		else :
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk})
 	except Exception as e :
 		return render(request, 'hzm/error.html')
-	
-	if match.accept == False :
-		return render(request, 'hzm/error.html')
-	return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'club':club})
 
 def match_before_info(request,match_pk) :
 	
@@ -266,7 +268,7 @@ def match_filter(request) :
 	else :
 		posts = Post_list.objects.all().filter(Q(accept=True)).order_by('-pk')
 
-	count = posts.count();
+	count = posts.count()
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
@@ -326,4 +328,26 @@ def matchred(request) :
 	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })
 def freeboard(request) :
 
-	return render(request,'hzm/freeboard.html')
+	posts=Freeboard.objects.all().order_by('-date')
+	count = posts.count()
+	paginator = Paginator(posts, 2)
+	pages = request.GET.get('page',1)
+
+	try :
+		posts = paginator.get_page(pages)
+	except PageNotAnInteger :
+		posts = paginator.page(1)
+	except EmptyPage :
+		posts = paginator.page(paginator.num_pages)
+		return HttpResponse("end")
+
+	return render(request,'hzm/freeboard.html',{'count':count,'posts':posts})
+
+def freeboard_info(request,post_pk) :
+	try :
+		pk=request.session.get('pk')
+		post=Freeboard.objects.get(pk=post_pk)
+		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post})
+	except Exception as e :
+		return redirect('hzm:error')
+	

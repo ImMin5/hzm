@@ -1,4 +1,6 @@
-
+#navbar_top{
+	max-height:10vh;
+}
 @media (min-width:1024px){
 	#navbar_top{
 		z-index: 10;
