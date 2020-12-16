@@ -23,6 +23,7 @@
 #AdminMatchFormContainer{
     padding:0;
     padding-top:3%;
+	display:inline-block;
 }
 #AdminRecordThead tr th{
     text-align: center; position:sticky; top:0;
