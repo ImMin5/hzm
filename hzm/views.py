@@ -355,7 +355,7 @@ def freeboard(request) :
 		return HttpResponse("end")
 	
 	if pk is not None :
-		club_id=request.session.get('pk')
+		club_id=request.session.get('club_id')
 		club=Club.objects.get(pk=club_id)
 		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk, 'club':club})
 	else :
@@ -365,12 +365,14 @@ def freeboard_info(request,post_pk) :
 	print(SIZE_POST_COMMENT)
 	try :
 		pk=request.session.get('pk')
-		if pk is not None :
-			player=Player.objects.get(pk=pk)
 		post=Freeboard.objects.get(pk=post_pk)
 		comments=Freeboardcomment.objects.filter(post_id=post.pk).order_by('date')
 		club=Club.objects.get(pk=post.club_id)
-		return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+		if pk is not None :
+			player=Player.objects.get(pk=pk)
+			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+		
 
 	except Exception as e :
 		print(e)
