@@ -61,4 +61,6 @@ urlpatterns = [
 	path('api/save_club_description',apis.save_club_description,name='ajax_save_club_description'),
 	path('api/add_freeboard_comment',apis.add_freeboard_comment ,name='ajax_add_freeboard_comment'),
 	path('api/add_freeboard_writing',apis.add_freeboard_writing ,name='ajax_add_freeboard_writing'),
+	path('api/delete_admin_record',apis.delete_admin_record ,name='ajax_delete_admin_record'),
+	path('api/edit_admin_record',apis.edit_admin_record ,name='ajax_edit_admin_record'),
 ]
