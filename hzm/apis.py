@@ -16,12 +16,13 @@ from .serializers import *
 import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Count,Max,Min
-
 from pandas import Series, DataFrame
 import pandas as pd
 import numpy as np
+from hzm.logs import *
+import logging
 
-
+log_dir = create_dir()
 
 my_club = "학지매"
 master_passwd = "ssdsmh"
@@ -60,11 +61,11 @@ def edit_mypage_info(request) :
 	p = Player.objects.filter(player_name=name).exclude(player_name=player_name)
 	
 	if p.exists() :
-		print(p)
-		return HttpResponse("sameId")
+		data={'msg':'sameId'}
+		return HttpResponse(data)
 
 	try:
-		player=Player.objects.get(player_name=player_name)
+		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=player.club_id)
 
 		#비밀번호가 일치할 경우
@@ -79,18 +80,29 @@ def edit_mypage_info(request) :
 				player.save()
 			#비밀번호를 변경할 경우
 			if password_change :
-				print("password change to"+password_change)
+				log_start(log_dir+'/'+str(player.pk)+'.log',"changed password : "+password_change)
 				player.passwd = password_change
 				player.save()
 			
 			#세션에 바뀐 이름으로 넣어줌
 			request.session['player_name'] = name
-			return HttpResponse("good")
+			log_start(log_dir+'/'+str(player.pk)+'.log',"changed player_name "+name)
+			data = {
+				'msg' : 'good',
+				'player_name' : name,
+			}
+			return JsonResponse(data)
 		else :
-			return HttpResponse("passwordfail")
+			data = {
+				'msg' : 'passwordfail',
+			}
+			return JsonResponse(data)
 	except Exception as e :
+		data = {
+				'msg' : 'fail',
+			}
 		print(e)
-		return HttpResponse("fail")
+		return JsonResponse(data)
 
 def sign_in(request) :
 	player_name = request.POST.get('player_name')
@@ -99,15 +111,14 @@ def sign_in(request) :
 		if request.method == 'POST' :
 			player = Player.objects.get(Q(player_name=player_name) & Q(passwd=player_passwd))
 			data = {}
-			print(player.pk)
-			print(player.club_id)
 			if player.accept == False :
 				return HttpResponse("auth_fail")
 			if player.player_name is not None:
 				request.session['pk'] = player.pk
 				request.session['player_name'] = player.player_name
 				request.session['club_id'] = player.club.pk
-				return redirect('/')
+				log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" login")
+				return HttpResponse("login")
 			else :
 				print('NONE')
 				return HttpResponse('login_fail1')
@@ -121,12 +132,10 @@ def sign_up(request) :
 	player_name = request.POST.get('player_name')
 	player_password = request.POST.get('player_password')
 	club_id = request.POST.get('club_id')
-	print(club_id)
 	try :
 		if request.method == 'POST' :
-			print('POST')
-			print(player_name)
 			player = Player(player_name=player_name, passwd=player_password, club_id=club_id)
+			print("signup: "+player_name)
 			player.save()
 			return redirect('/')
 		else :
@@ -137,36 +146,43 @@ def sign_up(request) :
 		return HttpResponse(e)
 
 def logout(request) :
-	request.session.clear()
-	return redirect('/')
+	try :
+		pk=request.session.get('pk')
+		player=Player.objects.get(pk=pk)
+		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" logout")
+		request.session.clear()
+		return HttpResponse("good")
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
 
 
 def add_fmatch(request) :
-	post_writer = request.POST.get('post_writer')
-	red_club_name = request.POST.get('club_red')
-	blue_club_name = request.POST.get('club_blue')
-	match_date = request.POST.get('match_date')
-	match_time_start = request.POST.get('match_time_start')
-	match_time_end = request.POST.get('match_time_end')
-	player_num = request.POST.get('player_num')
-	passwd = request.POST.get('passwd')
-	blue_goga_avg = request.POST.get('blue_goga_avg')
-	date = request.POST.get('date')
-	player= request.POST.get('player[]')
-	print(player)
-	players_= player.split(',')
-
-
-	club=Club.objects.get(club_name=red_club_name)
-
-	match = Match(post_writer=post_writer,red_club_id=club.pk,red_club_name=club.club_name ,blue_club_name=blue_club_name,\
+	try :
+		post_writer = request.POST.get('post_writer')
+		red_club_name = request.POST.get('club_red')
+		blue_club_name = request.POST.get('club_blue')
+		match_date = request.POST.get('match_date')
+		match_time_start = request.POST.get('match_time_start')
+		match_time_end = request.POST.get('match_time_end')
+		player_num = request.POST.get('player_num')
+		passwd = request.POST.get('passwd')
+		blue_goga_avg = request.POST.get('blue_goga_avg')
+		date = request.POST.get('date')
+		player= request.POST.get('player[]')
+		players_= player.split(',')
+		club=Club.objects.get(club_name=red_club_name)
+		match = Match(post_writer=post_writer,red_club_id=club.pk,red_club_name=club.club_name ,blue_club_name=blue_club_name,\
 		player_num=player_num, blue_player_name=players_,\
 		match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end,\
 		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date)
-
-	match.save()
-
-	return redirect('/')
+		pr
+		match.save()
+		log_start(log_dir+'/today.log',post_writer+" submit fmatch :"+str(match.pk))
+		return redirect('/')
+	except Exception as e :
+		print(e)
+		return redirect('/')
 
 def add_schedule(request) :
 	pk = request.session['pk']
@@ -174,10 +190,6 @@ def add_schedule(request) :
 	title = request.POST.get('title')
 	date_start = request.POST.get('date_start')
 	date_end =request.POST.get('date_end')
-
-	print(date_start)
-	print(date_end)
-	print(title)
 
 	schedule = Schedule(player_id=pk,date_start=date_start,date_end=date_end,title=title)
 	schedule.save()
@@ -188,7 +200,7 @@ def add_schedule(request) :
 		'date_start' : schedule.date_start,
 		'pk' : schedule.pk,
 	}
-
+	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" made schedule : "+str(schdule.pk))
 	return JsonResponse(data)
 
 def get_my_schedules(request) :
@@ -212,25 +224,19 @@ def create_my_schedule_table(request) :
 
 	if now.tm_mon < 10 :
 		mon= str('0')+str(now.tm_mon)
-		print(mon)
 	if now.tm_mday < 10 :
 		day= str('0')+str(now.tm_mday)
-		print(day)
 	if now.tm_hour < 10 :
 		hour= str('0')+str(now.tm_hour)
-		print(hour)
 	if now.tm_min < 10 :
 		hour= str('0')+str(now.tm_min)
-		print(mins)
 	if now.tm_sec < 10 :
 		sec= str('0')+str(now.tm_sec)
-		print(sec)
 
 
 	date_now = str(now.tm_year)+'-'+mon\
 	+'-'+day+'T'+hour+':'+mins+':'+sec
 
-	print(date_now)
 	pk = request.session['pk']
 	schedules = Schedule.objects.filter(Q(player_id=pk) & Q(date_start__gte=date_now)).order_by('date_start')
 	serialized_schedules = ScheduleSerializer(schedules,many=True)
@@ -245,16 +251,17 @@ def get_all_schedules(request) :
 		player=Player.objects.get(pk=pk)
 		schedules = Schedule.objects.filter(club_id=player.club_id).exclude(player_id=player.pk)
 		serialized_schedules = ScheduleSerializer(schedules,many=True)
-		print("aaaa")
-		print(serialized_records)
 		return HttpResponse(json.dumps(serialized_schedules.data))
 	except Exception as e :
 		return redirect('/')
 
 def delete_my_schedule(request) :
 	try :
-		pk = request.POST.get('pk')
-		schedule = Schedule.objects.filter(pk=pk)
+		pk=requset.session.get('pk')
+		s_pk = request.POST.get('pk')
+		player=Player.objects.get(pk=pk)
+		schedule = Schedule.objects.filter(pk=s_pk)
+		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" deleted schedule : "+str(schdule.pk))
 		schedule.delete()
 		return HttpResponse("삭제되었습니다!")
 	except Exception as e :
@@ -262,26 +269,18 @@ def delete_my_schedule(request) :
 
 def edit_my_schedule(request) :
 	pk = int(request.POST.get('pk'))
-	print("pk")
-	print(pk)
 	date_start = request.POST.get('date_start')
 	date_end = request.POST.get('date_end')
-
-		
-	print(1)
 	schedule = Schedule.objects.get(pk=pk)
 	schedule.date_start=date_start
 	schedule.date_end=date_end
 	schedule.save()
-	print(schedule)
-	
 	data = {
 		'pk' : schedule.pk,
 		'title' : schedule.title,
 		'date_start' : schedule.date_start,
 		'date_end' : schedule.date_end,
 		}
-	print(4)
 	return JsonResponse(data)
 
 def create_match_list(request) :
@@ -469,9 +468,10 @@ def save_match_info(request) :
 	
 	
 def save_admin_match_info(request) :
-	red_club_id=request.POST.get('club_red_id')
-	red_club_name=request.POST.get('club_red_name')
-	blue_club_name=request.POST.get('club_blue_name')
+	pk = request.session.get('pk')
+	red_club_id=request.POST.get('red_club_id')
+	red_club_name=request.POST.get('red_club_name')
+	blue_club_name=request.POST.get('blue_club_name')
 	post_writer=request.POST.get('post_writer')
 	passwd=request.POST.get('passwd')
 	player_num=request.POST.get('player_num')
@@ -484,6 +484,11 @@ def save_admin_match_info(request) :
 	blue_win=request.POST.get('blue_win')
 	date = request.POST.get('date')
 	result=False
+	
+	try :
+		temp_player=Player.objects.get(pk=pk)
+	except Exception as e :
+		return HttpResponse("fail")
 	
 	players_red=[]
 	players_red_id=[]
@@ -555,8 +560,9 @@ def save_admin_match_info(request) :
 		,player_num=player_num,red_win=red_win, blue_win=blue_win,result=result, accept=True)
 
 
-	match.save()		
-	return redirect('/match/')
+	match.save()
+	log_start(log_dir+'/'+str(temp_player.pk)+'.log',player.player_name+" admin add fmatch : "+str(match.pk))		
+	return HttpResponse("save")
 
 def get_redteam_subplayer(request) :
 	player_num=request.GET.get('player_num')
@@ -663,7 +669,7 @@ def add_map_record(request) :
 			record_date=record_date,club_id=club_id)
 		
 	record.save()
-
+	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" add record : "+str(record.pk))
 	records=Record.objects.filter(Q(player_id=player.pk) & Q(club_id=club_id)).order_by('map_name')
 	serialized_records = RecordSerializer(records,many=True)
 
@@ -695,24 +701,31 @@ def reject_player(request) :
 	return HttpResponse(player_name)
 
 def add_admin_record(request) :
+	club_id=request.session.get('club_id')
 	player_id=request.POST.get('player_id')
 	maps_id=request.POST.get('maps_id')
 	map_record=request.POST.get('record')
 	record_date=request.POST.get('record_date')
-	player=Player.objects.get(pk=player_id)
-	club_id=1
 
+	try :
+		player=Player.objects.get(pk=player_id)
+		maps=Map.objects.get(pk=maps_id)
+	except Exception as e :
+		return HttpResponse(e)
+	
 	try :
 		record=Record.objects.get(Q(player_id=player.pk) & Q(maps_id=maps_id))
 		record.record=map_record
 		record.date=record_date
+		record.map_name=maps.map_name
 		record.club_id=club_id
 	except Exception as e :
 		Record.objects.filter(Q(player_id=player.pk) & Q(maps_id=maps_id)).delete()
-		record=Record(maps_id=maps_id,record=map_record,player_id=player.pk,\
+		record=Record(maps_id=maps_id,map_name=maps.map_name,record=map_record,player_id=player.pk,\
 			record_date=record_date,club_id=club_id)
 
 	record.save()
+	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" admin add record : "+str(record.pk))
 	return HttpResponse("good")
 
 
@@ -784,8 +797,6 @@ def add_freeboard_comment(request) :
 	post_pk=request.POST.get('post_pk')
 	comment=request.POST.get('comment')
 	date=request.POST.get('date')
-	print(post_pk)
-
 	try :
 		freeboard=Freeboard.objects.get(pk=post_pk)
 		freeboard.comment_count += 1
@@ -793,6 +804,7 @@ def add_freeboard_comment(request) :
 		freeboardcomment=Freeboardcomment(player_id=pk,post_id=post_pk,\
 			player_name=player_name,date=date,comments=comment)
 		freeboardcomment.save()
+		log_start(log_dir+'/'+str(pk)+'.log',player_name+" freeboard:"+str(post_pk)+" comment: "+str(freeboardcomment.pk))
 	except Exception as e :
 		print(e)
 		return HttpResponse("fail")
@@ -811,8 +823,37 @@ def add_freeboard_writing(request) :
 		post=Freeboard(player_id=player.pk,club_id=club_id,post_writer=player.player_name,\
 			title=title,date=date,description=description)
 		post.save()
-
+		log_start(log_dir+'/'+str(player.pk)+'.log',"freeboard writing "+str(post.pk))
 		return HttpResponse("good")
 	except Exception as e :
 		print(e)
+		return HttpResponse(e)
+
+def delete_admin_record(request) :
+	try :
+		club_id=request.session.get('club_id')
+		record_pk=request.GET.get('record_pk')
+		record=Record.objects.get(pk=record_pk)
+		if record.club_id == club_id :
+			record.delete()
+			return HttpResponse(record_pk)
+		else :
+			raise Exception("fail")
+	except Exception as e :
+		print(e)
+		return HttpResponse(e)
+
+def edit_admin_record(request) :
+	try :
+		club_id=request.session.get('club_id')
+		record_pk=request.GET.get('record_pk')
+		record_time=request.GET.get('record')
+		record=Record.objects.get(pk=record_pk)
+		if record.club_id == club_id :
+			record.record=record_time
+			record.save()
+		else :
+			raise Exception("fail")
+		return HttpResponse("record edit")
+	except Exception as e :
 		return HttpResponse(e)

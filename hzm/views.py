@@ -10,11 +10,15 @@ import datetime
 import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Q
+from hzm.logs import *
+import logging
+
 #from datetime import datetime
 # Create your views here.
 SIZE_FREEBOARD_DESCRIPTION=1000
 SIZE_POST_COMMENT=200
 
+log_dir = create_dir()
 
 def record_win_lose(player_id,club_id) :
 	matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[player_id]))
@@ -30,22 +34,20 @@ def record_win_lose(player_id,club_id) :
 	return False
 
 
-
 def main_page(request) :
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
-	#records=Record.objects.all().order_by('maps_id')
-	#maps=Map.objects.all().order_by('pk')
-
 	freeboard=Freeboard.objects.all().order_by('date')
 	paginator = Paginator(freeboard, 5)
 	freeboards = paginator.get_page(1)
 
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
+		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
 		club=Club.objects.get(pk=player.club_id)
 		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club,'freeboards':freeboards})
 	else :
+		log_start(log_dir+'/today.log','main page')
 		return render(request,'hzm/main_page.html',{'freeboards':freeboards})
 
 def mypage(request) :
@@ -58,7 +60,9 @@ def mypage(request) :
 	try : 
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=player.club_id)
+		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" in mypage")
 	except Exception as e :
+		print(e)
 		return redirect('/')
 	return render(request,'hzm/mypage.html',{'pk':pk ,'player':player,'club':club})
 
@@ -248,7 +252,6 @@ def club(request,club_pk) :
 	try :
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
-		print(club)
 		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
 	except Exception as e :
 		print(e)
@@ -322,7 +325,7 @@ def club_admin(request,club_pk) :
 		if club.host != player_name :
 			raise Exception('잘못된 접근입니다')
 
-		players=Player.objects.filter(club_id=club.pk)
+		players=Player.objects.filter(club_id=club.pk).order_by('player_name')
 		maps=Map.objects.all().order_by('map_name')
 		records=Record.objects.all().order_by('player_id')
 		if pk == 1 :
@@ -330,6 +333,7 @@ def club_admin(request,club_pk) :
 			return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'clubs':clubs,'club':club})
 		return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'club':club})
 	except Exception as e :
+		print(e)
 		return redirect('/')
 
 def matchred(request) :
@@ -342,7 +346,7 @@ def freeboard(request) :
 	pk=request.session.get('pk')
 	posts=Freeboard.objects.all().order_by('-date')
 	count = posts.count()
-	paginator = Paginator(posts, 2)
+	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
 
@@ -362,7 +366,6 @@ def freeboard(request) :
 		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk})
 
 def freeboard_info(request,post_pk) :
-	print(SIZE_POST_COMMENT)
 	try :
 		pk=request.session.get('pk')
 		post=Freeboard.objects.get(pk=post_pk)
@@ -370,9 +373,14 @@ def freeboard_info(request,post_pk) :
 		club=Club.objects.get(pk=post.club_id)
 		if pk is not None :
 			player=Player.objects.get(pk=pk)
+<<<<<<< HEAD
+			return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+		return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+=======
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		
+>>>>>>> 86d121549335e5fe00f1d70df1c30d225cc16e6f
 
 	except Exception as e :
 		print(e)

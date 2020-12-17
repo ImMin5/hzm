@@ -95,21 +95,9 @@
 					<form>
 						<div class="container-fluid" id="matchinfo_body">
 							<div class="input-group mb-3">
-								<span class="input-group-text">클럽이름</span>
-								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{match.club_blue_name}}" readonly>
-							</div>
-							<div class="input-group mb-3">
 								<span class="input-group-text"> 신청자 </span>
 								<input type="text" id="matchinfo_postwriter" class="form-control" placeholder="카러플 캐릭터 이름" aria-label="신청자" aria-describedby="button-addon2" value="{{match.post_writer}}" readonly>
 							</div>
-					      	<div class="input-group mb-3">
-					      		<span class="input-group-text">경기 인원</span>
-					      		<select id="matchinfo_player_num" class="form-control" value="{{match.player_num}}" disabled>
-					      			<option id="matchinfo_player_num_option1" value="2" disabled> 2 vs 2</option>
-					      			<option id="matchinfo_player_num_option2" value="3" disabled> 3 vs 3</option>
-					      			<option id="matchinfo_player_num_option3" value="4" disabled> 4 vs 4</option>
-					      		</select>
-					      	</div>
 
 					      	<label for="exampleInputEmail1">RED팀 {{match.red_club_name}}</label>
 							<div class="input-group mb-3" id="matchinfo_redteam_member">
@@ -145,6 +133,15 @@
 							
 								
 								<input type="text" id="matchinfo_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+							</div>
+							<label for="exampleInputEmail1">경기정보</label>
+							<div class="input-group mb-3">
+								<span class="input-group-text">경기 인원</span>
+								<select id="matchinfo_player_num" class="form-control" value="{{match.player_num}}" disabled>
+									<option id="matchinfo_player_num_option1" value="2" disabled> 2 vs 2</option>
+									<option id="matchinfo_player_num_option2" value="3" disabled> 3 vs 3</option>
+									<option id="matchinfo_player_num_option3" value="4" disabled> 4 vs 4</option>
+								</select>
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">희망날짜</span>

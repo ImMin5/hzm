@@ -112,7 +112,7 @@
 				  </thead>
 				  <tbody id="record_table_tbody">
 				  	{% for record in records %}
-				  	<tr style="text-align: center;">
+				  	<tr id="tr_record_{{record.pk}}" style="text-align: center;">
 				  		<td>{{record.pk}}</td>
 				  		{% for map in maps %}
 				  			{% if map.pk == record.maps_id %}
@@ -125,10 +125,10 @@
 				  				<td>{{player.player_name}}({{player.pk}})</td>
 				  			{% endif %}
 				  		{% endfor %}
-						  <td>{{record.record}}</td>
+						  <td><input style="text-align:center" id="td_record_{{record.pk}}" type="text" class="form-control" value="{{record.record}}"></td>
 						  <td>
-							  <button class="btn btn-secondary bg-dark">수정</button>
-							  <button class="btn btn-secondary bg-dark">삭제</button>
+							  <button name="AdminRecordEditBtn" class="btn btn-secondary bg-dark" data-record="{{record.record}}" data-pk="{{record.pk}}">수정</button>
+							  <button name="AdminRecordDeleteBtn" class="btn btn-secondary bg-dark" data-pk="{{record.pk}}">삭제</button>
 						  </td>
 				  		
 				  	</tr>
@@ -241,16 +241,12 @@
 		</div><!--middle container 끝-->
 
 
-		<!--하단 탭바-->
 <!--하단 탭바-->
 		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-</div>
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu"  data-ad-width   = "320" data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			</div>
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-3" id="bottom_home" style="display:block; text-align: center;">
@@ -675,16 +671,13 @@
 			var passwd=$('#matchinfo_passwd').val()
 
 			var red_club_name=$('#matchinfo_red_club_name').val();
-			console.log(red_club_name)
 			var red_club_id="{{club.pk}}";
-			console.log(red_club_id)
 			var red_p1=$('#matchinfo_red_p1_name').val();
 			var red_p2=$('#matchinfo_red_p2_name').val();
 			if(player_num>=3) var red_p3=$('#matchinfo_red_p3_name').val();
 			if(player_num>=4) var red_p4=$('#matchinfo_red_p4_name').val();
 			
 			var blue_club_name=$('#matchinfo_blue_club_name').val();
-			console.log(blue_club_name)
 			var blue_p1=$('#matchinfo_blue_p1_name').val();
 			var blue_p2=$('#matchinfo_blue_p2_name').val();
 			if(player_num>=3) var blue_p3=$('#matchinfo_blue_p3_name').val();
@@ -762,7 +755,30 @@
 					'date':date,
 				},
 				success : function(msg){
-					swal("저장완료","success").then((value)=>{ location.reload();})
+					if(msg=="fail") return swal("저장실패");
+					else return swal("저장완료","success").then((value)=>{ 
+						$('#matchinfo_player_num').val('');
+						$('#matchinfo_postwriter').val('');
+						$('#matchinfo_passwd').val('');
+						$('#matchinfo_red_p1_name').val('');
+						$('#matchinfo_red_p2_name').val('');
+						$('#matchinfo_red_p3_name').val('');
+						$('#matchinfo_red_p4_name').val('');
+						$('#matchinfo_blue_p1_name').val('');
+						$('#matchinfo_blue_p2_name').val('');
+						$('#matchinfo_blue_p3_name').val('');
+						$('#matchinfo_blue_p4_name').val('');
+						$('#matchinfo_blue_club_name').val('');
+
+						$('#matchinfo_match_date').val('');
+						$('#matchinfo_time_start').val('');
+						$('#matchinfo_time_end').val('');
+						$('#matchinfo_red_goga_avg').val('');
+						$('#matchinfo_blue_goga_avg').val('');
+
+						$('#matchinfo_red_win').val('');
+						$('#matchinfo_blue_win').val('');
+					});
 				}
 			});
 		})
@@ -964,7 +980,46 @@
 				$('#matchinfo_blue_p4_name').val(blue_p4_name);
 			}
 		});
+		//레코드 삭제 버튼
+		$(document).on('click','button[name=AdminRecordDeleteBtn]',function(){
+			record_pk=$(this).attr('data-pk');
+			console.log("delete")
+			console.log(record_pk)
+			$.ajax({
+				url:"{% url 'hzm:ajax_delete_admin_record' %}",
+				type:'GET',
+				data : {
+					'record_pk':record_pk,
+				},
+				success:function(data){
+					$('#tr_record_'+data).remove();
+				},
+				error:function(error){
+					swal("통신 오류")
+				},
+			})
+		});
 
+		//레코드 수정 버튼
+		$(document).on('click','button[name=AdminRecordEditBtn]',function(){
+			console.log("edit")
+			record_pk=$(this).attr('data-pk');
+			record=$('#td_record_'+record_pk).val();
+			console.log(record)
+			if(goga_form_check(record)==false )return swal("기록 양식 00:00:00");
+			$.ajax({
+				url:"{% url 'hzm:ajax_edit_admin_record' %}",
+				type:'GET',
+				data : {
+					'record_pk':record_pk,
+					'record':record,
+				},
+				success:function(data){
+					console.log(data)
+				},
+				error:function(error){},
+			})
+		});
 	</script>
 	
 </body>
