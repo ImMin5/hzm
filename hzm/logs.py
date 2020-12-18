@@ -1,7 +1,7 @@
 import logging
 import os
 import datetime
-
+import socket
 kmh="kmh"
 
 logger=0
@@ -9,7 +9,8 @@ logger=0
 
 def create_logger(directory) :
     # 로그 생성
-    logger= logging.getLogger('HZM')
+    ip=socket.gethostbyname(socket.getfqdn())
+    logger= logging.getLogger(ip)
     # Check handler exists
     
     if len(logger.handlers) > 0:

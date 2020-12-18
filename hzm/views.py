@@ -373,14 +373,8 @@ def freeboard_info(request,post_pk) :
 		club=Club.objects.get(pk=post.club_id)
 		if pk is not None :
 			player=Player.objects.get(pk=pk)
-<<<<<<< HEAD
-			return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-		return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-=======
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-		
->>>>>>> 86d121549335e5fe00f1d70df1c30d225cc16e6f
 
 	except Exception as e :
 		print(e)
