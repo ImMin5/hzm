@@ -29,7 +29,7 @@
 
 	 
 	 <!--커스텀-->	 
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?4">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?5">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	  <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?3">
@@ -122,10 +122,44 @@
 				</table>
 			  </div>
 
+			  <div class="table-responsive">
+				<b style="font-size:2.5rem;"><a style="margin-left:2%; text-decoration: none; color:gray;" href="{% url 'hzm:match' %}">경기결과</a></b>
+				<table class="table table-hover">
+					<tbody style="font-size:2rem;">
+						{% for m in matches %}
+						<tr  onclick="location.href='{% url 'hzm:match_info' m.pk %}'">
+							<td style="width:40%;">
+								<div>
+									<span style="font-size:0.7rem;" ><i class="fas fa-circle"></i></span>						
+									{{m.red_club_name}} vs {{m.blue_club_name}}
+								</div>
+							</td>
+							{% if m.state == "경기종료" %}
+								{% if m.result %}
+								<td id="tbody_matches_td_state" style="color:green;">승리</td>
+								{% elif m.result == False %}
+									{% if m.red_win == m.blue_win %}
+										<td id="tbody_matches_td_state" style="color:gray;">결과입력대기</td>
+									{% else %}
+										<td id="tbody_matches_td_state" style="color:gray;">패배</td>
+									{% endif %}
+								{% else %}
+									<td id="tbody_matchse_td_state" style="color:blue;">{{m.state}}</td>
+								{% endif %}
+							{% elif m.state == "경기준비" %}
+								<td id="tbody_matches_td_state" style="color:black;">{{m.state}}</td>
+							{% elif m.state == "진행중" %}
+								<td id="tbody_match_td_state" style="color:red; ">{{m.state}}</td>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			  </div>
+
 		</div> <!--middle container 끝-->
 
 		<!--하단 탭바-->
-		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0;  max-height:10%; margin-top:1rem; padding:0;">
 			<div class="container-fluid" style="padding:0;">
 				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100"></ins> 
 				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>

@@ -117,8 +117,10 @@
 								<input type="text" id="matchinfo_red_p2_name" name="redteam" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" value="{{match.red_player_name.1}}" disabled required>
 								{% endif %}
 								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
-								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>	
+								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value="" disabled required>
+								{% if match.red_club_id == player.club_id %}	
 								<button type="button" class="btn btn-secondary bg-dark" id="matchinfo_redteam_member_edit_btn" data-toggle="modal" data-target="#modal_redteam_member" data-p1="{{match.red_player_name.0}}" data-p2="{{match.red_player_name.1}}" data-p3="{{match.red_player_name.2}}" data-p4="{{match.red_player_name.3}}" data-player_num="{{match.player_num}}" disabled>라이더수정</button>
+								{% endif %}
 							</div>
 							<label for="exampleInputEmail1">BLUE팀 {{match.blue_club_name}}</label>
 							<div class="input-group mb-3">
@@ -153,6 +155,13 @@
 								<span class="input-group-text">종료시간</span readonly>
 								<input type="time" id="matchinfo_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" value="{{match.match_time_end}}" disabled required>
 							</div>
+							<label for="exampleInputEmail1">최종 스코어</label>
+							<div class="input-group mb-3">
+								<span class="input-group-text">{{match.red_club_name}}</span>
+								<input type="number" id="matchinfo_red_win" class="form-control" placeholder="레드팀 승리" aria-label="결과" aria-describedby="button-addon2" value="{{match.red_win}}" disabled>
+								<span class="input-group-text">{{match.blue_club_name}}</span>
+								<input type="number" id="matchinfo_blue_win" class="form-control" placeholder="블루팀 승리" aria-label="결과" aria-describedby="button-addon2" value="{{match.blue_win}}" disabled>
+							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text">비밀번호</span>
 								<input type="text" id="matchinfo_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
@@ -160,11 +169,9 @@
 						</div><!-- matchinfo body끝-->
 						<div class="container-fluid" id="matchinfo_footer" style="">
 							<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:match' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
-							{% if club.pk == match.red_club_id %}
 							<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="{% url 'hzm:delete_match_info' match.pk %}" style="color:white; text-decoration: none; " >삭제</a></button>
 							<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
-							<button type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-secondary bg-dark" style="float:right;" data-red_p1_name="{{match.red_player_name.0}}" data-red_p2_name="{{match.red_player_name.1}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
-							{% endif %}
+							<button style="display:none;" type="button" id="matchinfo_result_btn" data-toggle="modal" data-target="#modal_matchresult" class="btn btn-secondary bg-dark" style="float:right;" data-red_p1_name="{{match.red_player_name.0}}" data-red_p2_name="{{match.red_player_name.1}}" data-red_p3_name="{{post.red_p3_name}}" data-red_p4_name="{{post.red_p4_name}}">결과입력</button>
 						</div>
 					</form>
 
@@ -525,6 +532,7 @@
 		});
 
 		function read_red(player_num){
+			$('#matchinfo_red_win').attr('disabled',false)
 			$('#matchinfo_red_goga_avg').attr('disabled',false);
 			$('#matchinfo_red_p1_name').attr('disabled',false);
 			$('#matchinfo_red_p2_name').attr('disabled',false);
@@ -532,6 +540,7 @@
 			if(player_num >= 4) $('#matchinfo_red_p4_name').attr('disabled',false);
 		}
 		function read_blue(player_num){
+			$('#matchinfo_blue_win').attr('disabled',false)
 			$('#matchinfo_blue_goga_avg').attr('disabled',false);
 			$('#matchinfo_blue_p1_name').attr('disabled',false);
 			$('#matchinfo_blue_p2_name').attr('disabled',false);
@@ -565,7 +574,7 @@
 					'pk' : pk,
 				},
 				success : function(data) {
-
+					$('#matchinfo_result_btn').css('display ','unset')
 					$('#matchinfo_passwd').val('')
 					if(data.team == "red"){
 						read_common();
@@ -611,6 +620,7 @@
 
 		//경기 정보 저장 버튼
 		$(document).on('click','#matchinfo_save_btn',function(e) {
+	
 			var player_num=$('#matchinfo_player_num').val();
 
 			var red_p1=$('#matchinfo_red_p1_name').val();
@@ -629,6 +639,10 @@
 			var red_goga_avg=$('#matchinfo_red_goga_avg').val();
 			var blue_goga_avg=$('#matchinfo_blue_goga_avg').val();
 			var match_pk="{{match.pk}}";
+			console.log("matchpk: "+match_pk)
+
+			var red_win=$('#matchinfo_red_win').val();
+			var blue_win=$('#matchinfo_blue_win').val();
 
 			var team=$(this).attr('data-team');
 
@@ -718,6 +732,8 @@
 					'red_goga_avg':red_goga_avg,
 					'blue_goga_avg' :blue_goga_avg,
 					'player_num':player_num,
+					'red_win':red_win,
+					'blue_win':blue_win,
 				},
 				success : function(msg){
 
@@ -745,6 +761,8 @@
 
 					$('#matchinfo_redteam_member_edit_btn').attr('disabled',true);
 					$('#matchinfo_result_btn').attr('disabled',false);
+					$('#matchinfo_red_win').attr('disabled',true);
+					$('#matchinfo_blue_win').attr('disabled',true);
 				}
 			});
 		})
@@ -774,6 +792,7 @@
 				}
 			}
 			if( team=="blue" || team=="all" ){
+				$('#matchinfo_blue_win').attr('disabled',true)
 				if( state== '2'){
 					$('#matchinfo_blue_p3_name').attr('disabled',true);
 					$('#matchinfo_blue_p4_name').attr('disabled',true);

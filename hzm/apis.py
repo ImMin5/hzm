@@ -395,6 +395,8 @@ def save_match_info(request) :
 	blue_club_name=request.POST.get('blue_clud_name')
 	post_writer=request.POST.get('post_writer')
 	passwd=request.POST.get('passwd')
+	red_win=request.POST.get('red_win')
+	blue_win=request.POST.get('blue_win')
 	
 	players_red=[]
 	players_red_id=[]
@@ -462,6 +464,8 @@ def save_match_info(request) :
 	match.red_goga_avg=red_goga_avg
 	match.blue_goga_avg=blue_goga_avg
 	match.player_num=player_num
+	match.red_win=red_win
+	match.blue_win=blue_win
 	match.save()		
 	return redirect('/match/')
 	#return render(request, 'hzm/match_info.html', {'post':post, 'pk':pk})
@@ -796,7 +800,7 @@ def add_freeboard_comment(request) :
 	player_name=request.session.get('player_name')
 	post_pk=request.POST.get('post_pk')
 	comment=request.POST.get('comment')
-	date=request.POST.get('date')
+	date=getTimeY_M_T()
 	try :
 		freeboard=Freeboard.objects.get(pk=post_pk)
 		freeboard.comment_count += 1
@@ -817,7 +821,7 @@ def add_freeboard_writing(request) :
 	club_id=request.session.get('club_id')
 	title=request.POST.get('title')
 	description=request.POST.get('description')
-	date=request.POST.get('date')
+	date=getTimeY_M_T()
 	try :
 		player=Player.objects.get(pk=pk)
 		post=Freeboard(player_id=player.pk,club_id=club_id,post_writer=player.player_name,\
@@ -857,3 +861,8 @@ def edit_admin_record(request) :
 		return HttpResponse("record edit")
 	except Exception as e :
 		return HttpResponse(e)
+
+def getTimeY_M_T() :
+	now = datetime.datetime.now()
+	nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
+	return nowDate
