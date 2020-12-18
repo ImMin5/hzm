@@ -13,6 +13,7 @@ from django.db.models import Q
 from hzm.logs import *
 import logging
 
+
 #from datetime import datetime
 # Create your views here.
 SIZE_FREEBOARD_DESCRIPTION=1000
@@ -43,11 +44,11 @@ def main_page(request) :
 
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
-		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
 		club=Club.objects.get(pk=player.club_id)
 		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club,'freeboards':freeboards})
 	else :
-		log_start(log_dir+'/today.log','main page')
+		log_start(request,log_dir+'/today.log','main page')
 		return render(request,'hzm/main_page.html',{'freeboards':freeboards})
 
 def mypage(request) :
@@ -373,14 +374,9 @@ def freeboard_info(request,post_pk) :
 		club=Club.objects.get(pk=post.club_id)
 		if pk is not None :
 			player=Player.objects.get(pk=pk)
-<<<<<<< HEAD
-			return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-		return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-=======
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		
->>>>>>> 86d121549335e5fe00f1d70df1c30d225cc16e6f
 
 	except Exception as e :
 		print(e)

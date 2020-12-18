@@ -1,15 +1,24 @@
 import logging
 import os
 import datetime
-
+import socket
+from ipware import get_client_ip
 kmh="kmh"
 
 logger=0
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
-def create_logger(directory) :
+def create_logger(request,directory) :
     # 로그 생성
-    logger= logging.getLogger('HZM')
+    ip = get_client_ip(request)
+    logger= logging.getLogger(ip)
     # Check handler exists
     
     if len(logger.handlers) > 0:
@@ -48,7 +57,7 @@ def create_dir() :
             print("Failed to create directory!!!!!")
 
 
-def log_start(directory,msg) :
+def log_start(request,directory,msg) :
     
-    logger = create_logger(directory)
+    logger = create_logger(request,directory)
     logger.info(msg)
