@@ -13,6 +13,7 @@ from django.db.models import Q
 from hzm.logs import *
 import logging
 
+
 #from datetime import datetime
 # Create your views here.
 SIZE_FREEBOARD_DESCRIPTION=1000
@@ -43,11 +44,11 @@ def main_page(request) :
 
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
-		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
 		club=Club.objects.get(pk=player.club_id)
 		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club,'freeboards':freeboards})
 	else :
-		log_start(log_dir+'/today.log','main page')
+		log_start(request,log_dir+'/today.log','main page')
 		return render(request,'hzm/main_page.html',{'freeboards':freeboards})
 
 def mypage(request) :
@@ -375,6 +376,10 @@ def freeboard_info(request,post_pk) :
 			player=Player.objects.get(pk=pk)
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+<<<<<<< HEAD
+		
+=======
+>>>>>>> 79dbbc54e18da1f09cd5129b25361386f4517c1c
 
 	except Exception as e :
 		print(e)

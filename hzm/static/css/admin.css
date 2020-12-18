@@ -46,10 +46,10 @@
     }
 
     #AdminRecordThead tr th:nth-child(1){ width:3%;}
-    #AdminRecordThead tr th:nth-child(2){ width:37%;}
+    #AdminRecordThead tr th:nth-child(2){ width:34%;}
     #AdminRecordThead tr th:nth-child(3){ width:22%;}
-    #AdminRecordThead tr th:nth-child(4){ width:9%;}
-    #AdminRecordThead tr th:nth-child(5){ width:29%;}
+    #AdminRecordThead tr th:nth-child(4){ width:15%;}
+    #AdminRecordThead tr th:nth-child(5){ width:26%;}
 
     #AdminAcceptThead tr th:nth-child(1){ width:10%;}
     #AdminAcceptThead tr th:nth-child(2){ width:35%;}

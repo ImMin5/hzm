@@ -80,13 +80,13 @@ def edit_mypage_info(request) :
 				player.save()
 			#비밀번호를 변경할 경우
 			if password_change :
-				log_start(log_dir+'/'+str(player.pk)+'.log',"changed password : "+password_change)
+				log_start(request,log_dir+'/'+str(player.pk)+'.log',"changed password : "+password_change)
 				player.passwd = password_change
 				player.save()
 			
 			#세션에 바뀐 이름으로 넣어줌
 			request.session['player_name'] = name
-			log_start(log_dir+'/'+str(player.pk)+'.log',"changed player_name "+name)
+			log_start(request,log_dir+'/'+str(player.pk)+'.log',"changed player_name "+name)
 			data = {
 				'msg' : 'good',
 				'player_name' : name,
@@ -117,7 +117,7 @@ def sign_in(request) :
 				request.session['pk'] = player.pk
 				request.session['player_name'] = player.player_name
 				request.session['club_id'] = player.club.pk
-				log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" login")
+				log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" login")
 				return HttpResponse("login")
 			else :
 				print('NONE')
@@ -149,7 +149,7 @@ def logout(request) :
 	try :
 		pk=request.session.get('pk')
 		player=Player.objects.get(pk=pk)
-		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" logout")
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" logout")
 		request.session.clear()
 		return HttpResponse("good")
 	except Exception as e :
@@ -178,7 +178,7 @@ def add_fmatch(request) :
 		passwd=passwd,blue_goga_avg=blue_goga_avg,date=date)
 		pr
 		match.save()
-		log_start(log_dir+'/today.log',post_writer+" submit fmatch :"+str(match.pk))
+		log_start(request,log_dir+'/today.log',post_writer+" submit fmatch :"+str(match.pk))
 		return redirect('/')
 	except Exception as e :
 		print(e)
@@ -200,7 +200,7 @@ def add_schedule(request) :
 		'date_start' : schedule.date_start,
 		'pk' : schedule.pk,
 	}
-	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" made schedule : "+str(schdule.pk))
+	log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" made schedule : "+str(schdule.pk))
 	return JsonResponse(data)
 
 def get_my_schedules(request) :
@@ -261,7 +261,7 @@ def delete_my_schedule(request) :
 		s_pk = request.POST.get('pk')
 		player=Player.objects.get(pk=pk)
 		schedule = Schedule.objects.filter(pk=s_pk)
-		log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" deleted schedule : "+str(schdule.pk))
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" deleted schedule : "+str(schdule.pk))
 		schedule.delete()
 		return HttpResponse("삭제되었습니다!")
 	except Exception as e :
@@ -561,7 +561,7 @@ def save_admin_match_info(request) :
 
 
 	match.save()
-	log_start(log_dir+'/'+str(temp_player.pk)+'.log',player.player_name+" admin add fmatch : "+str(match.pk))		
+	log_start(request,log_dir+'/'+str(temp_player.pk)+'.log',player.player_name+" admin add fmatch : "+str(match.pk))		
 	return HttpResponse("save")
 
 def get_redteam_subplayer(request) :
@@ -669,7 +669,7 @@ def add_map_record(request) :
 			record_date=record_date,club_id=club_id)
 		
 	record.save()
-	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" add record : "+str(record.pk))
+	log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" add record : "+str(record.pk))
 	records=Record.objects.filter(Q(player_id=player.pk) & Q(club_id=club_id)).order_by('map_name')
 	serialized_records = RecordSerializer(records,many=True)
 
@@ -725,7 +725,7 @@ def add_admin_record(request) :
 			record_date=record_date,club_id=club_id)
 
 	record.save()
-	log_start(log_dir+'/'+str(player.pk)+'.log',player.player_name+" admin add record : "+str(record.pk))
+	log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" admin add record : "+str(record.pk))
 	return HttpResponse("good")
 
 
@@ -804,7 +804,7 @@ def add_freeboard_comment(request) :
 		freeboardcomment=Freeboardcomment(player_id=pk,post_id=post_pk,\
 			player_name=player_name,date=date,comments=comment)
 		freeboardcomment.save()
-		log_start(log_dir+'/'+str(pk)+'.log',player_name+" freeboard:"+str(post_pk)+" comment: "+str(freeboardcomment.pk))
+		log_start(request,log_dir+'/'+str(pk)+'.log',player_name+" freeboard:"+str(post_pk)+" comment: "+str(freeboardcomment.pk))
 	except Exception as e :
 		print(e)
 		return HttpResponse("fail")
@@ -823,7 +823,7 @@ def add_freeboard_writing(request) :
 		post=Freeboard(player_id=player.pk,club_id=club_id,post_writer=player.player_name,\
 			title=title,date=date,description=description)
 		post.save()
-		log_start(log_dir+'/'+str(player.pk)+'.log',"freeboard writing "+str(post.pk))
+		log_start(request,request,log_dir+'/'+str(player.pk)+'.log',"freeboard writing "+str(post.pk))
 		return HttpResponse("good")
 	except Exception as e :
 		print(e)
