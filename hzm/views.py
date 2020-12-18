@@ -376,7 +376,10 @@ def freeboard_info(request,post_pk) :
 			player=Player.objects.get(pk=pk)
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 79dbbc54e18da1f09cd5129b25361386f4517c1c
 
 	except Exception as e :
 		print(e)

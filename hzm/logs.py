@@ -2,7 +2,10 @@ import logging
 import os
 import datetime
 import socket
+<<<<<<< HEAD
 from ipware import get_client_ip
+=======
+>>>>>>> 79dbbc54e18da1f09cd5129b25361386f4517c1c
 kmh="kmh"
 
 logger=0
@@ -17,7 +20,11 @@ def get_client_ip(request):
 
 def create_logger(request,directory) :
     # 로그 생성
+<<<<<<< HEAD
     ip = get_client_ip(request)
+=======
+    ip=socket.gethostbyname(socket.getfqdn())
+>>>>>>> 79dbbc54e18da1f09cd5129b25361386f4517c1c
     logger= logging.getLogger(ip)
     # Check handler exists
     

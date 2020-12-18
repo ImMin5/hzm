@@ -125,7 +125,7 @@
 				  				<td>{{player.player_name}}({{player.pk}})</td>
 				  			{% endif %}
 				  		{% endfor %}
-						  <td><input style="text-align:center" id="td_record_{{record.pk}}" type="text" class="form-control" value="{{record.record}}"></td>
+						  <td><input style="text-align:center" id="td_record_{{record.pk}}" type="text" value="{{record.record}}"></td>
 						  <td>
 							  <button name="AdminRecordEditBtn" class="btn btn-secondary bg-dark" data-record="{{record.record}}" data-pk="{{record.pk}}">수정</button>
 							  <button name="AdminRecordDeleteBtn" class="btn btn-secondary bg-dark" data-pk="{{record.pk}}">삭제</button>
