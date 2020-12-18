@@ -13,7 +13,6 @@ from django.db.models import Q
 from hzm.logs import *
 import logging
 
-
 #from datetime import datetime
 # Create your views here.
 SIZE_FREEBOARD_DESCRIPTION=1000
@@ -384,10 +383,10 @@ def freeboard_info(request,post_pk) :
 			player=Player.objects.get(pk=pk)
 			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
-	
 	except Exception as e :
 		print(e)
 		return redirect('hzm:error_page')
+	
 def freeboard_write(request) :
 	pk=request.session.get('pk')
 	try :
