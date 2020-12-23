@@ -34,6 +34,13 @@ def record_win_lose(player_id,club_id) :
 	return False
 
 
+def club_member_match_stat(club_id) :
+	players=Player.objects.filter( Q(club_id=club_id) & Q(accept=True))
+
+	for player in players :
+		record_win_lose(player.pk,club_id)
+	return False
+
 def main_page(request) :
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
@@ -258,6 +265,7 @@ def club(request,club_pk) :
 	if pk is None :
 		return redirect('/')
 	try :
+		club_member_match_stat(club_id)
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
 		club_member=Player.objects.filter(Q(club_id=club_id) & Q(accept=True)).count

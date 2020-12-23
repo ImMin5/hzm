@@ -538,7 +538,7 @@
 						if( data[i].win == 0 && data[i].lose == 0)
 							result="전적없음"
 						else
-							result=Number(data[i].win)/(Number(data[i].win)+Number(data[i].lose))*100 +"%";
+							result=Math.round(Number(data[i].win)/(Number(data[i].win)+Number(data[i].lose))*100) +"%";
 
 
 						$('#modal_tbody_club_member').append("<tr style=font-size:1.4rem;> \
