@@ -5,6 +5,14 @@
 	overflow:scroll;
 	border:0;
 }
+
+#modal_thead_club_member tr th{
+    text-align: center; position:sticky; top:0;
+}
+#modal_tbody_club_member tr td{
+	text-align: center;
+
+}
 @media (min-width:1024px){
 
 }
