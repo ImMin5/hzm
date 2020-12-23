@@ -93,7 +93,7 @@
 							{% if club.host == player.player_name %}
 							<span style="padding-top:2%; font-size:1.5rem; " id="club_edit_btn" onclick='location.href="{% url 'hzm:club_admin' club.pk %}"' ><i class="fas fa-cog"></i></span></h4>
 							{% endif %}
-							<h5>클럽원 {{club.member}}명</h5>
+							<h5>클럽원 {{club_member}}명</h5>
 						</div>
 						<div class="badge text-wrap" style="padding:0px; font-size:1.1em; height:3vh;overflow: scroll;">클럽소개 :{{club.description}}</div>
 				  	</div>
