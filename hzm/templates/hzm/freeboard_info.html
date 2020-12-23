@@ -14,7 +14,7 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard_info.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard_info.css?2">
 
 
 	 <!--폰트 어썸-->
@@ -30,7 +30,7 @@
 	<!--navbar 시작-->
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
 		{% if pk %}
-		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_name}}</a>
 		{% else %}
 		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
 		{% endif %}
@@ -99,11 +99,11 @@
 					<div id="post_body" class="container-fluid">
 						{{post.description}}
 					</div><!-- post body끝-->
-					<div class="container-fluid" id="matchinfo_footer">
+					<div class="container-fluid" id="freeboard_footer">
 						<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:freeboard' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
 						{% if post.player_id == pk %}
-						<button type="button" id="matchinfo_delete_btn" class="btn btn-secondary bg-dark" disabled><a href="" style="color:white; text-decoration: none; " >삭제</a></button>
-						<button type="button" id="matchinfo_edit_btn" class="btn btn-secondary bg-dark">수정</button>
+						<button type="button" id="freeboard_delete_btn" class="btn btn-secondary bg-dark"><a style="color:white; text-decoration: none; " >삭제</a></button>
+						<button type="button" id="freeboard_edit_btn" class="btn btn-secondary bg-dark" onclick="location.href='{% url 'hzm:freeboard_edit' post.pk %}'" >수정</button>
 						{% endif %}
 					</div>
 					{% if pk %}
@@ -112,10 +112,14 @@
 						<ul id="CommentList">
 							<div class="comment_tab"><h4 class="h4">댓글 </h4></div>
 							{% for comment in comments %}
-							<div class="CommentBox">
+							<div name="comment_{{comment.pk}}" class="CommentBox">
 								<li>
 									<div class="CommentArea">
-										<div class="comment_player"><b>{{comment.player_name}}</b></div>
+										<div class="comment_player"><b>{{comment.player_name}}</b>
+											{% if pk == comment.player_id %}
+											<i id="comment_delete_btn" style="float:right" class="fas fa-times" data-pk="{{comment.pk}}"></i>
+											{% endif %}
+										</div>
 										<p><span>{{comment.comments}}</span></p>
 										<div class="comment_date">{{comment.date}}</div>
 									</div>
@@ -350,6 +354,69 @@
 				}
 			})
 		})
+
+
+		//댓글 삭제하기
+		$(document).on('click','#comment_delete_btn',function(e) {
+			swal({
+				title: "정말 삭제하시겠습니까?",
+				icon : 'warning',
+				buttons:{
+					cancel: true,
+					confirm : true,
+				}
+			})
+			.then((willDelete)=> {
+				if(willDelete) {
+					comment_pk=$(this).attr('data-pk')
+					$.ajax({
+						url : "{% url 'hzm:ajax_delete_freeboardcomment' %}",
+						type : 'POST',
+						data : {
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+							'comment_pk' : comment_pk,
+						},
+						success: function(data) {
+							$('div[name=comment_'+data+']').remove();
+						},
+						error: function(error) {
+
+						},
+					});
+				}
+			})
+		});
+
+		//글 삭제 버튼
+		$(document).on('click','#freeboard_delete_btn',function() {
+			swal({
+				title: "정말 삭제하시겠습니까?",
+				icon : 'warning',
+				buttons:{
+					cancel: true,
+					confirm : true,
+				}
+			})
+			.then((value)=>{ 
+				if(value) {
+					var freeboard_pk="{{post.pk}}"
+					$.ajax({
+						url:"{% url 'hzm:ajax_delete_freeboard_writing' %}",
+						type:'POST',
+						data: {
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+							'freeboard_pk' : freeboard_pk,
+						},
+						success: function(data) {
+							location.href="{% url 'hzm:freeboard'  %}";
+						},
+						error : function(error) {
+							swal("통신오류");
+						},
+					});
+				}
+			})
+		});
 
 	</script>
 	

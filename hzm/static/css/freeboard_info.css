@@ -14,7 +14,10 @@
     word-break:break-all;
 }
 
-
+#CommentList{
+    padding-left: 2%;
+    padding-right:2%;
+}
 #comment{
     border:none;
     resize:none;

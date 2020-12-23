@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YPRPE75FJG');
-</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
@@ -125,7 +116,7 @@
 				  				<td>{{player.player_name}}({{player.pk}})</td>
 				  			{% endif %}
 				  		{% endfor %}
-						  <td><input style="text-align:center" id="td_record_{{record.pk}}" type="text" value="{{record.record}}"></td>
+						  <td><input style="width:100%; text-align:center" id="td_record_{{record.pk}}" type="text" value="{{record.record}}"></td>
 						  <td>
 							  <button name="AdminRecordEditBtn" class="btn btn-secondary bg-dark" data-record="{{record.record}}" data-pk="{{record.pk}}">수정</button>
 							  <button name="AdminRecordDeleteBtn" class="btn btn-secondary bg-dark" data-pk="{{record.pk}}">삭제</button>
@@ -983,7 +974,6 @@
 		//레코드 삭제 버튼
 		$(document).on('click','button[name=AdminRecordDeleteBtn]',function(){
 			record_pk=$(this).attr('data-pk');
-			console.log("delete")
 			console.log(record_pk)
 			$.ajax({
 				url:"{% url 'hzm:ajax_delete_admin_record' %}",

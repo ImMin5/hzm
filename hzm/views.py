@@ -38,7 +38,7 @@ def main_page(request) :
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
 	
-	freeboard=Freeboard.objects.all().order_by('date')
+	freeboard=Freeboard.objects.all().order_by('-date')
 	freeboard_paginator = Paginator(freeboard, 5)
 	freeboards = freeboard_paginator.get_page(1)
 
@@ -357,7 +357,6 @@ def freeboard(request) :
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
-
 	try :
 		posts = paginator.get_page(pages)
 	except PageNotAnInteger :
@@ -377,11 +376,13 @@ def freeboard_info(request,post_pk) :
 	try :
 		pk=request.session.get('pk')
 		post=Freeboard.objects.get(pk=post_pk)
-		comments=Freeboardcomment.objects.filter(post_id=post.pk).order_by('-date')
+		comments=Freeboardcomment.objects.filter(post_id=post.pk).order_by('date')
 		club=Club.objects.get(pk=post.club_id)
 		if pk is not None :
+			club_id=request.session.get('club_id')
+			club_name=Club.objects.get(pk=club_id).club_name
 			player=Player.objects.get(pk=pk)
-			return render(request,'hzm/freeboard_info.html',{'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+			return render(request,'hzm/freeboard_info.html',{'club_name':club_name,'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
 	except Exception as e :
 		print(e)
@@ -396,4 +397,21 @@ def freeboard_write(request) :
 	except Exception as e :
 		print(e)
 		return redirect('hzm:error_page')
-	
+
+def freeboard_edit(request,freeboard_pk) :
+	try :
+		pk=request.session.get('pk')
+		post=Freeboard.objects.get(pk=freeboard_pk)
+		if pk != post.player_id :
+			return redirect('hzm:main_page')
+		elif pk is None :
+			return refirect('hzm:main_page')
+
+		club=Club.objects.get(pk=post.club_id)
+		club_id=request.session.get('club_id')
+		club_name=Club.objects.get(pk=club_id).club_name
+		player=Player.objects.get(pk=pk)
+		return render(request,'hzm/freeboard_edit.html',{'club_name':club_name,'player':player,'pk':pk,'post':post,'club':club,'maxlength':SIZE_DESCRIPTION})
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
