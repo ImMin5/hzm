@@ -22,7 +22,7 @@ class MatchSerializer(serializers.ModelSerializer) :
 class PlayerSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Player
-		fields = ('player_name','passwd','club_id','win','lose','accept')
+		fields = ('pk','player_name','passwd','club_id','win','lose','accept')
 
 class RecordSerializer(serializers.ModelSerializer):
 	class Meta :

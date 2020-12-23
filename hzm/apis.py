@@ -816,23 +816,6 @@ def add_freeboard_comment(request) :
 	return HttpResponse("good")
 
 
-def add_freeboard_writing(request) :
-	pk=request.session.get('pk')
-	club_id=request.session.get('club_id')
-	title=request.POST.get('title')
-	description=request.POST.get('description')
-	date=getTimeY_M_T()
-	try :
-		player=Player.objects.get(pk=pk)
-		post=Freeboard(player_id=player.pk,club_id=club_id,post_writer=player.player_name,\
-			title=title,date=date,description=description)
-		post.save()
-		log_start(request,request,log_dir+'/'+str(player.pk)+'.log',"freeboard writing "+str(post.pk))
-		return HttpResponse("good")
-	except Exception as e :
-		print(e)
-		return HttpResponse(e)
-
 def delete_admin_record(request) :
 	try :
 		club_id=request.session.get('club_id')
@@ -866,3 +849,12 @@ def getTimeY_M_T() :
 	now = datetime.datetime.now()
 	nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
 	return nowDate
+
+def get_club_member(request) :
+	try :
+		club_id=request.session.get('club_id')
+		players=Player.objects.filter(Q(club_id=club_id) & Q(accept=True)).order_by('player_name')
+		serialized_players = PlayerSerializer(players,many=True)
+		return HttpResponse(json.dumps(serialized_players.data))
+	except Exception as e :
+		return HttpResponse(e)

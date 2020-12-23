@@ -67,5 +67,6 @@ urlpatterns = [
 	path('freeboard/edit/<int:freeboard_pk>',views.freeboard_edit ,name='freeboard_edit'),
 	path('api/edit_freeboard_writing',apis_freeboard.edit_freeboard_writing ,name='ajax_edit_freeboard_writing'),
 	path('api/delete_freeboard_writing',apis_freeboard.delete_freeboard_writing ,name='ajax_delete_freeboard_writing'),
+	path('api/get_club_member',apis.get_club_member ,name='ajax_get_club_member'),
 	
 ]

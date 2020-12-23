@@ -30,9 +30,9 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?6">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
-	 <link rel="stylesheet" type="text/css" href="/static/css/club.css?2"
+	 <link rel="stylesheet" type="text/css" href="/static/css/club.css?3"
 	
 
 
@@ -141,7 +141,13 @@
 					  </a>
 					</div>
 				</div><!--공지사항 슬라이드 끝-->
-		</div>
+
+				<div class="container-fluid">
+					<div style="padding-top:10px;" class="club_toolbox"><button id="clubmember_btn" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#club_member" >클럽원목록</button>
+					</div>
+				</div>
+				
+		</div><!-- middle container end -->
 
 
 		<!--하단 탭바-->
@@ -189,27 +195,30 @@
 	</nav><!--하단 탭바 끝-->
 	
 
-<!-- 로그인 모달 -->
-<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+<!-- 클럽원 모달 -->
+<div class="modal fade" id="club_member" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
+      		<h5 class="modal-title" id="modal_clubmember_title">클럽원 목록</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
 	   </div>
-	   <div class="modal-body" >
-	   		<form method="post">
-		   		<div class="input-group mb-3">
-		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
-				</div>
-		        <div class="input-group mb-3">
-		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
-		        	<div class="input-group-append">
-				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
-				</div>
-			</form>
+	   <div class="modal-body">
+			<div class="table-responsive" style="max-height:40vh; overflow:scroll;">
+				<table class="table table-hover">
+					 <thead class="thead-light" id="modal_thead_club_member">
+				   <tr>
+					   <th>클럽원 닉네임</th>
+					   <th>승률</th>
+				   </tr>
+			   </thead>
+			   <tbody id="modal_tbody_club_member">
+
+			   </tbody>
+		   </table>
+		   </div>
 		</div>
       </div>
     </div>
@@ -515,6 +524,34 @@
 				});
 			});
 		});
+
+		//클럽멤버 모달 
+		$(document).on('click','#clubmember_btn',function() {
+			$.ajax( {
+				url :"{% url 'hzm:ajax_get_club_member' %}",
+				type: 'GET',
+				dataType:'JSON',
+				success:function(data) {
+					var result;
+					$('#modal_tbody_club_member').empty();
+					for(var i=0; i < data.length; i++) {
+						if( data[i].win == 0 && data[i].lose == 0)
+							result="전적없음"
+						else
+							result=Number(data[i].win)/(Number(data[i].win)+Number(data[i].lose))*100 +"%";
+
+
+						$('#modal_tbody_club_member').append("<tr style=font-size:1.4rem;> \
+							<td>"+data[i].player_name+"</td>\
+							<td>"+result+"</td>\
+							</tr>")
+					}
+				},
+				error : function(error) {
+					swal("통신오류");
+				},
+			})
+		})
 		
 		
 			

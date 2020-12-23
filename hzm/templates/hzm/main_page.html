@@ -29,7 +29,7 @@
 
 	 
 	 <!--커스텀-->	 
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?5">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?6">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	  <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?3">
@@ -128,7 +128,7 @@
 					<tbody style="font-size:2rem;">
 						{% for m in matches %}
 						<tr  onclick="location.href='{% url 'hzm:match_info' m.pk %}'">
-							<td style="width:40%;">
+							<td style="width:48%;">
 								<div>
 									<span style="font-size:0.7rem;" ><i class="fas fa-circle"></i></span>						
 									{{m.red_club_name}} vs {{m.blue_club_name}}
