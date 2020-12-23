@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from . import apis
+from . import apis,apis_freeboard
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -60,7 +60,12 @@ urlpatterns = [
 	path('freeboard/<int:post_pk>/',views.freeboard_info,name='freeboard_info'),
 	path('api/save_club_description',apis.save_club_description,name='ajax_save_club_description'),
 	path('api/add_freeboard_comment',apis.add_freeboard_comment ,name='ajax_add_freeboard_comment'),
-	path('api/add_freeboard_writing',apis.add_freeboard_writing ,name='ajax_add_freeboard_writing'),
+	path('api/add_freeboard_writing',apis_freeboard.add_freeboard_writing ,name='ajax_add_freeboard_writing'),
 	path('api/delete_admin_record',apis.delete_admin_record ,name='ajax_delete_admin_record'),
 	path('api/edit_admin_record',apis.edit_admin_record ,name='ajax_edit_admin_record'),
+	path('api/delete_freeboardcomment',apis_freeboard.delete_freeboardcomment ,name='ajax_delete_freeboardcomment'),
+	path('freeboard/edit/<int:freeboard_pk>',views.freeboard_edit ,name='freeboard_edit'),
+	path('api/edit_freeboard_writing',apis_freeboard.edit_freeboard_writing ,name='ajax_edit_freeboard_writing'),
+	path('api/delete_freeboard_writing',apis_freeboard.delete_freeboard_writing ,name='ajax_delete_freeboard_writing'),
+	
 ]
