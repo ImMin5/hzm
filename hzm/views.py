@@ -260,7 +260,8 @@ def club(request,club_pk) :
 	try :
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
-		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
+		club_member=Player.objects.filter(Q(club_id=club_id) & Q(accept=True)).count
+		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club ,'club_member':club_member})
 	except Exception as e :
 		print(e)
 		return redirect('/')
