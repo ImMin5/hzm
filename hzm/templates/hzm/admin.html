@@ -173,7 +173,7 @@
 						<div class="input-group mb-3" id="matchinfo_redteam_member">
 							<div class="input-group mb-3">
 								<span class="input-group-text">고가평균</span>
-								<input type="text" id="matchinfo_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="RED팀 고가평균" aria-describedby="button-addon2" step="2"  required>
+								<input type="text" id="matchinfo_red_goga_avg" class="form-control" placeholder="경기시간" aria-label="RED팀 고가평균" aria-describedby="button-addon2" step="2"  title="00:00:00" disabled>
 							</div>
 							
 							<input type="text" id="matchinfo_red_p1_name" name="redteam" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" value=""  required>
@@ -190,7 +190,7 @@
 						<div class="input-group mb-3">
 							<div class="input-group mb-3">
 								<span class="input-group-text">고가평균</span>
-								<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2"  required title="00:00:00">
+								<input type="text" id="matchinfo_blue_goga_avg" class="form-control" placeholder="00:00:00" aria-label="시작시간" aria-describedby="button-addon2" title="00:00:00" disabled>
 							</div>
 							<input type="text" id="matchinfo_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2"  required>
 							<input type="text" id="matchinfo_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2"  required>
@@ -207,9 +207,9 @@
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">시작시간</span>
-							<input type="time" id="matchinfo_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2"   required>
+							<input type="time" id="matchinfo_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2"   disabled>
 							<span class="input-group-text">종료시간</span readonly>
-							<input type="time" id="matchinfo_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
+							<input type="time" id="matchinfo_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" disabled>
 						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">RED WIN</span>
@@ -689,8 +689,8 @@
 
 			if( team=="red" || team=="all") {
 				if($.trim(red_club_name) == '')return swal("RED팀 클럽명을 입력해주세요")
-				if(goga_form_check(red_goga_avg)==false )return swal("RED팀 고가 양식 00:00:00");
-				else if($.trim(red_p1) == '') return swal("RED 라이더1 을 입력해주세요.");
+				//if(goga_form_check(red_goga_avg)==false )return swal("RED팀 고가 양식 00:00:00");
+				if($.trim(red_p1) == '') return swal("RED 라이더1 을 입력해주세요.");
 				else if($.trim(red_p2) == '') return swal("RED 라이더2 을 입력해주세요.");
 				if(player_num >=3 && $.trim(red_p3) == '') return swal("RED 라이더3 을 입력해주세요.");
 				if(player_num >=4 && $.trim(red_p4) == '') return swal("RED 라이더4 을 입력해주세요.");
@@ -699,19 +699,19 @@
 			 
 			if( team=="blue" || team=="all") {
 				if($.trim(blue_club_name) == '')return swal("BLUE팀 클럽명을 입력해주세요");
-				if(goga_form_check(blue_goga_avg)==false )return swal("BLUE팀 고가 양식 00:00:00");
-				else if($.trim(blue_p1) == '') return swal("BLUE 라이더1 을 입력해주세요.");
+				//if(goga_form_check(blue_goga_avg)==false )return swal("BLUE팀 고가 양식 00:00:00");
+				if($.trim(blue_p1) == '') return swal("BLUE 라이더1 을 입력해주세요.");
 				else if($.trim(blue_p2) == '') return swal("BLUE 라이더2 을 입력해주세요.");
 				if(player_num >=3 && $.trim(blue_p3) == '') return swal("BLUE 라이더3 을 입력해주세요.");
 				if(player_num >=4 && $.trim(blue_p4) == '') return swal("BLUE 라이더4 을 입력해주세요.");
 			}
 
 			if(match_date_form_check(match_date) == false) return swal("날짜 입력 양식 ex)2020-01-01");
-			if(!(time_start)) return swal("시작 시간을 입력해 주세요");
-			else if(!(time_end)) return swal("종료 시간을 입력해 주세요");
-			else if(time_form_check(time_start) == false || time_form_check(time_end)==false) return swal("시간 입력 양식 ex)00:00 ")
-			else if(time_start > time_end) return swal("시작시간이 종료시간보다 늦습니다!");
-			else if($.trim(red_win) == '') return swal("RED팀 승리횟수 입력");
+			//if(!(time_start)) return swal("시작 시간을 입력해 주세요");
+			//else if(!(time_end)) return swal("종료 시간을 입력해 주세요");
+			//else if(time_form_check(time_start) == false || time_form_check(time_end)==false) return swal("시간 입력 양식 ex)00:00 ")
+			//else if(time_start > time_end) return swal("시작시간이 종료시간보다 늦습니다!");
+			if($.trim(red_win) == '') return swal("RED팀 승리횟수 입력");
 			else if($.trim(blue_win) == '') return swal("BLUE팀 승리횟수 입력")
 			
 				

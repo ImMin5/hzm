@@ -480,15 +480,18 @@ def save_admin_match_info(request) :
 	passwd=request.POST.get('passwd')
 	player_num=request.POST.get('player_num')
 	match_date=request.POST.get('match_date')
-	match_time_start=request.POST.get('time_start')
-	match_time_end=request.POST.get('time_end')
-	red_goga_avg=request.POST.get('red_goga_avg')
-	blue_goga_avg=request.POST.get('blue_goga_avg')
+	#match_time_start=request.POST.get('time_start')
+	#match_time_end=request.POST.get('time_end')
+	#red_goga_avg=request.POST.get('red_goga_avg')
+	#blue_goga_avg=request.POST.get('blue_goga_avg')
 	red_win=request.POST.get('red_win')
 	blue_win=request.POST.get('blue_win')
 	date = request.POST.get('date')
 	result=False
-	
+	red_goga_avg="00:00:00"
+	blue_goga_avg="00:00:00"
+	match_time_start="00:00"
+	match_time_end="00:01"
 	try :
 		temp_player=Player.objects.get(pk=pk)
 	except Exception as e :
@@ -561,7 +564,7 @@ def save_admin_match_info(request) :
 		,red_player_name=players_red,red_player_id=players_red_id, blue_player_name = players_blue \
 		,match_date=match_date, match_time_start=match_time_start, match_time_end=match_time_end \
 		,red_goga_avg=red_goga_avg, blue_goga_avg=blue_goga_avg ,date=date\
-		,player_num=player_num,red_win=red_win, blue_win=blue_win,result=result, accept=True)
+		,player_num=player_num,red_win=red_win, blue_win=blue_win,state="경기종료",result=result, accept=True)
 
 
 	match.save()
