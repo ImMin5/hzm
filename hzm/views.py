@@ -238,25 +238,31 @@ def error_page(request) :
 	return render(request, 'hzm/error.html')
 
 def personal_record(request) :
-	player_name=request.session.get('player_name')
-	pk=request.session.get('pk')
-	club_id=request.session.get('club_id')
-	maps=Map.objects.all().order_by('map_name')	
-	records=Record.objects.filter(player_id=pk).order_by('map_name')
-
 	try :
+		player_name=request.session.get('player_name')
+		pk=request.session.get('pk')
+		if pk is None :
+			raise Exception("pk is none")
+		
+		club_id=request.session.get('club_id')
+		maps=Map.objects.all().order_by('map_name')	
+		records=Record.objects.filter(player_id=pk).order_by('map_name')
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
 		record_win_lose(pk,club_id)
+		matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[pk]))
+		
+		if matches.exists() :
+			print("ee")
+			return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club,'matches':matches})
+		else :
+			return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club})
+
+
 	except Exception as e :
 		print(e)
 		return redirect("/")
 
-	if pk is None :
-		return redirect("/")
-		
-
-	return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club})
 
 def club(request,club_pk) :
 	pk=request.session.get('pk')
