@@ -737,14 +737,18 @@ def add_admin_record(request) :
 
 
 def get_records(request) :
-	player_id=request.session.get('pk')
-	club_id=request.session.get('club_id')
+	try :
+		player_id=request.session.get('pk')
+		club_id=request.session.get('club_id')
+		records=Record.objects.filter(Q(player_id=player_id) & Q(club_id=club_id)).order_by('map_name')
+		serialized_records = RecordSerializer(records,many=True)	
+		
+			
+		return HttpResponse(json.dumps(serialized_records.data))
+	except Exception as e:
+		return HttpResponse(e)	
 
-	records=Record.objects.filter(Q(player_id=player_id) & Q(club_id=club_id)).order_by('map_name')
 
-
-	serialized_records = RecordSerializer(records,many=True)		
-	return HttpResponse(json.dumps(serialized_records.data))
 
 def get_record_rank(request) :
 	pk=request.session.get('pk')

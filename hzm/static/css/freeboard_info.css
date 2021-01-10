@@ -61,6 +61,15 @@
         padding-right:0;
         padding-top:5%;
     }
+    #CommentList b{
+        font-size:1.2rem;
+    }
+    #CommentList p{
+        font-size:1.4rem;
+    }
+    #CommentList div{
+        font-size:1.4rem;
+    }
     #post_body{
         font-size:3rem;
     }
