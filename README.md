@@ -1,5 +1,5 @@
 # hzm_site
-kart
+카트라이더 클럽 관리 및 기록 페이지
 
 # postgresql 컨테이너 실행
 ```
