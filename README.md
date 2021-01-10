@@ -2,6 +2,7 @@
 kart
 
 #django 
+'''
 $ docker run -it --rm \
     -p 8000:8000 \
     --link db \
@@ -10,3 +11,4 @@ $ docker run -it --rm \
     --volume=$(pwd):/app/ \
     django-sample \
     ./manage.py runserver 0:8000
+'''
