@@ -21,6 +21,7 @@ import pandas as pd
 import numpy as np
 from hzm.logs import *
 import logging
+import datetime
 
 log_dir = create_dir()
 
@@ -54,6 +55,9 @@ def delete_freeboardcomment(request) :
         comment_pk=request.POST.get('comment_pk')
         comment=Freeboardcomment.objects.get(pk=comment_pk)
         log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" delete comment("+str(comment.pk)+") "+comment.comments)
+        freeboard=Freeboard.objects.get(pk=comment.post_id)
+        freeboard.comment_count-=1
+        freeboard.save()
         print("delete")
         comment.delete()
         return HttpResponse(comment_pk)

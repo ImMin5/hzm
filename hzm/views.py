@@ -12,6 +12,8 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Q
 from hzm.logs import *
 import logging
+from django.db.models import Count,Max,Min
+from pandas import Series
 
 #from datetime import datetime
 # Create your views here.
@@ -250,8 +252,8 @@ def personal_record(request) :
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
 		record_win_lose(pk,club_id)
-		matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[pk]))
-		
+		matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[pk])).order_by('-match_date')
+
 		if matches.exists() :
 			print("ee")
 			return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club,'matches':matches})
