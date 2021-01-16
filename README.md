@@ -3,7 +3,7 @@
 
 # postgresql 컨테이너 실행
 ```
-$ docker run -it --rm \
+$sudo docker run -it --rm \
     --name hzm_db \
     -e POSTGRES_DB=project_hzm \
     -e POSTGRES_USER=hzm_admin \
@@ -22,7 +22,7 @@ $ docker build -t django-sample .
 ===
 ```
 $sudo docker run -it --rm \
-    --name hzm_site
+    --name hzm_site \
     -p 9999:9999 \
     --link hzm_db \
     -e DJANGO_DB_HOST=hzm_db \
@@ -31,3 +31,13 @@ $sudo docker run -it --rm \
     django-hzm \
     ./manage.py runserver 0:9999
 ```
+#redis 실행방법
+===
+₩₩₩
+$ sudo docker run --it --rm \
+    --name hzm_chat
+    -p 6379:6379 \
+    --network redis-net -d \
+    redis redis-server \
+    --appendonly yes
+₩₩₩
