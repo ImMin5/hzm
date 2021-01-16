@@ -33,11 +33,11 @@ $sudo docker run -it --rm \
 ```
 #redis 실행방법
 ===
-₩₩₩
-$ sudo docker run --it --rm \
+```
+$ sudo docker run -it --rm \
     --name hzm_chat
     -p 6379:6379 \
-    --network redis-net -d \
+    --network hzm-net -d \
     redis redis-server \
     --appendonly yes
-₩₩₩
+```
