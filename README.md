@@ -16,7 +16,7 @@
  + PostgreSQL 9.6.1
  + Django 3.6.4
  ```
-pip install Django==3.1.4
+pip install Django==3.6.4
  ```
  ```
 pip install djangorestframework==3.11.1
