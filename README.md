@@ -21,6 +21,9 @@ pip install Django==3.6.4
  ```
 pip install djangorestframework==3.11.1
  ```
+ ```
+python -m pip install -U channels
+ ```
 ```
 pip install channels-redis==3.2.0
 ```
