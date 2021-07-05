@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YPRPE75FJG');
+</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
@@ -50,6 +59,9 @@
 			      		{% endif %}
 			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
+				  </li>
+				  <li class="nav-item">
+			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
@@ -89,7 +101,7 @@
 					<i id="map_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:12px; color:white;"></i>
 				</div>
 			</div>
-			<div id="table_container" class="container-fluid" style="overflow:scroll; height:60vh;">
+			<div id="table_container" class="container-fluid" style="overflow:scroll; height:55vh;">
 				<table class="table table-md">
 				  <thead class="thead-light">
 				    <tr>
@@ -113,6 +125,48 @@
 				  </tbody>
 				</table>				
 			</div>
+
+			<!-- 참여 경기 테이블-->
+			<div class="table-responsive" style="height:20vh;">
+				<div style="position:sticky; top:0;"class="bg-light"><b style="font-size:2.5rem;" ><a style=" margin-left:2%; text-decoration: none; color:gray;" href="{% url 'hzm:match' %}">내가 참여한 경기</a></b></div>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+						</tr>
+					</thead>
+					<tbody style="font-size:2rem;">
+						{% for m in matches %}
+						<tr  onclick="location.href='{% url 'hzm:match_info' m.pk %}'">
+							<td style="width:30%;">
+								<div>
+									<span style="font-size:0.7rem;" ></span>						
+									{{m.red_club_name}} vs {{m.blue_club_name}}
+								</div>
+							</td>
+							<td>{% if m.state == "경기종료" %}
+								{% if m.result %}
+								<td id="tbody_matches_td_state" style="color:green;">승리</td>
+								{% elif m.result == False %}
+									{% if m.red_win == m.blue_win %}
+										<td id="tbody_matches_td_state" style="color:gray;">결과입력대기</td>
+									{% else %}
+										<td id="tbody_matches_td_state" style="color:gray;">패배</td>
+									{% endif %}
+								{% else %}
+									<td id="tbody_matchse_td_state" style="color:blue;">{{m.state}}</td>
+								{% endif %}
+							{% elif m.state == "경기준비" %}
+								<td id="tbody_matches_td_state" style="color:black;">{{m.state}}</td>
+							{% elif m.state == "진행중" %}
+								<td id="tbody_match_td_state" style="color:red; ">{{m.state}}</td>
+							{% endif %}</td>
+							<td>{{m.red_win}} : {{m.blue_win}}</td>
+							<td>{{m.match_date}}</td>
+						</tr>
+							{%endfor %}
+					</tbody>
+				</table>
+			  </div>
 		</div><!--middle container 끝-->
 
 
@@ -161,68 +215,7 @@
 		</nav><!--하단 탭바 끝-->
 	
 
-<!--친선경기 신청 모달-->
-<div class="modal fade" id="friendlymatch" tabindex="-1" aria-labelledby="modal_fmatch_title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_fmatch_title">친선경기 신청 </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form>
-      <div class="modal-body">
-      	<div class="input-group mb-3">
-			<span class="input-group-text">클럽이름</span>
-			<input type="text" id="modal_fmatch_clubname" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" required>
-		</div>
-			<div class="input-group mb-3">
-			<span class="input-group-text"> 신청자 </span>
-			<input type="text" id="modal_fmatch_name" class="form-control" placeholder="카러플 닉네임" aria-label="신청자" aria-describedby="button-addon2" required>
-		</div>
-      	<div class="input-group mb-3">
-      		<span class="input-group-text">경기 인원</span>
-      		<select id="modal_fmatch_select" class="form-control" required>
-      			<option id="modal_fmatch_player_option1" value="2"> 2 vs 2</option>
-      			<option id="modal_fmatch_player_option2" value="3"> 3 vs 3</option>
-      			<option id="modal_fmatch_player_option3" value="4" selected> 4 vs 4</option>
-      		</select>
-      	</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">라이더</span>
-			<input type="text" id="modal_fmatch_blue_p1_name" class="form-control" placeholder="라이더1" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p2_name" class="form-control" placeholder="라이더2" aria-label="player_name" aria-describedby="button-addon2" required>
-			<input type="text" id="modal_fmatch_blue_p3_name" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" required >
-			<input type="text" id="modal_fmatch_blue_p4_name" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" required >
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">경기날짜</span>
-			<input type="date" id="modal_fmatch_date" class="form-control" placeholder="경기날짜" aria-label="경기날짜" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">고가 평균</span>
-			<input type="text" id="modal_fmatch_blue_goga_avg" class="form-control" placeholder="00:00:00 으로 입력해주세요" aria-label="시작시간" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">시작시간</span>
-			<input type="time" id="modal_fmatch_time_start" class="form-control" placeholder="경기시간" aria-label="시작시간" aria-describedby="button-addon2" required>
-			<span class="input-group-text">종료시간</span>
-			<input type="time" id="modal_fmatch_time_end" class="form-control" placeholder="경기시간" aria-label="종료시간" aria-describedby="button-addon2" required>
-		</div>
-		<div class="input-group mb-3">
-			<span class="input-group-text">비밀번호</span>
-			<input type="text" id="modal_fmatch_passwd" class="form-control" placeholder="내용 수정시 필요 꼭 기억해 주세요" aria-label="비밀번호" aria-describedby="button-addon2" required>
-		</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary bg-dark" data-dismiss="modal">닫기</button>
-        <button type="button" id="modal_fmatch_btn" class="btn btn-secondary bg-dark">신청하기</button>
-      </div>
-  </form>
-    </div>
-  </div>
-</div>
+
 
 
 <!--기록 추가 모달-->
@@ -348,25 +341,7 @@
 		});
 
 	
-		
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		});
+
 
 		//개인 기록 테이블
 		function create_record_table(data,num) {

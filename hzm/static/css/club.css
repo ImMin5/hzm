@@ -1,12 +1,25 @@
-#notice_slide > input[name=notice_slide_page_1] {
-	display:none;
+
+#middle-container{
+	height:100vh;
+	padding:5%;
+	overflow:scroll;
+	border:0;
 }
 
+#modal_thead_club_member tr th{
+    text-align: center; position:sticky; top:0;
+}
+#modal_tbody_club_member tr td{
+	text-align: center;
+
+}
 @media (min-width:1024px){
 
 }
 
 
 @media (min-width:768px) and (max-width:1024px){
-	
+	#middle-container{
+		padding:1%;
+	}
 }

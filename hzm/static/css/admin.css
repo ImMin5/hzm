@@ -1,0 +1,77 @@
+
+#middle-container{
+	min-height:100vh;
+    overflow:scroll;
+    padding-top:5%;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+#admin_record_container{
+    padding:0;
+    overflow:scroll; 
+    height:70vh;
+}
+#admin_accept_player {
+    padding:0;
+    overflow:scroll; 
+    height:40vh;
+}
+#ClubDescriptionBox{
+    padding-bottom:2%;
+}
+#AdminMatchFormContainer{
+    padding:0;
+    padding-top:3%;
+	display:inline-block;
+}
+#AdminRecordThead tr th{
+    text-align: center; position:sticky; top:0;
+}
+
+@media (min-width:1024px){
+    #middle-container{
+    }
+    #admin_record_container{
+        display:inline-block;
+        width:63%;
+        height:55vh;
+        float:left;
+    }
+    #admin_accept_player {
+        display:inline-block;
+        width:36%;
+        height:55vh;
+        float:right;
+    }
+
+    #AdminRecordThead tr th:nth-child(1){ width:3%;}
+    #AdminRecordThead tr th:nth-child(2){ width:34%;}
+    #AdminRecordThead tr th:nth-child(3){ width:22%;}
+    #AdminRecordThead tr th:nth-child(4){ width:15%;}
+    #AdminRecordThead tr th:nth-child(5){ width:26%;}
+
+    #AdminAcceptThead tr th:nth-child(1){ width:10%;}
+    #AdminAcceptThead tr th:nth-child(2){ width:35%;}
+    #AdminAcceptThead tr th:nth-child(3){ width:45%;}
+
+    #AdminMatchForm{
+        float:left;
+    }
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+	#middle-container{
+
+    }
+    #AdminRecordThead tr th:nth-child(1){ width:5%;}
+    #AdminRecordThead tr th:nth-child(2){ width:30%;}
+    #AdminRecordThead tr th:nth-child(3){ width:18%;}
+    #AdminRecordThead tr th:nth-child(4){ width:22%;}
+    #AdminRecordThead tr th:nth-child(5){ width:20%;}
+
+    #AdminAcceptThead tr th:nth-child(1){ width:20%;}
+    #AdminAcceptThead tr th:nth-child(2){ width:35%;}
+    #AdminAcceptThead tr th:nth-child(3){ width:45%;}
+}

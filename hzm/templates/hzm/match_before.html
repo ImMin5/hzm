@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YPRPE75FJG');
+</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
@@ -44,7 +53,10 @@
 				      		{% endif %}
 				      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 				      	</div>
-				      </li>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" name="navbar_link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
+					  </li>
 				      {% if pk %}
 				      <li class="nav-item">
 				        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
@@ -91,7 +103,7 @@
 							<td><a style="text-align:center; text-decoration:none; color:black;">{{match.pk}}</a></td>
 							<td>승인대기</td>
 							<td>{{match.player_num}} : {{match.player_num}}</td>
-							<td>{{match.club_red_name}} vs {{match.club_blue_name}}</td>
+							<td>{{match.red_club_name}} vs {{match.blue_club_name}}</td>
 							<td>{{match.post_writer}}</td>
 							<td>{{match.date}}</td>
 						</tr>
@@ -144,7 +156,7 @@
 						</a>
 					</div>
 					<div class="col-3" id="bottom_club" >
-						<a  href="{% url 'hzm:club' club.id %}" >
+						<a  href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>

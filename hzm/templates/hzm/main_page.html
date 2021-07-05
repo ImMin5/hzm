@@ -29,8 +29,8 @@
 
 	 
 	 <!--커스텀-->	 
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?6">
+	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	  <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?3">
 	  <!--커스텀-->
@@ -96,68 +96,73 @@
 	<!--middle container-->
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll; border:0;">
 			<!--점보트론 시작-->
-			<div class="jumbotron" style="padding-bottom: 1%;">
+			<div class="jumbotron">
 			  <h1 class="display-4"> {% if pk %} {{player.player_name}} 님 {% endif %} 반갑습니다.</br> {% if club.name %} {{club.name}} 입니다! {% endif %}	</h1>
 			  <p class="lead">학연지연매연 즐겜러들 환영합니다!</p>
 			  <hr class="my-4">
 			  <p>친선경기 신청은 아래 버튼</p>
 			  <a class="btn btn-secondary btn-lg bg-dark" href="{% url 'hzm:match_form' %}">친해지기</a>
 			</div><!--점보트론 끝-->
-			<!--
-			<!--유투브 채널 추천 슬라이드 
-				<div class="container-fluid" style="padding:0px;">
-					<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-					  <ol class="carousel-indicators">
-					    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-					    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-					    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-					  </ol>
-					  <div class="carousel-inner">
-					    <div class="carousel-item active">
-					      <div id="main_slide01_wrap" class="container-fluid" style="height:20vh; background-color:white;">
-					      	<img id="main_slide01"  src="https\:\/\/yt3\.ggpht\.com\/Txvvv-YFZP3bwUBnxneXMBLY_UCV6KPy9M1-GSsuBzGStghkXzZyyLQWGTMoWeV4F5Mua5hU\=w2120-fcrop64\=1\,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" >
-					      </div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>First slide label</h5>
-					        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-					      </div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Second slide label</h5>
-					        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					      </div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="container-fluid" style="height:20vh; background-color:gray;"></div>
-					      <div class="carousel-caption d-none d-md-block">
-					        <h5>Third slide label</h5>
-					        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-					      </div>
-					    </div>
-					  </div>
-					  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-					    <span style="width:40px; height:40px;" class="carousel-control-prev-icon" aria-hidden="true"></span>
-					    <span class="sr-only">Previous</span>
-					  </a>
-					  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-					    <span style="width:40px; height:40px;" class="carousel-control-next-icon" aria-hidden="true"></span>
-					    <span class="sr-only">Next</span>
-					  </a>
-					</div>
-				</div>공지사항 슬라이드 끝 -->
+			<div class="table-responsive">
+				<b style="font-size:2.5rem;"><a style="margin-left:2%; text-decoration: none; color:gray;" href="{% url 'hzm:freeboard' %}">자유게시판</a></b>
+				<table class="table table-hover">
+					<tbody style="font-size:2rem;">
+						{% for f in freeboards %}
+						<tr onclick="location.href='{% url 'hzm:freeboard_info' f.pk %}'">
+							<td>
+								<div>
+									<span style="font-size:0.7rem;" ><i class="fas fa-circle"></i></span>						
+									{{f.title}} [{{f.comment_count}}]
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+				
+					</tbody>
+				</table>
+			  </div>
+
+			  <div class="table-responsive">
+				<b style="font-size:2.5rem;"><a style="margin-left:2%; text-decoration: none; color:gray;" href="{% url 'hzm:match' %}">경기결과</a></b>
+				<table class="table table-hover">
+					<tbody style="font-size:2rem;">
+						{% for m in matches %}
+						<tr  onclick="location.href='{% url 'hzm:match_info' m.pk %}'">
+							<td style="width:48%;">
+								<div>
+									<span style="font-size:0.7rem;" ><i class="fas fa-circle"></i></span>						
+									{{m.red_club_name}} vs {{m.blue_club_name}}
+								</div>
+							</td>
+							{% if m.state == "경기종료" %}
+								{% if m.result %}
+								<td id="tbody_matches_td_state" style="color:green;">승리</td>
+								{% elif m.result == False %}
+									{% if m.red_win == m.blue_win %}
+										<td id="tbody_matches_td_state" style="color:gray;">결과입력대기</td>
+									{% else %}
+										<td id="tbody_matches_td_state" style="color:gray;">패배</td>
+									{% endif %}
+								{% else %}
+									<td id="tbody_matchse_td_state" style="color:blue;">{{m.state}}</td>
+								{% endif %}
+							{% elif m.state == "경기준비" %}
+								<td id="tbody_matches_td_state" style="color:black;">{{m.state}}</td>
+							{% elif m.state == "진행중" %}
+								<td id="tbody_match_td_state" style="color:red; ">{{m.state}}</td>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			  </div>
 
 		</div> <!--middle container 끝-->
 
 		<!--하단 탭바-->
-		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0;  max-height:10%; margin-top:1rem; padding:0;">
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 </div>
 			<div class="container-fluid">
 				<div class="row">
@@ -465,28 +470,7 @@
 				}
 			})
 		});
-/*
-		$(document).ready(function(e){
-			part= [];
-			part[0]='snippet';
-			part[1]='statistics';
-			$.ajax({
-				url: "https://www.googleapis.com/youtube/v3/channelSections",
-				type:'GET',
-				data : {
-					'key': 'AIzaSyAV5d9ttIrEiwQ3YwWNqQcjL49YpUAnqOo',
-					'channelId':'UCeivPjjK9-cdj8-gw4-7JRg',
-					'part':part,
 
-				},
-				success:function(data) {
-					console.log(data.snippet)
-					console.log("youtube")
-				}
-
-			});
-		})
-		*/
 </script>
 	
 </body>

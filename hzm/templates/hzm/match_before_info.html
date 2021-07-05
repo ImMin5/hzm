@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YPRPE75FJG');
+</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
@@ -45,6 +54,9 @@
 			      		{% endif %}
 			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
+				  </li>
+				  <li class="nav-item">
+			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
@@ -72,7 +84,7 @@
 		<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
 			<div class="container-fluid" style="padding-top:5%; padding-left:0;padding-right:0">
 				<div class="container-fluid" style="padding-left:5%; padding-right:5%;">
-					<h1 class="display-4">[#{{match.pk}} {{match.club_red_name}} vs {{match.club_blue_name}} ]</h1>
+					<h1 class="display-4">[#{{match.pk}} {{match.red_club_name}} vs {{match.blue_club_name}} ]</h1>
 					<h6>작성자 :	{{match.post_writer}}</h6>
 					<hr>
 				</div>
@@ -81,7 +93,7 @@
 						<div class="container-fluid" id="matchinfo_body">
 							<div class="input-group mb-3">
 								<span class="input-group-text">클럽이름</span>
-								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{match.club_blue_name}}">
+								<input type="text" id="matchinfo_club_name" class="form-control" placeholder="클럽이름" aria-label="클럽이름" aria-describedby="button-addon2" value="{{match.blue_club_name}}">
 							</div>
 							<div class="input-group mb-3">
 								<span class="input-group-text"> 신청자 </span>
@@ -96,7 +108,7 @@
 					      		</select>
 					      	</div>
 
-					      	<label for="exampleInputEmail1">RED팀 {{match.club_red_name}}</label>
+					      	<label for="exampleInputEmail1">RED팀 {{match.red_club_name}}</label>
 							<div class="input-group mb-3" id="matchinfo_redteam_member">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>
@@ -107,7 +119,7 @@
 								<input type="text" id="matchinfo_red_p3_name" name="redteam" class="form-control" placeholder="라이더3" aria-label="player_name" aria-describedby="button-addon2" value=""   disabled>
 								<input type="text" id="matchinfo_red_p4_name" name="redteam" class="form-control" placeholder="라이더4" aria-label="player_name" aria-describedby="button-addon2" value=""   disabled>
 							</div>
-							<label for="exampleInputEmail1">BLUE팀 {{match.club_blue_name}}</label>
+							<label for="exampleInputEmail1">BLUE팀 {{match.blue_club_name}}</label>
 							<div class="input-group mb-3">
 								<div class="input-group mb-3">
 									<span class="input-group-text">고가평균</span>

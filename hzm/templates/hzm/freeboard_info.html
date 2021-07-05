@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YPRPE75FJG');
-</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="/static/imgs/icon/favicon.png">
@@ -23,7 +14,7 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?4">
-	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/freeboard_info.css?7">
 
 
 	 <!--폰트 어썸-->
@@ -39,7 +30,7 @@
 	<!--navbar 시작-->
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
 		{% if pk %}
-		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
+		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_name}}</a>
 		{% else %}
 		<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
 		{% endif %}
@@ -83,56 +74,72 @@
 
 		<!--middle container-->
 		<div id="middle-container" class="container-fluid">
-			<div class="container-fluid" style="padding-top:5%;">
-				
-			</div>
-			<div class="table-responsive">
-				<table class="table table-striped table-hover">
-					<h1 class="display-3">자유게시판</h1>
+			<!--본문시작-->
+			<div id="ArticleWrap" class="container-fluid" >
+				<!-- POST HEADR-->
+				<div id="article-header" class="container-fluid">
+					<div id="TittleBox">
+						<h6><a href="{% url 'hzm:freeboard' %}">자유게시판 ></a></h6>
+						<h2>{{post.title}}</h2>
+					</div>
+                    <div style="display:inline-block; width:85vw;" id="WirterInfo">
+                        <div id="Profile">
+                            <div id="ProfileWriter"> 
+								<span style="padding-right:5px;"><b>{{post.post_writer}}</b></span>
+								<span style="padding-right:5px;"><i class="fas fa-crown"></i></span><span>{{club.club_name}}</span>
+							</div>
+                            <div id="ProfileDate"><span>{{post.date}}</span></div>
+                        </div>
+					</div> 
+					<div style="display:inline-block;" id="ArticleTool"><a id="url_copy">URL 복사</a></div>
+
 					<hr>
-					<p style="width:50%; margin-right:0; padding:0;">{{count}}개의 글</p>
-					<button id="write_post_btn" class="btn btn-secondary bg-dark"><a style="text-decoration: none; color:white;" href="{% url 'hzm:freeboard_write' %}">글쓰기</a></button>
-					<thead id="thead_posts" class="thead-dark">
-						<tr>
-							<th style="width:15%;" scope="col">말머리</th>
-							<th style="width:40%;" scope="col">제목</th>
-							<th style="width:20%;" scope="col">작성자</th>
-							<th style="width:30%;" scope="col">작성일</th>
-						</tr>
-					</thead>
-					<tbody id="tbody_posts" >
-						{% for post in posts %}
-						<tr onclick="location.href='{% url 'hzm:freeboard_info' post.pk %}'" >
-							<td><a style="text-align:center; text-decoration:none; color:black;">{{post.pk}}</a></td>
-							<td>{{post.title}}[{{post.comment_count}}]</td>
-							<td>{{post.post_writer}}</td>
-							<td>{{post.date}}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<div id="freeboard_pagenation">
-					<nav aria-label="Page navigation example">
-					<ul class="pagination pagination-lg justify-content-center">
-						{% if posts.has_previous %}
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
-						{% else %}
-						<li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
+				</div><!-- POST HEADER END-->
+				<div class="container-fluid" style="padding:0;">
+					<div id="post_body" class="container-fluid">
+						{{post.description}}
+					</div><!-- post body끝-->
+					<div class="container-fluid" id="freeboard_footer">
+						<button class="btn bg-dark btn-secondary"><a href="{% url 'hzm:freeboard' %}" style="color:white; text-decoration: none;" >뒤로가기</a></button>
+						{% if post.player_id == pk %}
+						<button type="button" id="freeboard_delete_btn" class="btn btn-secondary bg-dark"><a style="color:white; text-decoration: none; " >삭제</a></button>
+						<button type="button" id="freeboard_edit_btn" class="btn btn-secondary bg-dark" onclick="location.href='{% url 'hzm:freeboard_edit' post.pk %}'" >수정</button>
 						{% endif %}
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
-						{% if posts.has_next %}
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
-						{% else%}
-							<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
-						{% endif %}
-					</ul>
-					</nav>
+					</div>
+					{% if pk %}
+					<div class="container-fluid" style="padding:0;">
+						<hr>	
+						<ul id="CommentList">
+							<div class="comment_tab"><h4 class="h4">댓글 </h4></div>
+							{% for comment in comments %}
+							<div name="comment_{{comment.pk}}" class="CommentBox">
+								<li>
+									<div class="CommentArea">
+										<div class="comment_player"><b>{{comment.player_name}}</b>
+											{% if pk == comment.player_id %}
+											<i id="comment_delete_btn" style="float:right" class="fas fa-times" data-pk="{{comment.pk}}"></i>
+											{% endif %}
+										</div>
+										<p><span>{{comment.comments}}</span></p>
+										<div class="comment_date">{{comment.date}}</div>
+									</div>
+									<hr>
+								</li>
+							</div>
+							{% endfor %}
+						</ul>
+						
+						<div class="form-floating" style="border:1px solid gray; border-radius:0.3rem;">
+							<span style="font-size:1.1rem; padding:10px;"><b>{{player.player_name}}</b></span>
+							<textarea id="comment" class="form-control" placeholder="댓글을 남겨보세요" style="height: 100px" maxlength="{{maxlength}}"></textarea>
+							<div id="comment-tool"><button id="add_comment" class="btn" style="color:gray; background-color:none; border:none;">등록</button></div>
+						</div>
+					</div>
+					{% endif %}
 				</div>
-			</div>
-		</div>
-		<!-- middle container 끝-->
+			</div><!--본문끝-->
+			
+		</div><!-- middle container 끝-->
 
 		
 
@@ -242,6 +249,7 @@
 </div>
 
 
+
 <!-- script start -->
 	<script>
 		function getTime() {
@@ -255,62 +263,7 @@
 			NowTime += ':' + Now.getSeconds();
 			return NowTime;
 		}
-				//경기신청모달 고가 평균 폼 확인
-		function goga_form_check(data){
-			data_=data.split(':')
-
-			if(data.length != 8)
-				return false;
-			else if(data[2] != ':')
-				return false;
-			else if(data[5] != ':')
-				return false;
-			else if(isNaN(data_[0]))
-				return false;
-			else if(isNaN(data_[1]))
-				return false;
-			else if(isNaN(data_[2]))
-				return false;
-
-			return true;
-		}
-		//경기신청모달 경기 날짜 폼 체크
-		function match_date_form_check(match_date) {
-			if(match_date.length != 10) 
-				return false;
-			else if(match_date[4] != '-')
-				return false;
-			else if(match_date[7] != '-')
-				return false;
-			
-			match_date_=match_date.split('-')
-
-			if(isNaN(match_date_[0]))
-				return false;
-			else if(isNaN(match_date_[1]))
-				return false;
-			else if(isNaN(match_date_[2]))
-				return false;
-
-			return true;
-		}
-		//경기신청 모달 시간 체크
-		function time_form_check(time){
-			if(time.length != 5)
-				return false;
-			else if(time[2] != ':')
-				return false;
-
-			time_=time.split(':')
-			if(isNaN(time_[0]))
-				return false;
-			else if (isNaN(time_[1]))
-				return false;
-			return true;
-		}
-
-
-
+	
 		//모달에서 로그인 버튼 클릭
 		$(document).on('click', '#modal_signin_btn', function(e) {
 			var player_name = $('#modal_player_name').val();
@@ -350,7 +303,6 @@
 				}
 			});
 		});
-		
 		$(document).on('click','#logout_btn', function(e) {
 			$.ajax({
 				url:"{% url 'hzm:ajax_logout' %}",
@@ -364,7 +316,107 @@
 				}
 			})
 		});
+		// URL복사
+		function urlClipCopy() {
+			console.log(window.location.href)
+			var dummy   = document.createElement("input");
+			var text    = location.href;
+			document.body.appendChild(dummy);
+			dummy.value = text;
+			dummy.select();
+			document.execCommand("copy");
+			document.body.removeChild(dummy);
+			swal("복사 성공!")	
+		}
 
+		$(document).on('click','#url_copy',function(e) {urlClipCopy()});
+
+		//댓글추가
+		$(document).on('click','#add_comment',function(e) {
+			var comment = $('#comment').val();
+			var post_pk = "{{post.pk}}";
+			var date=getTime();
+
+			console.log(post_pk)
+			console.log(comment)
+			if( $.trim(comment) == '') return swal("내용을 입력해주세요");
+			$.ajax({
+				url : "{% url 'hzm:ajax_add_freeboard_comment' %}",
+				type : 'POST',
+				data : {
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
+					'comment':comment,
+					'post_pk':post_pk,
+					'date':date,
+				},
+				success:function(data) {
+					location.reload();
+				}
+			})
+		})
+
+
+		//댓글 삭제하기
+		$(document).on('click','#comment_delete_btn',function(e) {
+			swal({
+				title: "정말 삭제하시겠습니까?",
+				icon : 'warning',
+				buttons:{
+					cancel: true,
+					confirm : true,
+				}
+			})
+			.then((willDelete)=> {
+				if(willDelete) {
+					comment_pk=$(this).attr('data-pk')
+					$.ajax({
+						url : "{% url 'hzm:ajax_delete_freeboardcomment' %}",
+						type : 'POST',
+						data : {
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+							'comment_pk' : comment_pk,
+						},
+						success: function(data) {
+							$('div[name=comment_'+data+']').remove();
+						},
+						error: function(error) {
+
+						},
+					});
+				}
+			})
+		});
+
+		//글 삭제 버튼
+		$(document).on('click','#freeboard_delete_btn',function() {
+			swal({
+				title: "정말 삭제하시겠습니까?",
+				icon : 'warning',
+				buttons:{
+					cancel: true,
+					confirm : true,
+				}
+			})
+			.then((value)=>{ 
+				if(value) {
+					var freeboard_pk="{{post.pk}}"
+					$.ajax({
+						url:"{% url 'hzm:ajax_delete_freeboard_writing' %}",
+						type:'POST',
+						data: {
+							'csrfmiddlewaretoken' : "{{csrf_token}}",
+							'freeboard_pk' : freeboard_pk,
+						},
+						success: function(data) {
+							location.href="{% url 'hzm:freeboard'  %}";
+						},
+						error : function(error) {
+							swal("통신오류");
+						},
+					});
+				}
+			})
+		});
 
 	</script>
 	

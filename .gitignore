@@ -136,4 +136,5 @@ local_settings.py
 secret_config.py
 docker-compose.yml
 docker/
-
+*.log
+*.swp

@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRPE75FJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YPRPE75FJG');
+</script>
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no, user-scalable=no">
 	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/imgs/icon/ios/apple-touch-icon-120x120.png" />
@@ -21,9 +30,9 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?1">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?6">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
-	 <link rel="stylesheet" type="text/css" href="/static/css/club.css?1"
+	 <link rel="stylesheet" type="text/css" href="/static/css/club.css?3">
 	
 
 
@@ -56,6 +65,9 @@
 			      		{% endif %}
 			      		<a class="nav-link" href="{% url 'hzm:match' %}">&nbsp;경기 결과</a>
 			      	</div>
+				  </li>
+				  <li class="nav-item">
+			        <a class="nav-link" name="navbar_link" href="{% url 'hzm:freeboard' %}">자유게시판</a>
 			      </li>
 			      {% if pk %}
 			      <li class="nav-item">
@@ -70,7 +82,7 @@
 		</nav>
 	<!--navbar 끝-->
 	<!--middle container-->
-		<div class="container-fluid" style="height:100vh; padding:7%; overflow:scroll; border:0;">
+		<div id="middle-container" class="container-fluid">
 			
 				<div class="media" style="padding-top:5%; margin-bottom:5%;">
 					<i class="fas fa-flag-checkered fa-4x" style="padding-left:5%;"></i>
@@ -81,7 +93,7 @@
 							{% if club.host == player.player_name %}
 							<span style="padding-top:2%; font-size:1.5rem; " id="club_edit_btn" onclick='location.href="{% url 'hzm:club_admin' club.pk %}"' ><i class="fas fa-cog"></i></span></h4>
 							{% endif %}
-							<h5>클럽원 {{club.member}}명</h5>
+							<h5>클럽원 {{club_member}}명</h5>
 						</div>
 						<div class="badge text-wrap" style="padding:0px; font-size:1.1em; height:3vh;overflow: scroll;">클럽소개 :{{club.description}}</div>
 				  	</div>
@@ -129,7 +141,56 @@
 					  </a>
 					</div>
 				</div><!--공지사항 슬라이드 끝-->
-		</div>
+
+				<div class="container-fluid">
+					<div style="padding-top:10px;" class="club_toolbox"><button id="clubmember_btn" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#club_member" >클럽원목록</button>
+					</div>
+				</div>
+				<!--채팅 창-->
+				<div class="table-responsive" style="padding-top:3%;">
+					<textarea id="chat-log" class="form-control" cols="100" rows="20"></textarea><br>
+					<div class="input-group mb-3">
+						<input id="chat-message-input" type="text" size="100" class="form-control" placeholder="채팅 내용" aria-label="Recipient's username" aria-describedby="button-addon2">
+						<input class="btn btn-outline-secondary" type="button" value="Send" id="chat-message-submit">
+					</div>
+					
+					
+					<script>
+					const roomName = "{{club.pk}}";
+					const chatSocket = new WebSocket(
+						'ws://'+ window.location.host+ '/ws/chat/club/'+roomName+'/');
+
+					chatSocket.onmessage = function(e) {
+							const data = JSON.parse(e.data);
+							document.querySelector('#chat-log').value += (data.player_name+ ' : '+data.message +'    '+data.chat_time+'\n');
+						};
+					
+						chatSocket.onclose = function(e) {
+						console.error('Chat socket closed unexpectedly');
+					};
+					document.querySelector('#chat-message-input').focus();
+					document.querySelector('#chat-message-input').onkeyup = function(e) {
+						if (e.keyCode === 13) {  // enter, return
+							document.querySelector('#chat-message-submit').click();
+						}
+					};
+					
+					document.querySelector('#chat-message-submit').onclick = function(e) {
+						var player_name="{{player.player_name}}";
+						console.log(player_name);
+						const messageInputDom = document.querySelector('#chat-message-input');
+						const message = messageInputDom.value;
+
+							chatSocket.send(JSON.stringify({
+								'player_name' : player_name,
+								'message': message
+							}));
+							messageInputDom.value = '';
+						};
+					</script>
+				</div>
+				
+		</div><!-- middle container end -->
 
 
 		<!--하단 탭바-->
@@ -177,27 +238,30 @@
 	</nav><!--하단 탭바 끝-->
 	
 
-<!-- 로그인 모달 -->
-<div class="modal fade" id="login" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+<!-- 클럽원 모달 -->
+<div class="modal fade" id="club_member" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-      		<h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
+      		<h5 class="modal-title" id="modal_clubmember_title">클럽원 목록</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	        	<span aria-hidden="true">&times;</span>
 	        </button>
 	   </div>
-	   <div class="modal-body" >
-	   		<form method="post">
-		   		<div class="input-group mb-3">
-		   			<input type="text" id="modal_player_name" class="form-control" placeholder="라이더 이름" aria-label="player_name" aria-describedby="button-addon2">
-				</div>
-		        <div class="input-group mb-3">
-		        	<input type="password" id="modal_player_passwd" class="form-control" placeholder="비밀번호" aria-label="player_passwd" aria-describedby="button-addon2">
-		        	<div class="input-group-append">
-				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
-				</div>
-			</form>
+	   <div class="modal-body">
+			<div class="table-responsive" style="max-height:40vh; overflow:scroll;">
+				<table class="table table-hover">
+					 <thead class="thead-light" id="modal_thead_club_member">
+				   <tr>
+					   <th>클럽원 닉네임</th>
+					   <th>승률</th>
+				   </tr>
+			   </thead>
+			   <tbody id="modal_tbody_club_member">
+
+			   </tbody>
+		   </table>
+		   </div>
 		</div>
       </div>
     </div>
@@ -336,147 +400,6 @@
 			return true;
 		}
 
-		//경기 신청모달에서 참여인원 수 선택시
-		$('#modal_fmatch_select').change(function(e) {
-			console.log("change1")
-			var state=$('#modal_fmatch_select option:selected').val();
-			if( state== '2'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',true);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '3'){
-				console.log("change")
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',true);
-			}
-			else if( state== '4'){
-				$('#modal_fmatch_blue_p3_name').attr('disabled',false);
-				$('#modal_fmatch_blue_p4_name').attr('disabled',false);
-			}
-		})
-		
-		//경기신청 버튼
-		$(document).on('click','#modal_fmatch_btn',function(e) {
-			var blue_goga_avg = $('#modal_fmatch_blue_goga_avg').val();
-			var formData = new FormData();
-			var post_writer = $('#modal_fmatch_name').val();
-			var club_name = $('#modal_fmatch_clubname').val();
-			var match_date = $('#modal_fmatch_date').val();
-			var match_time_start = $('#modal_fmatch_time_start').val();
-			var match_time_end = $('#modal_fmatch_time_end').val();
-			var player_num = $('#modal_fmatch_select').val();
-			var passwd = $('#modal_fmatch_passwd').val();
-			var player = Array();
-			var date = getTime();
-			var player_count=0;
-			
-			for(var i = 0; i <player_num; i++) {
-					player[i] = $('#modal_fmatch_blue_p'+(i+1)+'_name').val();
-					if($.trim(player[i]) != '') {
-						player_count++;
-						console.log("player["+i+"]:"+player[i]);
-					}
-			}
-
-
-			if( $.trim(club_name) == '') {
-				console.log("club_name :" +club_name)
-				return swal("클럽명을 입력해주세요");
-			}
-			else if($.trim(post_writer) == '') {
-				 console.log("post writer: "+ club_name)
-				return swal("카러플 닉네임을 입력해주세요");
-			}
-			else if(player_num != player_count){
-				console.log("player_num :"+player_num)
-				console.log("player_num input :"+player.length)
-				return swal("라이더를  입력해 주세요");
-			}
-			else if(!(match_date)){
-				console.log("match date : "+match_date)
-				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
-			}
-			else if(match_date_form_check(match_date) == false){
-				return swal("희망 경기 날짜를 입력해주세요 ex)2020-01-01");
-			}
-			else if(goga_form_check(blue_goga_avg) == false) {	
-				return swal("고가 입력 양식 00:00:00");
-			} 
-			else if(time_form_check(match_time_start) == false || time_form_check(match_time_end) == false){
-				return swal("시간 입력 양식 ex) 11:11")
-			}
-			else if(!(match_time_start))
-				return swal("시작 시간을 입력해주세요");
-			else if(!(match_time_end))
-				return swal("종료 시간을 입력해주세요");
-			else if(match_time_start > match_time_end)
-				return swal("시작시간이 종료시간보다 늦습니다!");
-			else if(!(passwd))
-				return swal("비밀번호를 입력해주세요");
-
-			console.log("match date : "+match_date);
-			console.log(match_time_start);
-			console.log(match_time_end);
-
-			swal({
-				title: "이길 수 있겠어?",
-				text: "무르기 없기~",
-				icon: "warning",
-				buttons: true,
-				dangerMode: true,
-			})
-			.then((willDelete) => {
-				if (willDelete) {
-
-					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-					formData.append('p1',player[0]);
-					formData.append('p2',player[1]);
-					formData.append('p3',player[2]);
-					formData.append('p4',player[3]);
-					formData.append('post_writer',post_writer);
-					formData.append('club_name',club_name);
-					formData.append('match_date',match_date);
-					formData.append('match_time_start',match_time_start);
-					formData.append('match_time_end',match_time_end);
-					formData.append('player_num',player_num);
-					formData.append('passwd',passwd);
-					formData.append('blue_goga_avg',blue_goga_avg);
-					formData.append('date',date);
-					console.log("date : "+date)
-					$.ajax({
-						url : "{% url 'hzm:ajax_add_fmatch' %}",
-						type : 'POST',
-						contentType : false,
-						processData : false,
-						data : formData,
-						success : function(data) {
-							$('#friendlymatch').modal('hide');
-							swal("신청완료", "수락 완료되면 경기결과에서 확인 하 실 수 있어요!", "success");
-							
-						},
-						error : function(error) {
-							swal("신청실패", "아마도 통신오류??..", "error");
-							$('#friendlymatch').modal('hide');
-						},
-					});
-
-
-
-				} else {
-					swal("담에 봐요!");
-					$('#friendlymatch').modal('hide');
-				}
-			});
-
-		});
-
-		//상단 네이바에서 로그인 버튼 클릭
-		$(document).on('click','#signin_btn',function(e) {
-			$('#modal_signup_btn').attr('id','modal_signin_btn');
-			$('#modal_signin_btn').text('로그인');
-			$('#staticBackdropLabel').text('로그인');
-			
-		});
 
 		//로그아웃 버튼 클릭
 		$(document).on('click','#logout_btn', function(e) {
@@ -503,6 +426,44 @@
 				});
 			});
 		});
+
+		//클럽멤버 모달 
+		$(document).on('click','#clubmember_btn',function() {
+			$.ajax( {
+				url :"{% url 'hzm:ajax_get_club_member' %}",
+				type: 'GET',
+				dataType:'JSON',
+				success:function(data) {
+					var result;
+					$('#modal_tbody_club_member').empty();
+					for(var i=0; i < data.length; i++) {
+						if( data[i].win == 0 && data[i].lose == 0)
+							result="전적없음"
+						else
+							result=Math.round(Number(data[i].win)/(Number(data[i].win)+Number(data[i].lose))*100) +"%";
+
+
+						$('#modal_tbody_club_member').append("<tr style=font-size:1.4rem;> \
+							<td>"+data[i].player_name+"</td>\
+							<td>"+result+"</td>\
+							</tr>")
+					}
+				},
+				error : function(error) {
+					swal("통신오류");
+				},
+			})
+		})
+		//채팅
+		$(document).on('click','#send_msg_btn',function(e) {
+			var msg = $('#chat_msg').val();
+			var player_name = "{{player.player_name}}";
+			$('#tbody_chat_club').append('<tr>\
+				<td style="text-align:center; width:13%;">'+player_name+'</td>\
+				<td>'+msg+'</td>\
+					</tr>')
+			console.log(msg);
+		})
 		
 		
 			

@@ -11,7 +11,7 @@ class ScheduleSerializer(serializers.ModelSerializer) :
 class MatchSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Match
-		fields = ('pk','club_red_id','club_blue_id','post_writer'\
+		fields = ('pk','red_club_id','red_club_name','blue_club_id','blue_club_name','post_writer'\
 			,'player_num'\
 			,'red_player_name','blue_player_name'\
 			,'match_date','match_time_start','match_time_end'\
@@ -22,7 +22,7 @@ class MatchSerializer(serializers.ModelSerializer) :
 class PlayerSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Player
-		fields = ('player_name','passwd','club_id','win','lose','accept')
+		fields = ('pk','player_name','passwd','club_id','win','lose','accept')
 
 class RecordSerializer(serializers.ModelSerializer):
 	class Meta :

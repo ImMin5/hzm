@@ -10,11 +10,20 @@ import datetime
 import time
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Q
+from hzm.logs import *
+import logging
+from django.db.models import Count,Max,Min
+from pandas import Series
+
 #from datetime import datetime
 # Create your views here.
+SIZE_FREEBOARD_DESCRIPTION=1000
+SIZE_POST_COMMENT=200
+
+log_dir = create_dir()
 
 def record_win_lose(player_id,club_id) :
-	matches=Match.objects.filter(Q(club_red_id=club_id) & Q(red_player_id__contains=[player_id]))
+	matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[player_id]))
 	player=Player.objects.get(pk=player_id)
 	player.win=0
 	player.lose=0
@@ -24,24 +33,36 @@ def record_win_lose(player_id,club_id) :
 		else :
 			player.lose += 1
 	player.save()
-	return ;
+	return False
 
 
+def club_member_match_stat(club_id) :
+	players=Player.objects.filter( Q(club_id=club_id) & Q(accept=True))
+
+	for player in players :
+		record_win_lose(player.pk,club_id)
+	return False
 
 def main_page(request) :
 	pk=request.session.get('pk')
 	club_id=request.session.get('club_id')
-	#records=Record.objects.all().order_by('maps_id')
-	#maps=Map.objects.all().order_by('pk')
+	
+	freeboard=Freeboard.objects.all().order_by('-date')
+	freeboard_paginator = Paginator(freeboard, 5)
+	freeboards = freeboard_paginator.get_page(1)
 
-	
-	
+	match=Match.objects.filter(accept=True).order_by('-match_date')
+	match_paginator = Paginator(match, 5)
+	matches = match_paginator.get_page(1)
+
 	if pk is not None :
 		player=Player.objects.get(pk=pk)
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" in main page")
 		club=Club.objects.get(pk=player.club_id)
-		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club})
+		return render(request,'hzm/main_page.html',{'pk':pk,'player':player,'club':club,'freeboards':freeboards,'matches':matches})
 	else :
-		return render(request,'hzm/main_page.html')
+		log_start(request,log_dir+'/today.log','main page')
+		return render(request,'hzm/main_page.html',{'freeboards':freeboards, 'matches':matches})
 
 def mypage(request) :
 	pk=request.session.get('pk')
@@ -53,7 +74,9 @@ def mypage(request) :
 	try : 
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=player.club_id)
+		log_start(request,log_dir+'/'+str(player.pk)+'.log',player.player_name+" in mypage")
 	except Exception as e :
+		print(e)
 		return redirect('/')
 	return render(request,'hzm/mypage.html',{'pk':pk ,'player':player,'club':club})
 
@@ -129,31 +152,39 @@ def match_info(request,match_pk) :
 	pk=request.session.get('pk')
 	player_name=request.session.get('player_name') 
 	club_id=request.session.get('club_id')
+
+
 	
 	try :
-		club=Club.objects.get(pk=club_id)
 		match = Match.objects.get(pk=match_pk)
+		if match.accept == False :
+			return render(request, 'hzm/error.html')
+		if pk is not None :
+			player=Player.objects.get(pk=pk)
+			club=Club.objects.get(pk=club_id)
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'player':player,'club':club})
+		else :
+			return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk})
 	except Exception as e :
 		return render(request, 'hzm/error.html')
-	
-	if match.accept == False :
-		return render(request, 'hzm/error.html')
-	return render(request, 'hzm/match_info.html', {'match':match, 'pk':pk, 'club':club})
 
 def match_before_info(request,match_pk) :
 	
 	try :
 		match=Match.objects.get(pk=match_pk)
+		
 		if match.accept == True :
 			raise("잘못된접근")
+
 		pk=request.session.get('pk')
 		player_name=request.session.get('player_name') 
 		club_id=request.session.get('club_id')
 		club=Club.objects.get(pk=club_id)
 		try :			
-			if match.club_red_id != club_id :
+			if match.red_club_id != club.pk :
 				return render(request,'hzm:main_page.html')
 		except Exception as e:
+			print(e)
 			return render('hzm:error')
 
 
@@ -187,7 +218,7 @@ def match_before(request) :
 	except Exception as e :
 		return redirect('/')
 
-	matches = Match.objects.all().filter(Q(accept=False) & Q(club_red_id=club_id)).order_by('-pk')
+	matches = Match.objects.all().filter(Q(accept=False) & Q(red_club_id=club_id)).order_by('-pk')
 	count = matches.count()
 	paginator = Paginator(matches, 2)
 	pages = request.GET.get('page',1)
@@ -209,25 +240,31 @@ def error_page(request) :
 	return render(request, 'hzm/error.html')
 
 def personal_record(request) :
-	player_name=request.session.get('player_name')
-	pk=request.session.get('pk')
-	club_id=request.session.get('club_id')
-	maps=Map.objects.all().order_by('map_name')	
-	records=Record.objects.filter(player_id=pk).order_by('map_name')
-
 	try :
+		player_name=request.session.get('player_name')
+		pk=request.session.get('pk')
+		if pk is None :
+			raise Exception("pk is none")
+		
+		club_id=request.session.get('club_id')
+		maps=Map.objects.all().order_by('map_name')	
+		records=Record.objects.filter(player_id=pk).order_by('map_name')
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
 		record_win_lose(pk,club_id)
+		matches=Match.objects.filter(Q(red_club_id=club_id) & Q(red_player_id__contains=[pk])).order_by('-match_date')
+
+		if matches.exists() :
+			print("ee")
+			return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club,'matches':matches})
+		else :
+			return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club})
+
+
 	except Exception as e :
 		print(e)
 		return redirect("/")
 
-	if pk is None :
-		return redirect("/")
-		
-
-	return render(request, 'hzm/personal_record.html',{'records':records,'maps':maps,'player':player ,'pk':pk,'club':club})
 
 def club(request,club_pk) :
 	pk=request.session.get('pk')
@@ -236,10 +273,11 @@ def club(request,club_pk) :
 	if pk is None :
 		return redirect('/')
 	try :
+		club_member_match_stat(club_id)
 		player=Player.objects.get(pk=pk)
 		club=Club.objects.get(pk=club_id)
-		print(club)
-		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club})
+		club_member=Player.objects.filter(Q(club_id=club_id) & Q(accept=True)).count
+		return render(request, 'hzm/club.html',{'pk':pk,'player':player,'club':club ,'club_member':club_member})
 	except Exception as e :
 		print(e)
 		return redirect('/')
@@ -266,7 +304,7 @@ def match_filter(request) :
 	else :
 		posts = Post_list.objects.all().filter(Q(accept=True)).order_by('-pk')
 
-	count = posts.count();
+	count = posts.count()
 	paginator = Paginator(posts, 10)
 	pages = request.GET.get('page',1)
 
@@ -311,11 +349,16 @@ def club_admin(request,club_pk) :
 		club=Club.objects.get(pk=club_pk)
 		if club.host != player_name :
 			raise Exception('잘못된 접근입니다')
-		players=Player.objects.filter(club_id=club.pk)
+
+		players=Player.objects.filter(club_id=club.pk).order_by('player_name')
 		maps=Map.objects.all().order_by('map_name')
 		records=Record.objects.all().order_by('player_id')
+		if pk == 1 :
+			clubs=Club.objects.all().order_by('pk')
+			return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'clubs':clubs,'club':club})
 		return render(request,'hzm/admin.html',{'pk':pk,'players':players,'maps':maps,'records':records, 'club':club})
 	except Exception as e :
+		print(e)
 		return redirect('/')
 
 def matchred(request) :
@@ -325,5 +368,67 @@ def matchred(request) :
 
 	return render(request, 'hzm/test.html',{'matchreds':matchreds,'matchred':matchred })
 def freeboard(request) :
+	pk=request.session.get('pk')
+	posts=Freeboard.objects.all().order_by('-date')
+	count = posts.count()
+	paginator = Paginator(posts, 10)
+	pages = request.GET.get('page',1)
 
-	return render(request,'hzm/freeboard.html')
+	try :
+		posts = paginator.get_page(pages)
+	except PageNotAnInteger :
+		posts = paginator.page(1)
+	except EmptyPage :
+		posts = paginator.page(paginator.num_pages)
+		return HttpResponse("end")
+	
+	if pk is not None :
+		club_id=request.session.get('club_id')
+		club=Club.objects.get(pk=club_id)
+		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk, 'club':club})
+	else :
+		return render(request,'hzm/freeboard.html',{'count':count,'posts':posts,'pk':pk})
+
+def freeboard_info(request,post_pk) :
+	try :
+		pk=request.session.get('pk')
+		post=Freeboard.objects.get(pk=post_pk)
+		comments=Freeboardcomment.objects.filter(post_id=post.pk).order_by('date')
+		club=Club.objects.get(pk=post.club_id)
+		if pk is not None :
+			club_id=request.session.get('club_id')
+			club_name=Club.objects.get(pk=club_id).club_name
+			player=Player.objects.get(pk=pk)
+			return render(request,'hzm/freeboard_info.html',{'club_name':club_name,'player':player,'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+		return render(request,'hzm/freeboard_info.html',{'pk':pk,'post':post,'club':club,'comments':comments,'maxlength':SIZE_POST_COMMENT})
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
+	
+def freeboard_write(request) :
+	pk=request.session.get('pk')
+	try :
+		player=Player.objects.get(pk=pk)
+		club=Club.objects.get(pk=player.club_id)
+		return render(request,'hzm/freeboard_form.html',{'pk':pk,'player':player,'club':club,'maxlength':SIZE_DESCRIPTION})
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
+
+def freeboard_edit(request,freeboard_pk) :
+	try :
+		pk=request.session.get('pk')
+		post=Freeboard.objects.get(pk=freeboard_pk)
+		if pk != post.player_id :
+			return redirect('hzm:main_page')
+		elif pk is None :
+			return refirect('hzm:main_page')
+
+		club=Club.objects.get(pk=post.club_id)
+		club_id=request.session.get('club_id')
+		club_name=Club.objects.get(pk=club_id).club_name
+		player=Player.objects.get(pk=pk)
+		return render(request,'hzm/freeboard_edit.html',{'club_name':club_name,'player':player,'pk':pk,'post':post,'club':club,'maxlength':SIZE_DESCRIPTION})
+	except Exception as e :
+		print(e)
+		return redirect('hzm:error_page')
