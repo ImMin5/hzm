@@ -121,11 +121,12 @@ def sign_up(request) :
 	player_name = request.POST.get('player_name')
 	player_password = request.POST.get('player_password')
 	club_name = request.POST.get('club_name')
+	club = Club.objects.get(club_name=club_name)
 	try :
 		if request.method == 'POST' :
 			print('POST')
 			print(player_name)
-			player = Player(player_name=player_name, passwd=player_password, club_id=club_name)
+			player = Player(player_name=player_name, passwd=player_password, club_id=club.pk)
 			player.save()
 			return redirect('/')
 		else :

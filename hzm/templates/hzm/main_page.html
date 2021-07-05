@@ -555,8 +555,6 @@
 			var player_name = $('#modal_player_name').val();
 			var player_passwd = $('#modal_player_passwd').val(); 
 
-			console.log(player_name);
-			console.log(player_passwd);
 			$.ajax({
 				url:"{% url 'hzm:ajax_signin' %}",
 				type:'POST',
