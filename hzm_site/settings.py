@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hzm',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'hzm_site.urls'
@@ -79,8 +81,8 @@ WSGI_APPLICATION = 'hzm_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DJANGO_DB_NAME','project_hzm'),
-        'USER': os.environ.get('DJANGO_DB_USERNAME', 'hzm_admin'),
+        'NAME': os.environ.get('DJANGO_DB_NAME','postgres'),
+        'USER': os.environ.get('DJANGO_DB_USERNAME', 'postgres'),
         'PASSWORD' : os.environ.get('DJANGO_DB_PASSWORD', 'password1234'),
         'HOST': os.environ.get('DJANGO_DB_HOST' , 'hzm_db'),
         'PORT': os.environ.get('DJANGO_DB_PORT','5432'),
@@ -135,3 +137,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
+
+#CORS
+CORS_ORIGIN_ALLOW_ALL = True

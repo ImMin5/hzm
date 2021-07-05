@@ -130,9 +130,11 @@ dmypy.json
 
 #minho
 local_settings.py
-.DS_Store
+*.DS_Store
 *.pyc
+*.sqlite3
 secret_config.py
 docker-compose.yml
 docker/
 *.log
+*.swp
