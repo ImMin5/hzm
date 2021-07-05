@@ -134,7 +134,6 @@ local_settings.py
 *.pyc
 *.sqlite3
 secret_config.py
-docker-compose.yml
 docker/
 *.log
 *.swp

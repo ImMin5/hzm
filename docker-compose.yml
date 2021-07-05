@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  hzm_db:
+    image : postgres:9.6
+    volumes :
+      - ./docker/data:/var/lib/postgresql/data
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_DB_NAME=project_hzm
+      - DJANGO_DB_HOST=hzm_db
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DB_USERNAME=hzm_admin
+      - DJANGO_DB_PASSWORD=password1234
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  web:
+    build: .
+    command: ./start-dev.sh
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./:/app
+    depends_on :
+      - hzm_db
+
