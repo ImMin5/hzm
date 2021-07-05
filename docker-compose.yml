@@ -13,6 +13,10 @@ services:
       - DJANGO_DB_USERNAME=hzm_admin
       - DJANGO_DB_PASSWORD=password1234
       - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+    restart : always
+    ports :
+      - 5432:5432
 
   web:
     build: .
@@ -23,4 +27,13 @@ services:
       - ./:/app
     depends_on :
       - hzm_db
-
+      - redis
+    restart : always
+    
+  redis :
+    container_name : hzm_chat 
+    image : redis:latest
+    command : redis-server --port 6379 --appendonly yes
+    ports :
+      - 6379:6379
+    restart : always
