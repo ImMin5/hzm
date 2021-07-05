@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hzm',
     'corsheaders',
+    'channels',
 ]
 
+#Channels
+ASGI_APPLICATION = 'hzm_site.routing.application'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -116,6 +119,7 @@ CHANNEL_LAYERS = {
         }
     }
 }
+
 
 
 # Internationalization
