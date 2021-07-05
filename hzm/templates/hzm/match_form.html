@@ -13,7 +13,7 @@
 	 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">
 	
 	 <!--폰트 어썸-->
@@ -22,7 +22,7 @@
 	 <!--알림창-->
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	
-	<title>학지매</title>
+	<title>학지매-경기신청</title>
 
 
 </head>
@@ -31,7 +31,7 @@
 	<!--내비게이션 바-->
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
 			{% if pk %}
-			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club_id}}</a>
+			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}}</a>
 			{% else %}
 			<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">학지매</a>
 			{% endif %}
@@ -51,9 +51,6 @@
 			      	</div>
 			      </li>
 			      {% if pk %}
-			      <li class="nav-item">
-			      	<a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
@@ -89,8 +86,8 @@
 									<span class="input-group-text">클럽이름</span>
 									<select id="matchform_club_red" class="form-control" value="" >
 										{% if clubs %}
-										{% for club in clubs %}
-										<option>{{club.club_name}}</option>
+										{% for c in clubs %}
+										<option>{{c.club_name}}</option>
 										{% endfor %}
 										{% endif %}
 									</select>
@@ -142,7 +139,7 @@
 								<input type="text" id="matchform_passwd" class="form-control" placeholder="비밀번호 입력 후 수정 버튼 클릭" aria-label="비밀번호" aria-describedby="button-addon2" value="">
 							</div>
 						</div><!-- matchinfo body끝-->
-						<div class="container-fluid" id="matchinfo_footer" style="">
+						<div class="container-fluid" id="matchinfo_footer">
 							<button type="button" id="matchform_submit_btn" class="btn btn-secondary bg-dark">신청하기</button>
 						</div>
 					</form>
@@ -156,36 +153,38 @@
 
 
 		<!--하단 탭바-->
-
-	<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
-						<div class="container-fluid" style="padding:0;">
-<ins class="kakao_ad_area" style="display:none;" 
- data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
- data-ad-width   = "320" 
- data-ad-height  = "100"></ins> 
-<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-</div>
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
+			<div class="container-fluid" style="padding:0;">
+				<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" data-ad-width   = "320" data-ad-height  = "100"></ins> 
+				<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+			</div>
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-							<span>
-								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
-							<span>
+					<div class="col-3" id="bottom_home">
+						<a href="{% url 'hzm:main_page' %}" >
+							<span><i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i><span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club_id %}" >
+					<div class="col-3" id="bottom_club">
+						<a href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user">
+						<a href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
 							</span>
@@ -193,24 +192,32 @@
 						</a>
 					</div>
 					{% else %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+					<div class="col-3" id="bottom_home">
+						<a href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home fa" id="bottom_home_btn" style="color:gray;"></i>
 							<span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#">
+					<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" >
+						<a  href="#">
 							<span >
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							</span>
 							<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_record" data-toggle="modal" data-target="#login">
+						<a >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user" data-toggle="modal" data-target="#login" >
+						<a href="#" >
 							<span>
 								<i class="fa fa-user" id="bottom_user_btn" name="logout" style="color:gray;" ></i>
 							</span>
@@ -218,7 +225,7 @@
 					</div>
 					{% endif %}
 				</div>
-			</div>
+			</div>	
 		</nav>
 		<!--하단 탭바 끝-->
 
@@ -243,6 +250,10 @@
 				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
 				</div>
 			</form>
+		</div>
+		<div class="ad-banner" style="margin 0 auto;">
+			<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-0kOSYgjwyvWtHOVO" data-ad-width   = "250" data-ad-height  = "250"></ins> 
+			<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 		</div>
       </div>
     </div>
@@ -448,10 +459,6 @@
 				if (willDelete) {
 
 					formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
-					formData.append('p1',player[0]);
-					formData.append('p2',player[1]);
-					formData.append('p3',player[2]);
-					formData.append('p4',player[3]);
 					formData.append('post_writer',post_writer);
 					formData.append('club_red',club_red);
 					formData.append('club_blue',club_blue);
@@ -462,6 +469,7 @@
 					formData.append('passwd',passwd);
 					formData.append('blue_goga_avg',blue_goga_avg);
 					formData.append('date',date);
+					formData.append('player[]',player);
 					console.log("date : "+date)
 					$.ajax({
 						url : "{% url 'hzm:ajax_add_fmatch' %}",

@@ -17,7 +17,7 @@
 	 <!--커스텀-->
 	 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?2">
 	 <link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
-	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?2">
+	 <link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?3">
 	 <link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?3">	
 
 
@@ -28,7 +28,7 @@
 	 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-	<title>학지매</title>
+	<title>학지매-관리자페이지</title>
 </head>
 <body style="height:100%;">
 	
@@ -51,9 +51,6 @@
 			      	</div>
 			      </li>
 			      {% if pk %}
-			      <li class="nav-item">
-			        <a class="nav-link" href="{% url 'hzm:personal_record' %}">개인 기록</a>
-			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="{% url 'hzm:schedule' %}">일정관리</a>
 			      </li>
@@ -153,7 +150,7 @@
 </div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
+					<div class="col-3" id="bottom_home" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
@@ -161,15 +158,23 @@
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_club" style="display:block; text-align: center;">
+						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user" style="display:block; text-align: center;">
 						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
@@ -497,32 +502,6 @@
 			})
 		});
 
-		//하탄 탭 클릭시 아이콘 크기 변경
-		var active_btn="home";
-		$(document).on('click','#bottom_home',function(e) {
-			active_btn="home";
-		});
-		$(document).on('click','#bottom_user_btn',function(e) {
-			$('#bottom_user_btn').attr('class','fa fa-user fa-5x')
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="user";
-		});
-
-		$(document).on('click','#bottom_heart',function(e) {
-			$('#bottom_heart_btn').attr('class','fa fa-heart fa-5x')
-			if(active_btn=="heart")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="heart";
-		});
-
-		$(document).on('click','#bottom_bell',function(e) {
-			$('#bottom_bell_btn').attr('class','fa fa-bell fa-5x')
-			if(active_btn=="bell")
-				return false;
-			$('#bottom_'+active_btn+'_btn').attr('class', 'fa fa-'+active_btn+' fa-3x');
-			active_btn="bell";
-		});
 		
 		//경기 신청모달에서 참여인원 수 선택시
 		$('#modal_fmatch_select').change(function(e) {
@@ -667,6 +646,7 @@
 	
 				},
 				error: function(error) {
+					swal("수락 실패");
 				},
 			});
 		});

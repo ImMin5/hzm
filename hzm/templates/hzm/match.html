@@ -11,10 +11,10 @@
 
 		 <!--커스텀-->
 		 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-		 <link rel="stylesheet" type="text/css" href="/static/css/main_page.css?1">
 		<link rel="stylesheet" type="text/css" href="/static/css/custom_swal.css">
 		<link rel="stylesheet" type="text/css" href="/static/css/bt_tab_bar.css?1">
-		<link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?1">
+		<link rel="stylesheet" type="text/css" href="/static/css/top_nav_bar.css?2">
+		<link rel="stylesheet" type="text/css" href="/static/css/match.css?2">
 
 
 		 <!--폰트 어썸-->
@@ -23,13 +23,13 @@
 		 <!--알림창-->
 		 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		 <script data-ad-client="ca-pub-8149974355008509" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-		<title>학지매</title>
+		<title>학지매-경기목록</title>
 	</head>
 	<body style="height:100%;">
 		
 {% load custom_tags %}
 		<!--navbar 시작-->
-			<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light" style="position:sticky; top:0;">
+			<nav id="navbar_top" class="navbar navbar-expand-lg navbar-light bg-light">
 				{% if pk %}
 				<a class="navbar-brand" id="navbar_club_name" href="{% url 'hzm:main_page' %}">{{club.club_name}} </a>
 				{% else %}
@@ -74,62 +74,62 @@
 			</nav>
 		<!--navbar 끝-->
 		<!--middle container 시작-->
-			<div class="container-fluid" style="height:100vh; padding:0px; overflow:scroll;">
+			<div id="middle-container" class="container-fluid">
 				<div class="container-fluid" style="padding-top:5%;">
 					
 				</div>
-				<div class="table-responsive" style="padding-left:5%; padding-right:5%;">
+				<div class="table-responsive">
 					<table class="table table-striped table-hover">
 						<h1 class="display-3">경기 결과</h1>
 						<hr>
 						<div class="container-fluid">
-							<p style="display:inline-block;">{{post_count}}개의 경기결과</p> 
+							<p style="display:inline-block;">{{match_count}}개의 경기결과</p> 
 							<select id="match_filter" onchange="location.href=this.value"style="display:inline-block; float:right;">
 								<option>전체</option>
 								{% for c in clubs %}
-								<option value="{% url 'hzm:match' %}">{{c.pk}}</option>
+								<option value="{% url 'hzm:match' %}">{{c.club_name}}</option>
 								{% endfor %}
 
 							</select>
 
 						</div>
-						<thead class="thead-dark" >
+						<thead id="thead_matches" class="thead-dark" >
 							<tr>
-								<th style="width:10%; text-align:center;" scope="col">#</th>
-								<th style="width:20%; text-align:center;" scope="col">결과</th>
-								<th style="width:15%; text-align:center;" scope="col">스코어</th>
-								<th style="width:30%; text-align:center;" scope="col">클럽</th>
-								<th style="width:25%; text-align:center;" scope="col">경기 날짜</th>
+								<th style="width:10%;" scope="col">#</th>
+								<th style="width:20%;" scope="col">결과</th>
+								<th style="width:15%;" scope="col">스코어</th>
+								<th style="width:30%;" scope="col">클럽</th>
+								<th style="width:25%;" scope="col">경기 날짜</th>
 							</tr>
 						</thead>
-						<tbody id="tbody_post_lists" data-nowdate="" >
+						<tbody id="tbody_matches" >
 
-							{% for post in posts %}
+							{% for match in matches %}
 
-							<tr onclick="location.href='/match/info/{{post.pk}}'" >
-								<td style="text-align:center;" ><a style="text-decoration:none; color:black;">{{post.pk}}</a></td>
-								{% if post.state == "경기종료" %}
-									{% if post.result %}
-									<td id="tbody_post_lists_td_state" style="color:green; text-align:center;">승리</td>
-									{% elif post.result == False %}
-										{% if post.red_win == list.blue_win %}
-										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">결과입력대기</td>
+							<tr onclick="location.href='/match/info/{{match.pk}}'" >
+								<td><a style="text-decoration:none; color:black;">{{match.pk}}</a></td>
+								{% if match.state == "경기종료" %}
+									{% if match.result %}
+									<td id="tbody_matches_td_state" style="color:green;">승리</td>
+									{% elif match.result == False %}
+										{% if match.red_win == match.blue_win %}
+										<td id="tbody_matches_td_state" style="color:gray;">결과입력대기</td>
 										{% else %}
-										<td id="tbody_post_lists_td_state" style="color:gray; text-align:center;">패배</td>
+										<td id="tbody_matches_td_state" style="color:gray;">패배</td>
 										{% endif %}
 									{% else %}
-									<td id="tbody_post_lists_td_state" style="color:blue; text-align: center;">{{post.state}}</td>
+									<td id="tbody_matchse_td_state" style="color:blue;">{{match.state}}</td>
 									{% endif %}
-								{% elif post.state == "경기준비" %}
-								<td id="tbody_post_lists_td_state" style="color:black; text-align: center;">{{post.state}}
+								{% elif match.state == "경기준비" %}
+								<td id="tbody_matches_td_state" style="color:black;">{{match.state}}
 								</td>
-								{% elif post.state == "진행중" %}
-								<td id="tbody_post_lists_td_state" style="color:red; text-align: center;">{{post.state}}
+								{% elif match.state == "진행중" %}
+								<td id="tbody_match_td_state" style="color:red; ">{{match.state}}
 								</td>
 								{% endif %}
-								<td align="center">{{post.red_win}} : {{post.blue_win}}</td>
-								<td style="text-align:center;"> {{post.club_id}}vs {{post.club_blue}}</td>
-								<td align="center">{{post.match_date}}</td>
+								<td>{{match.red_win}} : {{match.blue_win}}</td>
+								<td> {{match.club_red_name}} vs {{match.club_blue_name}}</td>
+								<td>{{match.match_date}}</td>
 							</tr>
 								{% endfor %}
 						</tbody>
@@ -137,18 +137,18 @@
 
 					<nav aria-label="Page navigation example">
 					  <ul class="pagination pagination-lg justify-content-center">
-					  	{% if posts.has_previous %}
-					  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}"">이전</a></li>
-					  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.previous_page_number}}" >{{posts.previous_page_number}}</a></li>
+					  	{% if matches.has_previous %}
+					  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.previous_page_number}}"">이전</a></li>
+					  		<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.previous_page_number}}" >{{matches.previous_page_number}}</a></li>
 					     {% else %}
 					       <li class="page-item"><a style="color:black;" class="page-link" href="?page=1">이전</a></li>
 					    {% endif %}
-					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">{{posts.number}}</a></li>
-					    {% if posts.has_next %}
-					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">{{posts.next_page_number}}</a></li>
-					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.next_page_number}}">다음</a></li>
+					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.number}}">{{matches.number}}</a></li>
+					    {% if matches.has_next %}
+					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.next_page_number}}">{{matches.next_page_number}}</a></li>
+					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.next_page_number}}">다음</a></li>
 					    {% else%}
-					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{posts.number}}">다음</a></li>
+					    	<li class="page-item"><a style="color:black;" class="page-link" href="?page={{matches.number}}">다음</a></li>
 					    {% endif %}
 					  </ul>
 					</nav>
@@ -158,7 +158,8 @@
 			
 
 
-	<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
+		<!--하단 탭바-->
+		<nav id="bottom_tapbar" class="navbar fixed-bottom navbar-light bg-light" style="position:sticky; bottom:0; height:10%; max-height:10%; margin-top:1rem; padding:0;">
 						<div class="container-fluid" style="padding:0;">
 <ins class="kakao_ad_area" style="display:none;" 
  data-ad-unit    = "DAN-VgaPZkxM9B2j0lxu" 
@@ -169,24 +170,30 @@
 			<div class="container-fluid">
 				<div class="row">
 					{% if pk %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
-							<span>
-								<i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i>
-							<span>
+					<div class="col-3" id="bottom_home">
+						<a href="{% url 'hzm:main_page' %}" >
+							<span><i class="fa fa-home" id="bottom_home_btn" style="color:gray;"></i><span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:club' club.pk %}" >
+					<div class="col-3" id="bottom_club">
+						<a href="{% url 'hzm:club' club.pk %}" >
 							<span>
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							<span>
 								<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:mypage' %}" >
+					<div class="col-3" id="bottom_record">
+						<a href="{% url 'hzm:personal_record' %}" >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user">
+						<a href="{% url 'hzm:mypage' %}" >
 							<span >
 								<i class="fa fa-user" id="bottom_user_btn" style="color:gray;" ></i>
 							</span>
@@ -194,24 +201,32 @@
 						</a>
 					</div>
 					{% else %}
-					<div class="col-4" id="bottom_home" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="{% url 'hzm:main_page' %}" >
+					<div class="col-3" id="bottom_home">
+						<a href="{% url 'hzm:main_page' %}" >
 							<span>
 								<i class="fa fa-home fa" id="bottom_home_btn" style="color:gray;"></i>
 							<span>
 							<h2>홈</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_club" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#">
+					<div class="col-3" id="bottom_club" data-toggle="modal" data-target="#login" >
+						<a  href="#">
 							<span >
 								<i class="fas fa-flag-checkered" id="bottom_club_btn" style="color:gray;" ></i>
 							</span>
 							<h2>클럽</h2>
 						</a>
 					</div>
-					<div class="col-4" id="bottom_user" data-toggle="modal" data-target="#login" style="display:block; text-align: center;">
-						<a style="color: black; text-decoration:none" href="#" >
+					<div class="col-3" id="bottom_record" data-toggle="modal" data-target="#login">
+						<a >
+							<span>
+								<i class="fas fa-clipboard" id="bottom_club_btn" style="color:gray;" ></i>
+							<span>
+								<h2>개인기록</h2>
+						</a>
+					</div>
+					<div class="col-3" id="bottom_user" data-toggle="modal" data-target="#login" >
+						<a href="#" >
 							<span>
 								<i class="fa fa-user" id="bottom_user_btn" name="logout" style="color:gray;" ></i>
 							</span>
@@ -219,7 +234,7 @@
 					</div>
 					{% endif %}
 				</div>
-			</div>
+			</div>	
 		</nav>
 		<!--하단 탭바 끝-->
 		
@@ -245,6 +260,10 @@
 				    <button id="modal_signin_btn" class="btn btn-outline-secondary" type="button" data-dismiss="modal">로그인</button>
 				</div>
 			</form>
+		</div>
+		<div class="ad-banner" style="margin 0 auto;">
+			<ins class="kakao_ad_area" style="display:none;" data-ad-unit    = "DAN-0kOSYgjwyvWtHOVO" data-ad-width   = "250" data-ad-height  = "250"></ins> 
+			<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 		</div>
       </div>
     </div>

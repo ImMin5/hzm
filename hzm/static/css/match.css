@@ -1,0 +1,39 @@
+#middle-container {
+    height:100vh;
+    overflow: scroll;
+    
+}
+
+
+@media (min-width:1024px){
+    #middle-container{
+        padding:5%;
+    }
+    #tbody_matches tr td {
+        text-align:center;
+    }
+    #thead_matches tr th{
+        text-align:center;
+    }
+}
+
+
+@media (min-width:768px) and (max-width:1024px){
+    #middle-container{
+        padding:1%;
+    }
+    #thead_matches tr th{
+        text-align:center;
+    }
+    #tbody_matches tr td {
+        font-size:1.3rem;
+        text-align:center;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+
