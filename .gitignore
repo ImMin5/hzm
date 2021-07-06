@@ -137,3 +137,4 @@ secret_config.py
 docker/
 *.log
 *.swp
+secrets.json

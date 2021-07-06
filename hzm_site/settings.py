@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'hzm_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DJANGO_DB_NAME','postgres'),
-        'USER': os.environ.get('DJANGO_DB_USERNAME', 'postgres'),
+        'NAME': os.environ.get('DJANGO_DB_NAME','hzm_project'),
+        'USER': os.environ.get('DJANGO_DB_USERNAME', 'hzm_admin'),
         'PASSWORD' : os.environ.get('DJANGO_DB_PASSWORD', 'password1234'),
         'HOST': os.environ.get('DJANGO_DB_HOST' , 'hzm_db'),
         'PORT': os.environ.get('DJANGO_DB_PORT','5432'),
@@ -110,12 +110,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+#REDIS_HOST = os.environ.get('REDIS_HOST','127.0.0.1')
 CHANNEL_LAYERS = {
     'default' : {
         'BACKEND' : 'channels_redis.core.RedisChannelLayer',
         'CONFIG' : {
-            "hosts":[('127.0.0.1', 6379)],
+            "hosts":[('192.168.80.1', 6379)],
         }
     }
 }
